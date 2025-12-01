@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://cnew6x2hwvjyh"]
+[gd_scene load_steps=16 format=3 uid="uid://cnew6x2hwvjyh"]
 
 [ext_resource type="Script" uid="uid://dgjnqo7dn7jol" path="res://scripts/character.gd" id="1_v3uhd"]
 [ext_resource type="Script" uid="uid://cckf6x335dlsg" path="res://scripts/scaleObject.gd" id="2_iqu8w"]
@@ -33,10 +33,6 @@ albedo_color = Color(0.8965428, 0.8928584, 0, 1)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8ra5a"]
 albedo_texture = ExtResource("2_ufxs0")
 uv1_triplanar = true
-
-[sub_resource type="BoxMesh" id="BoxMesh_k5pu3"]
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_iqu8w"]
 
 [node name="MainLevel" type="Node3D"]
 
@@ -335,22 +331,3 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 6.39
 transform = Transform3D(-1.0000001, 0, 0, 0, 1, 0, 0, 0, -1.0000001, 6.395023, 1.0003803, -21.281067)
 
 [node name="Objects" type="Node3D" parent="."]
-
-[node name="box" type="RigidBody3D" parent="Objects"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.886938, 5.580927, -46.128853)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/box"]
-mesh = SubResource("BoxMesh_k5pu3")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/box"]
-shape = SubResource("BoxShape3D_iqu8w")
-
-[node name="box2" type="RigidBody3D" parent="Objects"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.886938, 5.580927, -46.128853)
-mass = 0.165
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/box2"]
-mesh = SubResource("BoxMesh_k5pu3")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/box2"]
-shape = SubResource("BoxShape3D_iqu8w")
