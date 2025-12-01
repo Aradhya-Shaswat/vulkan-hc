@@ -1,0 +1,20 @@
+[gd_scene load_steps=5 format=3 uid="uid://dkdhu84jhqjn5"]
+
+[ext_resource type="PackedScene" uid="uid://taatjacc3uh2" path="res://assets/models/graveyard-kit/crypt.glb" id="1_83lsc"]
+[ext_resource type="Texture2D" uid="uid://cueinsg0lxwjk" path="res://assets/models/graveyard-kit/Textures/colormap.png" id="2_800fi"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tlr0d"]
+albedo_texture = ExtResource("2_800fi")
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_83lsc"]
+points = PackedVector3Array(-0.2980501, 0, -0.55799997, -0.2980501, 0.12395713, -0.55799997, 0.29797962, 0, -0.55799997, -0.35999998, 0, -0.49606067, -0.2891699, 0.61692125, -0.50032103, -7.048249e-05, 0.73156905, -0.50032103, 0.29797962, 0.12395713, -0.55799997, -0.35999998, 0.12395713, -0.49606067, 0.35999992, 0, -0.49606067, -0.35999998, 0, 0.4959514, -0.3356852, 0.5985174, -0.45039818, 0.3355442, 0.5985174, -0.45039818, 0.28909943, 0.61692125, -0.50032103, -7.048249e-05, 0.73156905, 0.5002117, 0.35999992, 0.12395713, -0.49606067, -0.35999998, 0.12395713, 0.4959514, 0.35999992, 0, 0.4959514, -0.2980501, 0, 0.55799997, -0.3356852, 0.5985174, 0.4501797, 0.3355442, 0.5985174, 0.4501797, -0.2891699, 0.61692125, 0.5002117, -0.2980501, 0.12395713, 0.55799997, 0.29797962, 0.12395713, 0.55799997, 0.28909943, 0.61692125, 0.5002117, 0.35999992, 0.12395713, 0.4959514, 0.29797962, 0, 0.55799997)
+
+[node name="crypt" instance=ExtResource("1_83lsc")]
+
+[node name="crypt" parent="." index="0"]
+transform = Transform3D(6, 0, 0, 0, 6, 0, 0, 0, 6, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_tlr0d")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." index="1"]
+transform = Transform3D(6, 0, 0, 0, 6, 0, 0, 0, 6, 0, 0, 0)
+shape = SubResource("ConvexPolygonShape3D_83lsc")
