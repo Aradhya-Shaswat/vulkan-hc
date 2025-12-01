@@ -13,7 +13,7 @@ dest_files=["res://.godot/imported/brick-wall-curve-small.glb-34c476847cd24a0d6c
 
 [params]
 
-nodes/root_type=""
+nodes/root_type="StaticBody3D"
 nodes/root_name=""
 nodes/root_script=null
 nodes/apply_root_scale=true

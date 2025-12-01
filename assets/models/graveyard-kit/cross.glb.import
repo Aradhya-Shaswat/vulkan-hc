@@ -13,7 +13,7 @@ dest_files=["res://.godot/imported/cross.glb-9c8c1750dc2358ea2ff2acee0d030407.sc
 
 [params]
 
-nodes/root_type=""
+nodes/root_type="StaticBody3D"
 nodes/root_name=""
 nodes/root_script=null
 nodes/apply_root_scale=true

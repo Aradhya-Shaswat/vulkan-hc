@@ -13,7 +13,7 @@ dest_files=["res://.godot/imported/stone-wall-damaged.glb-c2412f55577b95ab150eb6
 
 [params]
 
-nodes/root_type=""
+nodes/root_type="StaticBody3D"
 nodes/root_name=""
 nodes/root_script=null
 nodes/apply_root_scale=true

@@ -13,7 +13,7 @@ dest_files=["res://.godot/imported/stone-wall-column.glb-43ef536739552510e0135fa
 
 [params]
 
-nodes/root_type=""
+nodes/root_type="StaticBody3D"
 nodes/root_name=""
 nodes/root_script=null
 nodes/apply_root_scale=true

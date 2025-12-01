@@ -13,7 +13,7 @@ dest_files=["res://.godot/imported/stone-wall-curve.glb-33f34b06ba845123bd5be40e
 
 [params]
 
-nodes/root_type=""
+nodes/root_type="StaticBody3D"
 nodes/root_name=""
 nodes/root_script=null
 nodes/apply_root_scale=true

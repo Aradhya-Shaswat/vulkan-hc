@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://dubjdyiae8baa"]
+
+[ext_resource type="PackedScene" uid="uid://i0pg0wy42uip" path="res://assets/models/graveyard-kit/brick-wall.glb" id="1_ur7wf"]
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_uxw0r"]
+points = PackedVector3Array(-0.48246798, 0.010789164, -0.5, 0.48593062, 0.7219351, -0.33406255, 0.4829469, 0.7045397, -0.24360646, -0.4858622, 0.7219351, -0.33406255, -0.47758693, 0.014373579, -0.19999999, 0.4825364, 0.010789164, -0.5, 0.4825364, 0.6740765, -0.5, 0.47765535, 0.014373579, -0.19999999, -0.47758693, 0.670951, -0.19999999, -0.48246798, 0.6740765, -0.5, 0.47765535, 0.670951, -0.19999999, 0.48874396, 0.693368, -0.486632, -0.4870123, 0.69225085, -0.21225084, -0.48328748, 0.70482713, -0.45489872, 0.48708072, 0.69225085, -0.21225084, -0.48867553, 0.693368, -0.486632, 0.48634222, 0.72223735, -0.36436564, -0.48287848, 0.7045397, -0.24360646, -0.4862738, 0.72223735, -0.36436564, 0.4833559, 0.70482713, -0.45489872)
+
+[node name="brick-wall2" instance=ExtResource("1_ur7wf")]
+
+[node name="brick-wall" parent="." index="0"]
+transform = Transform3D(6, 0, 0, 0, 6, 0, 0, 0, 6, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." index="1"]
+transform = Transform3D(6, 0, 0, 0, 6, 0, 0, 0, 6, 0, 0, 0)
+shape = SubResource("ConvexPolygonShape3D_uxw0r")

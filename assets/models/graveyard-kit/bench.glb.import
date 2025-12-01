@@ -13,7 +13,7 @@ dest_files=["res://.godot/imported/bench.glb-06c8521597bcd4eef4c5d2bbe1ff5aae.sc
 
 [params]
 
-nodes/root_type=""
+nodes/root_type="StaticBody3D"
 nodes/root_name=""
 nodes/root_script=null
 nodes/apply_root_scale=true

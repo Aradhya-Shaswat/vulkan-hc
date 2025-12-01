@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://idvvck1xoxwe"]
+
+[ext_resource type="PackedScene" uid="uid://de77rwtkpp2a3" path="res://assets/models/graveyard-kit/border-pillar.glb" id="1_trqr4"]
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_xy76s"]
+points = PackedVector3Array(0.101091065, 0.72802407, 0.09020893, -0.1066594, 0.028233023, -0.0846406, -0.1091389, 0.019881004, 0.0821611, 0.10469345, 0.019841604, -0.08660655, -0.0846406, 0.73176694, -0.1066594, -0.1091389, 0.740119, 0.0821611, 0.09020893, 0.03197595, 0.101091065, 0.10469345, 0.7401584, -0.08660655, -0.08660655, 0.7401584, 0.10469345, 0.0821611, 0.019881004, -0.1091389, -0.08660655, 0.019841604, 0.10469345, 0.0821611, 0.740119, -0.1091389, -0.0846406, 0.028233023, -0.1066594, -0.1066594, 0.73176694, -0.0846406, 0.09020893, 0.72802407, 0.101091065, 0.101091065, 0.03197595, 0.09020893)
+
+[node name="border-pillar2" instance=ExtResource("1_trqr4")]
+
+[node name="border-pillar" parent="." index="0"]
+transform = Transform3D(6, 0, 0, 0, 6, 0, 0, 0, 6, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." index="1"]
+transform = Transform3D(6, 0, 0, 0, 6, 0, 0, 0, 6, 0, 0, 0)
+shape = SubResource("ConvexPolygonShape3D_xy76s")

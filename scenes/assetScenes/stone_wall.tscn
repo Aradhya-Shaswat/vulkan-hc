@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://dj2q7ckihe14y"]
+
+[ext_resource type="PackedScene" uid="uid://dkxlmw4g4w2j0" path="res://assets/models/graveyard-kit/stone-wall.glb" id="1_piskl"]
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_jowbk"]
+points = PackedVector3Array(-0.47175163, 0.018707534, -0.5, 0.48233303, 0.71930563, -0.38177806, -0.5079365, 0.690341, -0.28571433, 0.507921, -0.007863522, -0.28571433, -0.5079365, -0.007863522, -0.28571433, 0.4611389, 0.66038656, -0.49768203, -0.48663968, 0.69195545, -0.48804456, 0.47173613, 0.018707534, -0.5, 0.507921, 0.690341, -0.28571433, 0.48662418, 0.69195545, -0.48804456, -0.4850155, 0.721264, -0.41195497, -0.4611544, 0.66038656, -0.49768203, 0.485, 0.721264, -0.41195497, -0.48234853, 0.71930563, -0.38177806, -0.48644754, 0.70700103, -0.45759666, 0.48643205, 0.70700103, -0.45759666)
+
+[node name="stone-wall2" instance=ExtResource("1_piskl")]
+
+[node name="stone-wall" parent="." index="0"]
+transform = Transform3D(6, 0, 0, 0, 6, 0, 0, 0, 6, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." index="1"]
+transform = Transform3D(6, 0, 0, 0, 6, 0, 0, 0, 6, 0, 0, 0)
+shape = SubResource("ConvexPolygonShape3D_jowbk")

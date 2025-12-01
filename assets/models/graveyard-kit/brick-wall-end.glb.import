@@ -13,7 +13,7 @@ dest_files=["res://.godot/imported/brick-wall-end.glb-6b4ad2f92a078184b49f0040eb
 
 [params]
 
-nodes/root_type=""
+nodes/root_type="StaticBody3D"
 nodes/root_name=""
 nodes/root_script=null
 nodes/apply_root_scale=true

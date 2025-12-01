@@ -13,7 +13,7 @@ dest_files=["res://.godot/imported/border-pillar.glb-34afff4069678e0d6338e5d268f
 
 [params]
 
-nodes/root_type=""
+nodes/root_type="StaticBody3D"
 nodes/root_name=""
 nodes/root_script=null
 nodes/apply_root_scale=true
