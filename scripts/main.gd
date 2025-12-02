@@ -6,7 +6,7 @@ var used_spawn_points = []
 
 func _ready():
 	$MultiplayerSpawner.spawn_function = custom_spawn
-
+	
 func _on_host_pressed() -> void:
 	peer.create_server(1027)
 	multiplayer.multiplayer_peer = peer
@@ -15,7 +15,14 @@ func _on_host_pressed() -> void:
 	add_player(1)
 	$CanvasLayer/Host.hide()
 	$CanvasLayer/Join.hide()
-
+	$CanvasLayer/Back.hide()
+	$CanvasLayer/title.hide()
+	$CanvasLayer/hackclub.hide()
+	$CanvasLayer/hackclub2.hide()
+	$CanvasLayer/SelectionUI.hide()
+	$CanvasLayer/CenterContainer/Crosshair.show()
+	$CanvasLayer/guide.show()
+	$CanvasLayer/version.show()
 
 func _on_join_pressed() -> void:
 	peer.create_client('127.0.0.1', 1027)
@@ -23,6 +30,14 @@ func _on_join_pressed() -> void:
 	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
 	$CanvasLayer/Host.hide()
 	$CanvasLayer/Join.hide()
+	$CanvasLayer/Back.hide()
+	$CanvasLayer/title.hide()
+	$CanvasLayer/hackclub.hide()
+	$CanvasLayer/hackclub2.hide()
+	$CanvasLayer/SelectionUI.hide()
+	$CanvasLayer/CenterContainer/Crosshair.show()
+	$CanvasLayer/guide.show()
+	$CanvasLayer/version.show()
 
 func _on_peer_connected(id):
 	if multiplayer.is_server():
@@ -59,9 +74,7 @@ func del_player(id):
 	var player_node = get_node_or_null(str(id))
 	if player_node:
 		player_node.queue_free()
-	
-	
-	
-	
-	
-	
+
+
+func _on_back_pressed() -> void:
+	get_tree().change_scene_to_file('res://scenes/main_menu.tscn')

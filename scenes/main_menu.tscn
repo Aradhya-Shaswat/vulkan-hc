@@ -1,7 +1,16 @@
-[gd_scene load_steps=2 format=3 uid="uid://dqc48gytnhsn6"]
+[gd_scene load_steps=11 format=3 uid="uid://dqc48gytnhsn6"]
+
+[ext_resource type="Script" uid="uid://b1qf8uq6hul16" path="res://scripts/changeScenesMainMenu.gd" id="1_ekxnf"]
+[ext_resource type="FontFile" uid="uid://gunvccib1svm" path="res://assets/fonts/Poppins-Regular.ttf" id="1_l6cm7"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l6cm7"]
+bg_color = Color(0.51381, 0.68613404, 0.62646294, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wu84c"]
+bg_color = Color(0.79613936, 0.60749817, 0.2546859, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vue75"]
-bg_color = Color(1, 1, 1, 1)
+bg_color = Color(1, 1, 0.8392157, 1)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
@@ -10,6 +19,32 @@ shadow_color = Color(0.00011382803, 0.00011382803, 0.00011382803, 0.6)
 shadow_size = 2
 shadow_offset = Vector2(0, 3)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ekxnf"]
+bg_color = Color(0.29954746, 0.29954746, 0.29954743, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0.00011382803, 0.00011382803, 0.00011382803, 0.6)
+shadow_size = 2
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bqqt6"]
+bg_color = Color(0.92615587, 0.79888654, 0.80990773, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0.00011382803, 0.00011382803, 0.00011382803, 0.6)
+shadow_size = 2
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_l6cm7"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_l6cm7"]
+
+[sub_resource type="PrismMesh" id="PrismMesh_l6cm7"]
+
 [node name="MainMenu" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -17,6 +52,70 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_ekxnf")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_l6cm7")
+
+[node name="Panel2" type="Panel" parent="."]
+layout_mode = 0
+offset_left = 792.0
+offset_right = 1152.0
+offset_bottom = 648.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_wu84c")
+
+[node name="title" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.46300003
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -574.0
+offset_top = -62.024017
+offset_right = -219.0
+offset_bottom = 54.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 0.8235294, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/outline_size = 7
+theme_override_fonts/font = ExtResource("1_l6cm7")
+theme_override_font_sizes/font_size = 58
+text = "VULKAN?"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="hackclub" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.46300003
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 291.0
+offset_top = 199.97598
+offset_right = 574.0
+offset_bottom = 321.0
+grow_horizontal = 2
+grow_vertical = 2
+tooltip_text = "This game was made for Milkyway, an event for Hack Club!"
+mouse_filter = 0
+theme_override_colors/font_color = Color(1, 1, 0.8235294, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/outline_size = 7
+theme_override_fonts/font = ExtResource("1_l6cm7")
+theme_override_font_sizes/font_size = 40
+text = "hack club."
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
@@ -25,10 +124,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -123.0
-offset_top = -96.0
-offset_right = 123.0
-offset_bottom = 96.0
+offset_left = -528.0
+offset_top = 64.0
+offset_right = -282.0
+offset_bottom = 281.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 11
@@ -36,28 +135,102 @@ theme_override_constants/separation = 11
 [node name="PlayButton" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_l6cm7")
 theme_override_font_sizes/font_size = 32
 theme_override_styles/normal = SubResource("StyleBoxFlat_vue75")
-text = "Play"
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ekxnf")
+theme_override_styles/hover = SubResource("StyleBoxFlat_bqqt6")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_l6cm7")
+text = "  Play"
+alignment = 0
 
 [node name="OptionsButton" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_l6cm7")
 theme_override_font_sizes/font_size = 32
 theme_override_styles/normal = SubResource("StyleBoxFlat_vue75")
-text = "Options
-"
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ekxnf")
+theme_override_styles/hover = SubResource("StyleBoxFlat_bqqt6")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_l6cm7")
+text = "  Options"
+alignment = 0
 
 [node name="CreditsButton" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_l6cm7")
 theme_override_font_sizes/font_size = 32
 theme_override_styles/normal = SubResource("StyleBoxFlat_vue75")
-text = "Credits"
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ekxnf")
+theme_override_styles/hover = SubResource("StyleBoxFlat_bqqt6")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_l6cm7")
+text = "  Credits"
+alignment = 0
 
 [node name="QuitButton" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_l6cm7")
 theme_override_font_sizes/font_size = 32
 theme_override_styles/normal = SubResource("StyleBoxFlat_vue75")
-text = "Quit"
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ekxnf")
+theme_override_styles/hover = SubResource("StyleBoxFlat_bqqt6")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_l6cm7")
+text = "  Quit"
+alignment = 0
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="."]
+modulate = Color(0.98898584, 0.86889833, 0.7355447, 1)
+position = Vector2(649.3062, 327.9569)
+rotation = 0.3820917
+scale = Vector2(-20.16319, 715.4113)
+mesh = SubResource("BoxMesh_l6cm7")
+
+[node name="triangle" type="MeshInstance2D" parent="."]
+modulate = Color(0.79613936, 0.60749817, 0.2546859, 1)
+position = Vector2(730.88367, 341.4076)
+rotation = 3.3178723
+scale = Vector2(-307.19186, 720.29913)
+mesh = SubResource("PrismMesh_l6cm7")
+
+[node name="hackclub2" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.46300003
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 276.0
+offset_top = -298.02402
+offset_right = 576.0
+offset_bottom = -212.0
+grow_horizontal = 2
+grow_vertical = 2
+tooltip_text = "This game was made for Milkyway, an event for Hack Club!"
+mouse_filter = 0
+theme_override_colors/font_color = Color(1, 1, 0.8235294, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("1_l6cm7")
+theme_override_font_sizes/font_size = 20
+text = "VULKAN-HC (BETA_0.4)"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="VBoxContainer/PlayButton" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/OptionsButton" to="." method="_on_options_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/CreditsButton" to="." method="_on_credits_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]

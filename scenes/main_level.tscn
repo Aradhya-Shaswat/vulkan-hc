@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://cnew6x2hwvjyh"]
+[gd_scene load_steps=34 format=3 uid="uid://cnew6x2hwvjyh"]
 
 [ext_resource type="FontFile" uid="uid://gunvccib1svm" path="res://assets/fonts/Poppins-Regular.ttf" id="1_iqu8w"]
 [ext_resource type="Script" uid="uid://b27u1ptmiviqb" path="res://scripts/main.gd" id="1_mwgft"]
@@ -10,6 +10,48 @@
 [ext_resource type="PackedScene" uid="uid://dhe2vdggcxcmo" path="res://scenes/assetScenes/stone_wall_curve.tscn" id="16_ndwfr"]
 [ext_resource type="PackedScene" uid="uid://dny03htroscuh" path="res://scenes/assetScenes/stone_wall_column.tscn" id="17_nc5r2"]
 [ext_resource type="Script" uid="uid://crdgml8a8yh0a" path="res://scripts/synced_rigid_body.gd" id="18_sync"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mwgft"]
+bg_color = Color(0.51381, 0.68613404, 0.62646294, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_adxub"]
+bg_color = Color(0.79613936, 0.60749817, 0.2546859, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ff0s2"]
+
+[sub_resource type="PrismMesh" id="PrismMesh_uk2yf"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5fr2l"]
+bg_color = Color(1, 1, 0.8392157, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0.00011382803, 0.00011382803, 0.00011382803, 0.6)
+shadow_size = 2
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2sb77"]
+bg_color = Color(0.29954746, 0.29954746, 0.29954743, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0.00011382803, 0.00011382803, 0.00011382803, 0.6)
+shadow_size = 2
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fkrx8"]
+bg_color = Color(0.92615587, 0.79888654, 0.80990773, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0.00011382803, 0.00011382803, 0.00011382803, 0.6)
+shadow_size = 2
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5fr2l"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_v3uhd"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -73,29 +115,104 @@ player_scene = ExtResource("3_fkrx8")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="CenterContainer" type="CenterContainer" parent="CanvasLayer"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+[node name="hackclub2" type="Label" parent="CanvasLayer"]
+z_index = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.46300003
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 276.0
+offset_top = -298.02402
+offset_right = 576.0
+offset_bottom = -212.0
 grow_horizontal = 2
 grow_vertical = 2
+tooltip_text = "This game was made for Milkyway, an event for Hack Club!"
+mouse_filter = 0
+theme_override_colors/font_color = Color(1, 1, 0.8235294, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 20
+text = "VULKAN-HC (BETA_0.4)"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="Label" type="Label" parent="CanvasLayer/CenterContainer"]
+[node name="title" type="Label" parent="CanvasLayer"]
+z_index = 12
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.46300003
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -574.0
+offset_top = -62.024017
+offset_right = -219.0
+offset_bottom = 54.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 0.8235294, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/outline_size = 7
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 58
+text = "VULKAN?"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="hackclub" type="Label" parent="CanvasLayer"]
+z_index = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.46300003
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 291.0
+offset_top = 199.97598
+offset_right = 574.0
+offset_bottom = 321.0
+grow_horizontal = 2
+grow_vertical = 2
+tooltip_text = "This game was made for Milkyway, an event for Hack Club!"
+mouse_filter = 0
+theme_override_colors/font_color = Color(1, 1, 0.8235294, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/outline_size = 7
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 40
+text = "hack club."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CenterContainer" type="CenterContainer" parent="CanvasLayer"]
+offset_right = 1153.0
+offset_bottom = 648.0
+
+[node name="Crosshair" type="Label" parent="CanvasLayer/CenterContainer"]
+visible = false
 modulate = Color(0.2087988, 0.92084754, 0, 1)
 layout_mode = 2
-theme_override_font_sizes/font_size = 10
-text = "+"
+theme_override_colors/font_shadow_color = Color(0.12225223, 0.12225223, 0.12225223, 0)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 16
+text = "•"
 
 [node name="guide" type="Label" parent="CanvasLayer"]
+visible = false
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = 308.0
-offset_top = 566.0
-offset_right = 805.0
-offset_bottom = 589.0
+offset_left = -248.0
+offset_top = -42.0
+offset_right = 249.0
+offset_bottom = -19.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_colors/font_color = Color(0.6706895, 0.6706895, 0.6706895, 1)
@@ -108,6 +225,7 @@ text = "WASD / [Q/E] TO RESIZE / [TAB + SCROLL] OR SCROLL TO ROTATE"
 metadata/_edit_group_ = true
 
 [node name="version" type="Label" parent="CanvasLayer"]
+visible = false
 offset_left = 988.0
 offset_top = 14.0
 offset_right = 1334.0
@@ -116,6 +234,87 @@ theme_override_colors/font_color = Color(0.6955032, 0.6955031, 0.6955031, 1)
 theme_override_fonts/font = ExtResource("1_iqu8w")
 theme_override_font_sizes/font_size = 11
 text = "VULKAN - HC, BUILD BETA 0.3"
+
+[node name="SelectionUI" type="Node2D" parent="CanvasLayer"]
+
+[node name="Panel" type="Panel" parent="CanvasLayer/SelectionUI"]
+offset_right = 1152.0
+offset_bottom = 648.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_mwgft")
+
+[node name="Panel2" type="Panel" parent="CanvasLayer/SelectionUI"]
+offset_left = 792.0
+offset_right = 1152.0
+offset_bottom = 648.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_adxub")
+
+[node name="cutter" type="MeshInstance2D" parent="CanvasLayer/SelectionUI"]
+modulate = Color(0.98898584, 0.86889833, 0.7355447, 1)
+position = Vector2(649.3062, 327.9569)
+rotation = -2.759501
+scale = Vector2(20.16319, -715.4113)
+mesh = SubResource("BoxMesh_ff0s2")
+
+[node name="triangle" type="MeshInstance2D" parent="CanvasLayer/SelectionUI"]
+modulate = Color(0.79613936, 0.60749817, 0.2546859, 1)
+position = Vector2(730.88367, 341.4076)
+rotation = 0.17627965
+scale = Vector2(307.19183, -720.29913)
+mesh = SubResource("PrismMesh_uk2yf")
+
+[node name="Host" type="Button" parent="CanvasLayer"]
+offset_left = 48.0
+offset_top = 467.0
+offset_right = 375.0
+offset_bottom = 528.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxFlat_5fr2l")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_2sb77")
+theme_override_styles/hover = SubResource("StyleBoxFlat_fkrx8")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_5fr2l")
+text = "  Host Game"
+alignment = 0
+
+[node name="Back" type="Button" parent="CanvasLayer"]
+offset_left = 48.0
+offset_top = 538.0
+offset_right = 375.0
+offset_bottom = 599.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxFlat_5fr2l")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_2sb77")
+theme_override_styles/hover = SubResource("StyleBoxFlat_fkrx8")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_5fr2l")
+text = "  Back"
+alignment = 0
+
+[node name="Join" type="Button" parent="CanvasLayer"]
+offset_left = 48.0
+offset_top = 396.0
+offset_right = 375.0
+offset_bottom = 457.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxFlat_5fr2l")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_2sb77")
+theme_override_styles/hover = SubResource("StyleBoxFlat_fkrx8")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_5fr2l")
+text = "  Join Game"
+alignment = 0
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.8660254, -0.43301275, 0.25000003, 0.49600145, -0.6808939, 0.53885627, -0.063108146, 0.59066355, 0.80444634, 32.54878, 1.767848, -25.480614)
@@ -665,7 +864,7 @@ spawn_path = NodePath("..")
 [node name="SpawnPoints" type="Node3D" parent="."]
 
 [node name="SpawnPoint1" type="Marker3D" parent="SpawnPoints" groups=["spawn_points"]]
-transform = Transform3D(-0.7667171, 0, -0.6419851, 0, 1, 0, 0.6419851, 0, -0.7667171, 27.416101, -5, -54.626045)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.416101, -5, -54.626045)
 
 [node name="SpawnPoint2" type="Marker3D" parent="SpawnPoints" groups=["spawn_points"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.562923, -5, 54.71348)
@@ -676,27 +875,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.491024, -5, -57.63561)
 [node name="SpawnPoint4" type="Marker3D" parent="SpawnPoints" groups=["spawn_points"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.923948, -5, 54.51059)
 
-[node name="Host" type="Button" parent="."]
-modulate = Color(0.9624881, 0.808221, 0.586664, 1)
-offset_left = 36.0
-offset_top = 483.0
-offset_right = 201.0
-offset_bottom = 544.0
-theme_override_colors/font_color = Color(0.875, 0.875, 0.875, 1)
-theme_override_colors/font_focus_color = Color(0.4458478, 0.5027164, 0.21434408, 1)
-theme_override_fonts/font = ExtResource("1_iqu8w")
-theme_override_font_sizes/font_size = 32
-text = "HOST"
-
-[node name="Join" type="Button" parent="."]
-modulate = Color(0.9607843, 0.80784315, 0.5882353, 1)
-offset_left = 36.0
-offset_top = 555.0
-offset_right = 201.0
-offset_bottom = 617.0
-theme_override_fonts/font = ExtResource("1_iqu8w")
-theme_override_font_sizes/font_size = 32
-text = "JOIN"
-
-[connection signal="pressed" from="Host" to="." method="_on_host_pressed"]
-[connection signal="pressed" from="Join" to="." method="_on_join_pressed"]
+[connection signal="pressed" from="CanvasLayer/Host" to="." method="_on_host_pressed"]
+[connection signal="pressed" from="CanvasLayer/Back" to="." method="_on_back_pressed"]
+[connection signal="pressed" from="CanvasLayer/Join" to="." method="_on_join_pressed"]
