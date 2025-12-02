@@ -1,15 +1,15 @@
-[gd_scene load_steps=23 format=3 uid="uid://cnew6x2hwvjyh"]
+[gd_scene load_steps=26 format=3 uid="uid://cnew6x2hwvjyh"]
 
-[ext_resource type="FontFile" uid="uid://cciugckxvrpfw" path="res://assets/fonts/PressStart2P-Regular.ttf" id="1_5fr2l"]
 [ext_resource type="FontFile" uid="uid://gunvccib1svm" path="res://assets/fonts/Poppins-Regular.ttf" id="1_iqu8w"]
-[ext_resource type="Script" uid="uid://dgjnqo7dn7jol" path="res://scripts/character.gd" id="1_v3uhd"]
-[ext_resource type="Script" uid="uid://cckf6x335dlsg" path="res://scripts/scaleObject.gd" id="2_iqu8w"]
+[ext_resource type="Script" uid="uid://b27u1ptmiviqb" path="res://scripts/main.gd" id="1_mwgft"]
 [ext_resource type="Texture2D" uid="uid://de3sq00uyfg2c" path="res://assets/textures/ground.jpg" id="2_ufxs0"]
+[ext_resource type="PackedScene" uid="uid://cva3jmdk0sqdm" path="res://scenes/assetScenes/player.tscn" id="3_fkrx8"]
 [ext_resource type="PackedScene" uid="uid://dubjdyiae8baa" path="res://scenes/assetScenes/brick_wall.tscn" id="6_bq26l"]
 [ext_resource type="PackedScene" uid="uid://c75miugiquori" path="res://scenes/assetScenes/brick_wall_curve.tscn" id="7_u2c82"]
 [ext_resource type="PackedScene" uid="uid://dj2q7ckihe14y" path="res://scenes/assetScenes/stone_wall.tscn" id="15_siio1"]
 [ext_resource type="PackedScene" uid="uid://dhe2vdggcxcmo" path="res://scenes/assetScenes/stone_wall_curve.tscn" id="16_ndwfr"]
 [ext_resource type="PackedScene" uid="uid://dny03htroscuh" path="res://scenes/assetScenes/stone_wall_column.tscn" id="17_nc5r2"]
+[ext_resource type="Script" uid="uid://crdgml8a8yh0a" path="res://scripts/synced_rigid_body.gd" id="18_sync"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_v3uhd"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -24,14 +24,6 @@ sky = SubResource("Sky_ufxs0")
 tonemap_mode = 2
 glow_enabled = true
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_ufxs0"]
-
-[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_6we3w"]
-points = PackedVector3Array(-0.12520654, -0.532801, -0.4805069, 0.022783129, 0.4760704, 0.49888408, 0.16971254, 0.5591441, 0.46417162, 0.23105091, -0.8035912, 0.32045516, 0.40741014, 0.651043, -0.24352328, -0.4827893, 0.59484255, 0.082213186, -0.3628679, -0.68231165, 0.2896967, 0.46904355, -0.65452886, -0.06627126, -0.12744367, 0.8427015, -0.33810276, -0.39343542, -0.6839421, -0.24471663, 0.43825462, 0.62330925, 0.20084947, 0.0841477, 0.977454, 0.11479468, -0.06820232, -0.9764576, -0.12927033, 0.20054972, -0.56312895, -0.4514544, -0.18552664, 0.59545326, -0.4534751, -0.27336287, 0.59226835, 0.40775412, -0.0069364863, -0.47682306, 0.49966025, 0.37582088, -0.5886136, 0.31695515, 0.111579016, 0.5630594, -0.48117727, -0.41725034, 0.5278656, -0.27049688, -0.48454633, -0.59697217, -0.06650971, -0.27974695, 0.90856135, 0.05333608, -0.25019687, -0.8807117, 0.20531891, 0.263647, -0.90277094, -0.1273943, 0.29336792, 0.8715263, -0.15719566, 0.3734115, -0.5263189, -0.32824618, 0.4996626, 0.47664148, -0.0068885577, 0.053105574, 0.8750009, 0.32470253, -0.15454252, -0.5908538, 0.4658794, -0.09727988, -0.7823577, -0.39818847, -0.3876489, -0.49817133, 0.31564978, -0.30067965, -0.58799505, -0.38890144)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_iqu8w"]
-albedo_color = Color(0.8965428, 0.8928584, 0, 1)
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8ra5a"]
 albedo_texture = ExtResource("2_ufxs0")
 uv1_triplanar = true
@@ -44,13 +36,40 @@ albedo_color = Color(0.4840049, 1, 0.7420714, 1)
 [sub_resource type="BoxMesh" id="BoxMesh_fkrx8"]
 material = SubResource("StandardMaterial3D_2sb77")
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_rigid"]
+properties/0/path = NodePath(".:sync_position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:sync_rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath(".:sync_linear_velocity")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+properties/3/path = NodePath(".:sync_angular_velocity")
+properties/3/spawn = true
+properties/3/replication_mode = 1
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5fr2l"]
 albedo_color = Color(1.0107458e-06, 0.67199695, 0.4142134, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_k5pu3"]
 material = SubResource("StandardMaterial3D_5fr2l")
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_iqu8w"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fkrx8"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_iqu8w"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_iqu8w"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_5fr2l"]
+
 [node name="MainLevel" type="Node3D"]
+script = ExtResource("1_mwgft")
+player_scene = ExtResource("3_fkrx8")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -65,17 +84,25 @@ theme_override_font_sizes/font_size = 10
 text = "+"
 
 [node name="guide" type="Label" parent="CanvasLayer"]
-offset_left = 262.0
-offset_top = 603.0
-offset_right = 918.0
-offset_bottom = 626.0
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 308.0
+offset_top = 566.0
+offset_right = 805.0
+offset_bottom = 589.0
+grow_horizontal = 2
+grow_vertical = 0
 theme_override_colors/font_color = Color(0.6706895, 0.6706895, 0.6706895, 1)
-theme_override_constants/shadow_offset_x = 5
-theme_override_constants/shadow_offset_y = 5
-theme_override_constants/outline_size = 11
-theme_override_constants/shadow_outline_size = 4
-theme_override_fonts/font = ExtResource("1_5fr2l")
-text = "WASD / [Q/E] TO RESIZE / SCROLL TO ROTATE"
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/outline_size = 0
+theme_override_constants/shadow_outline_size = 1
+theme_override_fonts/font = ExtResource("1_iqu8w")
+text = "WASD / [Q/E] TO RESIZE / [TAB + SCROLL] OR SCROLL TO ROTATE"
+metadata/_edit_group_ = true
 
 [node name="version" type="Label" parent="CanvasLayer"]
 offset_left = 988.0
@@ -87,125 +114,56 @@ theme_override_fonts/font = ExtResource("1_iqu8w")
 theme_override_font_sizes/font_size = 11
 text = "VULKAN - HC, BUILD BETA 0.3"
 
+[node name="Host" type="Button" parent="CanvasLayer"]
+offset_left = 316.0
+offset_top = 269.0
+offset_right = 481.0
+offset_bottom = 330.0
+text = "HOST"
+
+[node name="Join" type="Button" parent="CanvasLayer"]
+offset_left = 316.0
+offset_top = 343.0
+offset_right = 481.0
+offset_bottom = 405.0
+text = "JOIN"
+
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.8660254, -0.43301275, 0.25000003, 0.49600145, -0.6808939, 0.53885627, -0.063108146, 0.59066355, 0.80444634, 32.54878, 8.378404, -25.480614)
+transform = Transform3D(-0.8660254, -0.43301275, 0.25000003, 0.49600145, -0.6808939, 0.53885627, -0.063108146, 0.59066355, 0.80444634, 32.54878, 1.767848, -25.480614)
 shadow_enabled = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_6we3w")
 
-[node name="player" type="CharacterBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.303345, 3, -54.62654)
-script = ExtResource("1_v3uhd")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="player"]
-mesh = SubResource("CapsuleMesh_ufxs0")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="player"]
-shape = SubResource("ConvexPolygonShape3D_6we3w")
-
-[node name="Head" type="Node3D" parent="player"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
-
-[node name="Camera3D" type="Camera3D" parent="player/Head"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
-script = ExtResource("2_iqu8w")
-highlight_material = SubResource("StandardMaterial3D_iqu8w")
-
 [node name="ground" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -0.00047465682, 0, 0, 0, 1, 0.5, 1, -7.0064697)
+transform = Transform3D(1, 0, 0, 0, -0.00047465682, 0, 0, 0, 1, 0.5, -5.6105556, -0.42085266)
 material_override = SubResource("StandardMaterial3D_8ra5a")
 use_collision = true
-size = Vector3(100, 1, 113.01294)
-
-[node name="ground2" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.00076055527, 0, 0, 0, 1, 1.3316345, 5.853674, 10.090057)
-use_collision = true
-size = Vector3(153.45026, 1, 157.45673)
+size = Vector3(100, 1, 124.67514)
 
 [node name="walls" type="Node3D" parent="."]
-
-[node name="brick-wall2" parent="walls" instance=ExtResource("6_bq26l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40.564762, 1.0003803, 50.664772)
-
-[node name="brick-wall3" parent="walls" instance=ExtResource("6_bq26l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.564762, 1.0003803, 50.664772)
-
-[node name="brick-wall4" parent="walls" instance=ExtResource("6_bq26l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28.564762, 1.0003803, 50.664772)
-
-[node name="brick-wall5" parent="walls" instance=ExtResource("6_bq26l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.564762, 1.0003803, 50.664772)
-
-[node name="brick-wall6" parent="walls" instance=ExtResource("6_bq26l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.564762, 1.0003803, 50.664772)
-
-[node name="brick-wall7" parent="walls" instance=ExtResource("6_bq26l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.564762, 1.0003803, 50.664772)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -6.6105556, 0)
 
 [node name="brick-wall8" parent="walls" instance=ExtResource("6_bq26l")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.564762, 1.0003803, 50.664772)
-
-[node name="brick-wall10" parent="walls" instance=ExtResource("6_bq26l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.435238, 1.0003803, 50.664772)
-
-[node name="brick-wall11" parent="walls" instance=ExtResource("6_bq26l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.435238, 1.0003803, 50.664772)
-
-[node name="brick-wall12" parent="walls" instance=ExtResource("6_bq26l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.435238, 1.0003803, 50.664772)
-
-[node name="brick-wall13" parent="walls" instance=ExtResource("6_bq26l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.435238, 1.0003803, 50.664772)
-
-[node name="brick-wall14" parent="walls" instance=ExtResource("6_bq26l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.435238, 1.0003803, 50.664772)
-
-[node name="brick-wall15" parent="walls" instance=ExtResource("6_bq26l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 37.435238, 1.0003803, 50.664772)
-
-[node name="brick-wall16" parent="walls" instance=ExtResource("6_bq26l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43.435238, 1.0003803, 50.664772)
-
-[node name="brick-wall9" parent="walls" instance=ExtResource("6_bq26l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4352379, 1.0003803, 50.664772)
 
 [node name="brick-wall32" parent="walls" instance=ExtResource("6_bq26l")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40.564762, 1.0003803, 50.664772)
 
 [node name="brick-wall33" parent="walls" instance=ExtResource("6_bq26l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.564762, 1.0003803, 50.664772)
-
-[node name="brick-wall34" parent="walls" instance=ExtResource("6_bq26l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28.564762, 1.0003803, 50.664772)
-
-[node name="brick-wall35" parent="walls" instance=ExtResource("6_bq26l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.564762, 1.0003803, 50.664772)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -37.39444, 1.0003805, 50.664772)
 
 [node name="brick-wall36" parent="walls" instance=ExtResource("6_bq26l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.564762, 1.0003803, 50.664772)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.597498, 1.0003805, 50.664772)
 
 [node name="brick-wall37" parent="walls" instance=ExtResource("6_bq26l")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.564762, 1.0003803, 50.664772)
-visible = false
-
-[node name="brick-wall38" parent="walls" instance=ExtResource("6_bq26l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.564762, 1.0003803, 50.664772)
 
 [node name="brick-wall39" parent="walls" instance=ExtResource("6_bq26l")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.435238, 1.0003803, 50.664772)
 
 [node name="brick-wall40" parent="walls" instance=ExtResource("6_bq26l")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.435238, 1.0003803, 50.664772)
-
-[node name="brick-wall41" parent="walls" instance=ExtResource("6_bq26l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.435238, 1.0003803, 50.664772)
-
-[node name="brick-wall42" parent="walls" instance=ExtResource("6_bq26l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.435238, 1.0003803, 50.664772)
-
-[node name="brick-wall43" parent="walls" instance=ExtResource("6_bq26l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.435238, 1.0003803, 50.664772)
 
 [node name="brick-wall44" parent="walls" instance=ExtResource("6_bq26l")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 37.435238, 1.0003803, 50.664772)
@@ -218,18 +176,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4352379, 1.0003803, 50.6647
 
 [node name="brick-wall47" parent="walls" instance=ExtResource("6_bq26l")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40.564762, 1.0003803, -49.2404)
-
-[node name="brick-wall48" parent="walls" instance=ExtResource("6_bq26l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.564762, 1.0003803, -49.2404)
-
-[node name="brick-wall49" parent="walls" instance=ExtResource("6_bq26l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28.564762, 1.0003803, -49.2404)
-
-[node name="brick-wall50" parent="walls" instance=ExtResource("6_bq26l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.564762, 1.0003803, -49.2404)
-
-[node name="brick-wall51" parent="walls" instance=ExtResource("6_bq26l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.564762, 1.0003803, -49.2404)
 
 [node name="brick-wall52" parent="walls" instance=ExtResource("6_bq26l")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.564762, 1.0003803, -49.2404)
@@ -245,6 +191,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.435238, 1.0003803, -49.240
 
 [node name="brick-wall56" parent="walls" instance=ExtResource("6_bq26l")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.023413, 1.0003803, -49.2404)
+
+[node name="brick-wall57" parent="walls" instance=ExtResource("6_bq26l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.225313, 1.0003805, -49.2404)
+
+[node name="brick-wall58" parent="walls" instance=ExtResource("6_bq26l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36.851486, 1.0003805, -49.2404)
 
 [node name="brick-wall59" parent="walls" instance=ExtResource("6_bq26l")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38.50228, 1.0003803, -49.2404)
@@ -364,7 +316,7 @@ transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0, 0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.367447, 1.0003817, -33.25254)
 
 [node name="stone-wall6" parent="walls/starting_room" instance=ExtResource("15_siio1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.367447, 1.0003817, -33.25254)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.372334, 1.0003812, -33.254566)
 
 [node name="stone-wall4" parent="walls/starting_room" instance=ExtResource("15_siio1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.367447, 1.0003817, -16.489368)
@@ -381,10 +333,99 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 6.39
 [node name="stone-wall-curve3" parent="walls/starting_room" instance=ExtResource("16_ndwfr")]
 transform = Transform3D(-1.0000001, 0, 0, 0, 1, 0, 0, 0, -1.0000001, 6.395023, 1.0003803, -21.281067)
 
+[node name="stone-wall-curve4" parent="walls/starting_room" instance=ExtResource("16_ndwfr")]
+transform = Transform3D(-4.371138e-08, 0, -1, 0, 1, 0, 1, 0, -4.371138e-08, 24.199177, 1.0003803, -21.277994)
+
+[node name="stone-wall-curve5" parent="walls/starting_room" instance=ExtResource("16_ndwfr")]
+transform = Transform3D(1.0000001, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, 1.0000001, 24.19918, 1.0003803, -33.25334)
+
+[node name="stone-wall11" parent="walls/starting_room" instance=ExtResource("15_siio1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.367447, 1.0003815, 19.747456)
+
+[node name="stone-wall12" parent="walls/starting_room" instance=ExtResource("15_siio1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.372337, 1.0003815, 19.74543)
+
+[node name="stone-wall13" parent="walls/starting_room" instance=ExtResource("15_siio1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.367447, 1.0003815, 36.51063)
+
+[node name="stone-wall14" parent="walls/starting_room" instance=ExtResource("15_siio1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.367447, 1.0003815, 36.510628)
+
+[node name="stone-wall-column4" parent="walls/starting_room" instance=ExtResource("17_nc5r2")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 1.6012497, 1.000381, 25.735874)
+
+[node name="stone-wall-curve10" parent="walls/starting_room" instance=ExtResource("16_ndwfr")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 6.3950233, 1.0003805, 19.74358)
+
+[node name="stone-wall-curve11" parent="walls/starting_room" instance=ExtResource("16_ndwfr")]
+transform = Transform3D(-1.0000001, 0, 0, 0, 1, 0, 0, 0, -1.0000001, 6.3950233, 1.0003805, 31.71893)
+
+[node name="stone-wall-curve12" parent="walls/starting_room" instance=ExtResource("16_ndwfr")]
+transform = Transform3D(-4.371138e-08, 0, -1, 0, 1, 0, 1, 0, -4.371138e-08, 24.199173, 1.0003805, 31.722006)
+
+[node name="stone-wall-curve13" parent="walls/starting_room" instance=ExtResource("16_ndwfr")]
+transform = Transform3D(1.0000001, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, 1.0000001, 24.19918, 1.0003805, 19.746656)
+
+[node name="stone-wall15" parent="walls/starting_room" instance=ExtResource("15_siio1")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 117.24685, 1.0003815, 31.848352)
+
+[node name="stone-wall16" parent="walls/starting_room" instance=ExtResource("15_siio1")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 111.24196, 1.0003815, 31.850382)
+
+[node name="stone-wall17" parent="walls/starting_room" instance=ExtResource("15_siio1")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 117.24685, 1.0003815, 15.085185)
+
+[node name="stone-wall18" parent="walls/starting_room" instance=ExtResource("15_siio1")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 111.24685, 1.0003815, 15.085185)
+
+[node name="stone-wall-column5" parent="walls/starting_room" instance=ExtResource("17_nc5r2")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 128.01305, 1.000381, 25.859932)
+
+[node name="stone-wall-curve14" parent="walls/starting_room" instance=ExtResource("16_ndwfr")]
+transform = Transform3D(1.3113416e-07, 0, -1, 0, 1, 0, 1, 0, 1.3113416e-07, 123.21928, 1.0003805, 31.85223)
+
+[node name="stone-wall-curve15" parent="walls/starting_room" instance=ExtResource("16_ndwfr")]
+transform = Transform3D(1.0000001, 0, 8.7422784e-08, 0, 1, 0, -8.7422784e-08, 0, 1.0000001, 123.21928, 1.0003805, 19.876879)
+
+[node name="stone-wall-curve16" parent="walls/starting_room" instance=ExtResource("16_ndwfr")]
+transform = Transform3D(-4.3711395e-08, 0, 1, 0, 1, 0, -1, 0, -4.3711395e-08, 105.41512, 1.0003805, 19.873804)
+
+[node name="stone-wall-curve17" parent="walls/starting_room" instance=ExtResource("16_ndwfr")]
+transform = Transform3D(-1.0000001, 0, 0, 0, 1, 0, 0, 0, -1.0000001, 105.415115, 1.0003805, 31.84915)
+
+[node name="stone-wall7" parent="walls/starting_room" instance=ExtResource("15_siio1")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 117.548416, 1.0003777, -19.15165)
+
+[node name="stone-wall8" parent="walls/starting_room" instance=ExtResource("15_siio1")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 111.54352, 1.0003777, -19.149626)
+
+[node name="stone-wall9" parent="walls/starting_room" instance=ExtResource("15_siio1")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 117.5484, 1.0003815, -35.91482)
+
+[node name="stone-wall10" parent="walls/starting_room" instance=ExtResource("15_siio1")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 111.5484, 1.0003777, -35.914814)
+
+[node name="stone-wall-column3" parent="walls/starting_room" instance=ExtResource("17_nc5r2")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 128.3146, 1.0003772, -25.140062)
+
+[node name="stone-wall-curve6" parent="walls/starting_room" instance=ExtResource("16_ndwfr")]
+transform = Transform3D(1.3113416e-07, 0, -1, 0, 1, 0, 1, 0, 1.3113416e-07, 123.52083, 1.0003767, -19.147768)
+
+[node name="stone-wall-curve7" parent="walls/starting_room" instance=ExtResource("16_ndwfr")]
+transform = Transform3D(1.0000001, 0, 8.7422784e-08, 0, 1, 0, -8.7422784e-08, 0, 1.0000001, 123.52083, 1.0003767, -31.123116)
+
+[node name="stone-wall-curve8" parent="walls/starting_room" instance=ExtResource("16_ndwfr")]
+transform = Transform3D(-4.3711395e-08, 0, 1, 0, 1, 0, -1, 0, -4.3711395e-08, 105.716675, 1.0003805, -31.126196)
+
+[node name="stone-wall-curve9" parent="walls/starting_room" instance=ExtResource("16_ndwfr")]
+transform = Transform3D(-1.0000001, 0, 0, 0, 1, 0, 0, 0, -1.0000001, 105.716675, 1.0003767, -19.15085)
+
 [node name="Objects" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -6.6105556, 0)
 
 [node name="box" type="RigidBody3D" parent="Objects"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.886938, 4.580927, -46.128853)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 33.042732, 2.580927, -48.97306)
+script = ExtResource("18_sync")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/box"]
 shape = SubResource("BoxShape3D_iqu8w")
@@ -392,12 +433,259 @@ shape = SubResource("BoxShape3D_iqu8w")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/box"]
 mesh = SubResource("BoxMesh_fkrx8")
 
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Objects/box"]
+replication_config = SubResource("SceneReplicationConfig_rigid")
+
+[node name="box4" type="RigidBody3D" parent="Objects"]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 33.042732, 2.580927, -46.474236)
+script = ExtResource("18_sync")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/box4"]
+shape = SubResource("BoxShape3D_iqu8w")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/box4"]
+mesh = SubResource("BoxMesh_fkrx8")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Objects/box4"]
+replication_config = SubResource("SceneReplicationConfig_rigid")
+
 [node name="box2" type="RigidBody3D" parent="Objects"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28.81277, 4.580927, -46.128853)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 33.042732, 2.580927, -52.89889)
 mass = 0.165
+script = ExtResource("18_sync")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/box2"]
 shape = SubResource("BoxShape3D_iqu8w")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/box2"]
 mesh = SubResource("BoxMesh_k5pu3")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Objects/box2"]
+replication_config = SubResource("SceneReplicationConfig_rigid")
+
+[node name="box3" type="RigidBody3D" parent="Objects"]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 33.042732, 2.580927, -56.16922)
+mass = 0.165
+script = ExtResource("18_sync")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/box3"]
+shape = SubResource("BoxShape3D_iqu8w")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/box3"]
+mesh = SubResource("BoxMesh_k5pu3")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Objects/box3"]
+replication_config = SubResource("SceneReplicationConfig_rigid")
+
+[node name="box9" type="RigidBody3D" parent="Objects"]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -19.957268, 2.580927, -48.97306)
+script = ExtResource("18_sync")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/box9"]
+shape = SubResource("BoxShape3D_iqu8w")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/box9"]
+mesh = SubResource("BoxMesh_fkrx8")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Objects/box9"]
+replication_config = SubResource("SceneReplicationConfig_rigid")
+
+[node name="box10" type="RigidBody3D" parent="Objects"]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -19.957268, 2.580927, -46.474236)
+script = ExtResource("18_sync")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/box10"]
+shape = SubResource("BoxShape3D_iqu8w")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/box10"]
+mesh = SubResource("BoxMesh_fkrx8")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Objects/box10"]
+replication_config = SubResource("SceneReplicationConfig_rigid")
+
+[node name="box11" type="RigidBody3D" parent="Objects"]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -19.957268, 2.580927, -52.89889)
+mass = 0.165
+script = ExtResource("18_sync")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/box11"]
+shape = SubResource("BoxShape3D_iqu8w")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/box11"]
+mesh = SubResource("BoxMesh_k5pu3")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Objects/box11"]
+replication_config = SubResource("SceneReplicationConfig_rigid")
+
+[node name="box12" type="RigidBody3D" parent="Objects"]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -19.957268, 2.580927, -56.16922)
+mass = 0.165
+script = ExtResource("18_sync")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/box12"]
+shape = SubResource("BoxShape3D_iqu8w")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/box12"]
+mesh = SubResource("BoxMesh_k5pu3")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Objects/box12"]
+replication_config = SubResource("SceneReplicationConfig_rigid")
+
+[node name="box5" type="RigidBody3D" parent="Objects"]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 19.967499, 2.580927, 50.62213)
+script = ExtResource("18_sync")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/box5"]
+shape = SubResource("BoxShape3D_iqu8w")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/box5"]
+mesh = SubResource("BoxMesh_fkrx8")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Objects/box5"]
+replication_config = SubResource("SceneReplicationConfig_rigid")
+
+[node name="box6" type="RigidBody3D" parent="Objects"]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 19.967499, 2.580927, 53.12095)
+script = ExtResource("18_sync")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/box6"]
+shape = SubResource("BoxShape3D_iqu8w")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/box6"]
+mesh = SubResource("BoxMesh_fkrx8")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Objects/box6"]
+replication_config = SubResource("SceneReplicationConfig_rigid")
+
+[node name="box7" type="RigidBody3D" parent="Objects"]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 19.967499, 2.580927, 46.696297)
+mass = 0.165
+script = ExtResource("18_sync")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/box7"]
+shape = SubResource("BoxShape3D_iqu8w")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/box7"]
+mesh = SubResource("BoxMesh_k5pu3")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Objects/box7"]
+replication_config = SubResource("SceneReplicationConfig_rigid")
+
+[node name="box8" type="RigidBody3D" parent="Objects"]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 19.967499, 2.580927, 43.42597)
+mass = 0.165
+script = ExtResource("18_sync")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/box8"]
+shape = SubResource("BoxShape3D_iqu8w")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/box8"]
+mesh = SubResource("BoxMesh_k5pu3")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Objects/box8"]
+replication_config = SubResource("SceneReplicationConfig_rigid")
+
+[node name="box13" type="RigidBody3D" parent="Objects"]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -32.0325, 2.580927, 50.62213)
+script = ExtResource("18_sync")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/box13"]
+shape = SubResource("BoxShape3D_iqu8w")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/box13"]
+mesh = SubResource("BoxMesh_fkrx8")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Objects/box13"]
+replication_config = SubResource("SceneReplicationConfig_rigid")
+
+[node name="box14" type="RigidBody3D" parent="Objects"]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -32.0325, 2.580927, 53.12095)
+script = ExtResource("18_sync")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/box14"]
+shape = SubResource("BoxShape3D_iqu8w")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/box14"]
+mesh = SubResource("BoxMesh_fkrx8")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Objects/box14"]
+replication_config = SubResource("SceneReplicationConfig_rigid")
+
+[node name="box15" type="RigidBody3D" parent="Objects"]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -32.0325, 2.580927, 46.696297)
+mass = 0.165
+script = ExtResource("18_sync")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/box15"]
+shape = SubResource("BoxShape3D_iqu8w")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/box15"]
+mesh = SubResource("BoxMesh_k5pu3")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Objects/box15"]
+replication_config = SubResource("SceneReplicationConfig_rigid")
+
+[node name="box16" type="RigidBody3D" parent="Objects"]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -32.0325, 2.580927, 43.42597)
+mass = 0.165
+script = ExtResource("18_sync")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/box16"]
+shape = SubResource("BoxShape3D_iqu8w")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/box16"]
+mesh = SubResource("BoxMesh_k5pu3")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Objects/box16"]
+replication_config = SubResource("SceneReplicationConfig_rigid")
+
+[node name="ball" type="RigidBody3D" parent="Objects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 41.593597, 2.6604323, -60.707924)
+visible = false
+script = ExtResource("18_sync")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/ball"]
+shape = SubResource("SphereShape3D_iqu8w")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/ball"]
+material_overlay = SubResource("StandardMaterial3D_fkrx8")
+mesh = SubResource("SphereMesh_iqu8w")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Objects/ball"]
+replication_config = SubResource("SceneReplicationConfig_rigid")
+
+[node name="cylinder" type="RigidBody3D" parent="Objects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 41.593597, 2.6604323, -57.083923)
+visible = false
+script = ExtResource("18_sync")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/cylinder"]
+shape = SubResource("CylinderShape3D_iqu8w")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/cylinder"]
+material_overlay = SubResource("StandardMaterial3D_fkrx8")
+mesh = SubResource("CylinderMesh_5fr2l")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Objects/cylinder"]
+replication_config = SubResource("SceneReplicationConfig_rigid")
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("uid://cva3jmdk0sqdm")
+spawn_path = NodePath("..")
+
+[node name="SpawnPoints" type="Node3D" parent="."]
+
+[node name="SpawnPoint1" type="Marker3D" parent="SpawnPoints" groups=["spawn_points"]]
+transform = Transform3D(-0.7667171, 0, -0.6419851, 0, 1, 0, 0.6419851, 0, -0.7667171, 27.416101, -5, -54.626045)
+
+[node name="SpawnPoint2" type="Marker3D" parent="SpawnPoints" groups=["spawn_points"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.562923, -5, 54.71348)
+
+[node name="SpawnPoint3" type="Marker3D" parent="SpawnPoints" groups=["spawn_points"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.491024, -5, -57.63561)
+
+[node name="SpawnPoint4" type="Marker3D" parent="SpawnPoints" groups=["spawn_points"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.923948, -5, 54.51059)
+
+[connection signal="pressed" from="CanvasLayer/Host" to="." method="_on_host_pressed"]
+[connection signal="pressed" from="CanvasLayer/Join" to="." method="_on_join_pressed"]
