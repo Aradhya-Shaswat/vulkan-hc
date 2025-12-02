@@ -11,7 +11,7 @@ const BOB_AMP = 0.09
 const TILT_MAX = 0.08
 var t_bob = 0.0
 
-var gravity = 9.8
+var gravity = 15
 
 @onready var head = $Head
 @onready var camera = $Head/Camera3D
@@ -28,7 +28,7 @@ func _unhandled_input(event):
 	if event is InputEventMouseMotion:
 		head.rotate_y(-event.relative.x * SENSITIVITY)
 		var new_x = camera.rotation.x - event.relative.y * SENSITIVITY
-		new_x = clamp(new_x, deg_to_rad(-40), deg_to_rad(60))
+		new_x = clamp(new_x, deg_to_rad(-80), deg_to_rad(90))
 		camera.rotation.x = new_x
 
 func _physics_process(delta):
@@ -81,7 +81,17 @@ func _physics_process(delta):
 
 	camera.transform.origin = camera.transform.origin.lerp(target_pos, clamp(delta * 8.0, 0, 1))
 
-	move_and_slide()
+	var collision_count = move_and_slide()
+	
+	for i in range(get_slide_collision_count()):
+		var collision = get_slide_collision(i)
+		var body = collision.get_collider()
+		
+		if body is RigidBody3D:
+			var push_vec = Vector3(velocity.x, 0, velocity.z)
+			
+			if push_vec.length() > 0.1:
+				body.apply_central_force(push_vec * 1.0)
 
 func _headbob(time) -> Vector3:
 	var pos = Vector3.ZERO

@@ -13,6 +13,9 @@ const MODE_RIGID = 0
 @export var max_scale: float = 2.0
 @export var cooldown: float = 0.12
 @export var player_node_path: NodePath
+@export var max_impact_velocity: float = 8.0
+@export var held_mass_multiplier: float = 0.3
+@export var wall_push_distance: float = 0.3
 
 var hovered: Node3D = null
 var previous: Node3D = null
@@ -26,6 +29,8 @@ var held_prev_linvel: Vector3 = Vector3.ZERO
 var last_frame_pos: Vector3 = Vector3.ZERO
 var last_frame_dt: float = 0.0
 var held_original_scale: Vector3 = Vector3.ONE
+var held_prev_mass: float = 1.0
+var object_scales: Dictionary = {}
 
 @onready var player_node: Node = null
 
@@ -45,6 +50,12 @@ func _process(delta):
 	_handle_resize()
 	_update_held_motion(delta)
 	_handle_rotation()
+
+func _physics_process(delta):
+	if held:
+		_prevent_wall_clipping()
+		if held is RigidBody3D:
+			_clamp_nearby_velocities()
 
 func _input(event):
 	if event is InputEventMouseButton:
@@ -129,6 +140,8 @@ func _try_start_hold():
 	if held is RigidBody3D:
 		held_prev_gravity = held.gravity_scale
 		held_prev_linvel = held.linear_velocity
+		held_prev_mass = held.mass
+		held.mass = held.mass * held_mass_multiplier
 		
 		held.freeze = true
 		held.linear_velocity = Vector3.ZERO
@@ -141,6 +154,11 @@ func _release_hold():
 	if held is RigidBody3D:
 		var dt = max(last_frame_dt, 0.016)
 		var velocity = (held.global_transform.origin - last_frame_pos) / dt
+		
+		if velocity.length() > max_impact_velocity:
+			velocity = velocity.normalized() * max_impact_velocity
+		
+		held.mass = held_prev_mass
 		
 		held.freeze = false
 		held.sleeping = false
@@ -176,16 +194,75 @@ func _update_held_motion(delta):
 	last_frame_pos = current_pos
 	last_frame_dt = delta
 
+func _prevent_wall_clipping():
+	if not held:
+		return
+	
+	var space_state = get_world_3d().direct_space_state
+	var held_pos = held.global_transform.origin
+	
+	var shape_node = _find_collision_shape(held)
+	if not shape_node or not shape_node.shape:
+		return
+	
+	var query = PhysicsShapeQueryParameters3D.new()
+	query.shape = shape_node.shape
+	query.transform = Transform3D(Basis().scaled(shape_node.global_transform.basis.get_scale()), held_pos)
+	query.collide_with_bodies = true
+	query.collide_with_areas = false
+	query.exclude = [held.get_rid()]
+	
+	if player_node and player_node is CollisionObject3D:
+		query.exclude.append(player_node.get_rid())
+	
+	var results = space_state.intersect_shape(query, 32)
+	
+	for result in results:
+		var collider = result.collider
+		
+		if _is_part_of_walls(collider) or collider.name == "ground" or collider.is_in_group("walls"):
+			var push_dir = (held_pos - collider.global_transform.origin).normalized()
+			if push_dir.length() < 0.1:
+				push_dir = Vector3(0, 1, 0)
+			
+			held.global_position += push_dir * wall_push_distance
+
+func _clamp_nearby_velocities():
+	if not held:
+		return
+	
+	var space_state = get_world_3d().direct_space_state
+	var held_pos = held.global_transform.origin
+	
+	var query = PhysicsShapeQueryParameters3D.new()
+	var sphere = SphereShape3D.new()
+	sphere.radius = 2.0
+	query.shape = sphere
+	query.transform = Transform3D(Basis(), held_pos)
+	query.collide_with_bodies = true
+	query.collide_with_areas = false
+	
+	var results = space_state.intersect_shape(query, 32)
+	
+	for result in results:
+		var body = result.collider
+		if body is RigidBody3D and body != held:
+			if body.linear_velocity.length() > max_impact_velocity:
+				body.linear_velocity = body.linear_velocity.normalized() * max_impact_velocity
+			
+			if body.linear_velocity.y < -max_impact_velocity:
+				body.linear_velocity.y = -max_impact_velocity
+
 func _handle_resize():
 	var target = held if held else hovered
 	
 	if not target or not can_resize:
 		return
 	
-	if Input.is_action_just_pressed("ui_page_up") or (Input.is_key_pressed(KEY_Q) and can_resize):
+	if Input.is_action_just_pressed("ui_page_up") or (Input.is_action_pressed('expand') and can_resize):
 		_scale_object(target, scale_step)
 		_start_cooldown()
-	elif Input.is_action_just_pressed("ui_page_down") or (Input.is_key_pressed(KEY_R) and can_resize):
+	elif Input.is_action_just_pressed("ui_page_down") or (Input.is_action_pressed('shrink') and can_resize):
 		_scale_object(target, 1.0 / scale_step)
 		_start_cooldown()
 
@@ -194,12 +271,19 @@ func _start_cooldown():
 	await get_tree().create_timer(cooldown).timeout
 	can_resize = true
 
+func _get_object_scale(obj: Node3D) -> float:
+	if not object_scales.has(obj):
+		object_scales[obj] = 1.0
+	return object_scales[obj]
+
 func _scale_object(obj: Node3D, factor: float):
-	var current_scale = obj.scale.x
+	var current_scale = _get_object_scale(obj)
 	var new_scale_value = current_scale * factor
 	
 	if new_scale_value < min_scale or new_scale_value > max_scale:
 		return
+	
+	object_scales[obj] = new_scale_value
 	
 	var was_frozen = false
 	if obj is RigidBody3D and not obj.freeze:
@@ -222,7 +306,11 @@ func _scale_object(obj: Node3D, factor: float):
 		held_original_scale = obj.scale
 	
 	if obj is RigidBody3D:
+		var old_mass = obj.mass
 		obj.mass = obj.mass * (factor * factor * factor)
+		
+		if obj == held:
+			held_prev_mass = held_prev_mass * (factor * factor * factor)
 		
 		if was_frozen:
 			await get_tree().process_frame
@@ -231,7 +319,7 @@ func _scale_object(obj: Node3D, factor: float):
 				obj.freeze = false
 				obj.sleeping = false
 	
-	print("mesh scale: ", mesh.scale if mesh else "none", " | collision scale: ", shape_node.scale if shape_node else "none")
+	#print("mesh scale: ", mesh.scale if mesh else "none", " | collision scale: ", shape_node.scale if shape_node else "none")
 
 func _handle_rotation():
 	if not held:

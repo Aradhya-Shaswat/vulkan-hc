@@ -36,13 +36,13 @@ albedo_color = Color(0.8965428, 0.8928584, 0, 1)
 albedo_texture = ExtResource("2_ufxs0")
 uv1_triplanar = true
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_iqu8w"]
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2sb77"]
 albedo_color = Color(0.4840049, 1, 0.7420714, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_fkrx8"]
 material = SubResource("StandardMaterial3D_2sb77")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_iqu8w"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5fr2l"]
 albedo_color = Color(1.0107458e-06, 0.67199695, 0.4142134, 1)
@@ -113,13 +113,13 @@ script = ExtResource("2_iqu8w")
 highlight_material = SubResource("StandardMaterial3D_iqu8w")
 
 [node name="ground" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -0.00047465682, 0, 0, 0, 1, 0.5, 1, -7.0064697)
+transform = Transform3D(1, 0, 0, 0, 0.00076055527, 0, 0, 0, 1, 0.5, 1, -7.0064697)
 material_override = SubResource("StandardMaterial3D_8ra5a")
 use_collision = true
 size = Vector3(100, 1, 113.01294)
 
 [node name="ground2" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.00076055527, 0, 0, 0, 1, 1.3316345, 5.853674, 10.090057)
+transform = Transform3D(1, 0, 0, 0, 0.00076055527, 0, 0, 0, 1, 1.3316345, 4.853674, 10.090057)
 use_collision = true
 size = Vector3(153.45026, 1, 157.45673)
 
@@ -386,18 +386,18 @@ transform = Transform3D(-1.0000001, 0, 0, 0, 1, 0, 0, 0, -1.0000001, 6.395023, 1
 [node name="box" type="RigidBody3D" parent="Objects"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.886938, 4.580927, -46.128853)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/box"]
-shape = SubResource("BoxShape3D_iqu8w")
-
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/box"]
 mesh = SubResource("BoxMesh_fkrx8")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/box"]
+shape = SubResource("BoxShape3D_iqu8w")
 
 [node name="box2" type="RigidBody3D" parent="Objects"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28.81277, 4.580927, -46.128853)
 mass = 0.165
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/box2"]
-shape = SubResource("BoxShape3D_iqu8w")
-
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/box2"]
 mesh = SubResource("BoxMesh_k5pu3")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/box2"]
+shape = SubResource("BoxShape3D_iqu8w")
