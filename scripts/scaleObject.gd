@@ -2,8 +2,8 @@ extends Camera3D
 
 @export var ray_length: float = 12.0
 @export var hold_distance: float = 3.0
-@export var max_drag_distance: float = 6.0
-@export var pull_strength: float = 14.0
+@export var max_drag_distance: float = 8.0
+@export var pull_strength: float = 18.0
 @export var scale_step := 1.1
 @export var highlight_material: Material
 @export var min_scale: float = 0.5
@@ -12,7 +12,7 @@ extends Camera3D
 @export var player_node_path: NodePath
 @export var max_impact_velocity: float = 8.0
 @export var held_mass_multiplier: float = 0.3
-@export var wall_push_distance: float = 0.3
+@export var surface_offset: float = 0.15
 
 var hovered: Node3D = null
 var previous: Node3D = null
@@ -26,6 +26,9 @@ var last_frame_pos := Vector3.ZERO
 var last_frame_dt := 0.0
 var held_original_scale := Vector3.ONE
 var object_scales: Dictionary = {}
+var held_aabb_half_extents := Vector3.ZERO
+var velocity_buffer: Array = []
+var buffer_size: int = 5
 
 @onready var player_node: Node = null
 
@@ -53,10 +56,6 @@ func _process(delta):
 	elif not held:
 		wheel_delta = 0.0
 
-func _physics_process(_delta):
-	if held:
-		_prevent_wall_clipping()
-
 func _input(event):
 	if event is InputEventMouseButton:
 		match event.button_index:
@@ -73,8 +72,8 @@ func _is_player_grounded() -> bool:
 		return player_node.is_on_floor()
 	return true
 
-func _get_exclusion_list() -> Array:
-	var excl = []
+func _get_exclusion_rids() -> Array[RID]:
+	var excl: Array[RID] = []
 	if player_node and player_node is CollisionObject3D:
 		excl.append(player_node.get_rid())
 		for child in player_node.get_children():
@@ -82,14 +81,20 @@ func _get_exclusion_list() -> Array:
 				excl.append(child.get_rid())
 	return excl
 
-func _is_wall_or_ground(node: Node) -> bool:
-	if node.name == "ground" or node.is_in_group("walls"):
+func _is_static_surface(node: Node) -> bool:
+	if node == null:
+		return false
+	if node.name == "ground" or node.is_in_group("ground"):
 		return true
-	var current = node
-	while current:
-		if current.name == "walls" or current.is_in_group("walls"):
-			return true
-		current = current.get_parent()
+	if node.is_in_group("walls"):
+		return true
+	if node is StaticBody3D:
+		var current = node
+		while current:
+			if current.name == "walls" or current.is_in_group("walls") or current.name == "ground" or current.is_in_group("ground"):
+				return true
+			current = current.get_parent()
+		return true
 	return false
 
 func _update_hover():
@@ -106,7 +111,7 @@ func _update_hover():
 	var origin = project_ray_origin(center)
 	var dir = project_ray_normal(center)
 	var params = PhysicsRayQueryParameters3D.create(origin, origin + dir * ray_length)
-	params.exclude = _get_exclusion_list()
+	params.exclude = _get_exclusion_rids()
 	params.collide_with_bodies = true
 	
 	var res = get_world_3d().direct_space_state.intersect_ray(params)
@@ -114,9 +119,9 @@ func _update_hover():
 	
 	if res:
 		var c = res.collider
-		if not _is_wall_or_ground(c) and not _is_part_of_player(c):
+		if not _is_static_surface(c) and not _is_part_of_player(c):
 			var root = _get_interactable_root(c)
-			if root and not _is_wall_or_ground(root) and not _is_part_of_player(root):
+			if root and not _is_static_surface(root) and not _is_part_of_player(root) and not _is_player_standing_on(root):
 				hovered = root
 	
 	if hovered != previous:
@@ -124,8 +129,26 @@ func _update_hover():
 		_apply_highlight(hovered)
 		previous = hovered
 
+func _is_player_standing_on(obj: Node3D) -> bool:
+	if not player_node or not player_node is CharacterBody3D:
+		return false
+	if not player_node.is_on_floor():
+		return false
+	var player_body = player_node as CharacterBody3D
+	for i in range(player_body.get_slide_collision_count()):
+		var collision = player_body.get_slide_collision(i)
+		var collider = collision.get_collider()
+		if collider == obj:
+			return true
+		var root = _get_interactable_root(collider)
+		if root == obj:
+			return true
+	return false
+
 func _try_start_hold():
 	if not hovered or not _is_player_grounded():
+		return
+	if _is_player_standing_on(hovered):
 		return
 	held = hovered
 	var euler = held.global_transform.basis.get_euler()
@@ -134,6 +157,8 @@ func _try_start_hold():
 	held_original_scale = held.scale
 	last_frame_pos = held.global_transform.origin
 	last_frame_dt = 0.0
+	velocity_buffer.clear()
+	held_aabb_half_extents = _get_object_half_extents(held)
 	
 	if held is RigidBody3D:
 		held_prev_mass = held.mass
@@ -151,8 +176,7 @@ func _release_hold():
 	if not held:
 		return
 	if held is RigidBody3D:
-		var dt = max(last_frame_dt, 0.016)
-		var velocity = (held.global_transform.origin - last_frame_pos) / dt
+		var velocity = _get_smoothed_velocity()
 		if velocity.length() > max_impact_velocity:
 			velocity = velocity.normalized() * max_impact_velocity
 		held.mass = held_prev_mass
@@ -166,14 +190,41 @@ func _release_hold():
 			held.linear_velocity = velocity
 			held.angular_velocity = Vector3.ZERO
 			if velocity.length() < 0.1:
-				held.apply_central_impulse(Vector3(0, -0.01, 0))
+				held.apply_central_impulse(Vector3(0, -0.05, 0))
 	held = null
 	last_frame_dt = 0.0
+	velocity_buffer.clear()
+
+func _get_smoothed_velocity() -> Vector3:
+	if velocity_buffer.is_empty():
+		return Vector3.ZERO
+	var sum = Vector3.ZERO
+	for v in velocity_buffer:
+		sum += v
+	return sum / velocity_buffer.size()
 
 func _is_multiplayer_active() -> bool:
 	if multiplayer.multiplayer_peer == null:
 		return false
 	return multiplayer.multiplayer_peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED
+
+func _get_object_half_extents(obj: Node3D) -> Vector3:
+	var mesh = _find_mesh(obj)
+	if mesh and mesh.mesh:
+		var aabb = mesh.mesh.get_aabb()
+		return aabb.size * 0.5 * mesh.global_transform.basis.get_scale()
+	var shape = _find_collision_shape(obj)
+	if shape and shape.shape:
+		if shape.shape is BoxShape3D:
+			return shape.shape.size * 0.5 * shape.global_transform.basis.get_scale()
+		elif shape.shape is SphereShape3D:
+			var r = shape.shape.radius
+			return Vector3(r, r, r)
+		elif shape.shape is CapsuleShape3D:
+			var r = shape.shape.radius
+			var h = shape.shape.height * 0.5
+			return Vector3(r, h, r)
+	return Vector3(0.3, 0.3, 0.3)
 
 func _update_held_motion(delta):
 	if not held:
@@ -181,33 +232,49 @@ func _update_held_motion(delta):
 	
 	var cam_pos = global_transform.origin
 	var cam_forward = -global_transform.basis.z
+	var cam_right = global_transform.basis.x
 	var current_pos = held.global_transform.origin
 	var player_pos = player_node.global_transform.origin if player_node else cam_pos
 	var space_state = get_world_3d().direct_space_state
-	var min_dist = hold_distance * 0.5
 	
-	if current_pos.distance_to(cam_pos) > max_drag_distance:
+	if current_pos.distance_to(player_pos) > max_drag_distance + 2.0:
 		_release_hold()
 		return
 
-	var target_pos = cam_pos + cam_forward * hold_distance
-	var excl = [held.get_rid()]
-	if player_node and player_node is CollisionObject3D:
-		excl.append(player_node.get_rid())
+	var excl: Array[RID] = [held.get_rid()]
+	var player_excl = _get_exclusion_rids()
+	for rid in player_excl:
+		excl.append(rid)
 	
-	target_pos = _adjust_for_walls(space_state, cam_pos, target_pos, excl)
-	target_pos = _adjust_for_walls(space_state, current_pos, target_pos, excl)
+	var horizontal_forward = Vector3(cam_forward.x, 0, cam_forward.z).normalized()
+	if horizontal_forward.length() < 0.1:
+		horizontal_forward = Vector3(cam_right.x, 0, cam_right.z).normalized().rotated(Vector3.UP, -PI/2)
 	
-	if target_pos.distance_to(player_pos) < min_dist:
-		var away = (target_pos - player_pos).normalized()
-		if away.length() < 0.01:
-			away = cam_forward
-		target_pos = player_pos + away * min_dist
+	var target_pos = player_pos + horizontal_forward * hold_distance
+	target_pos.y = cam_pos.y + cam_forward.y * hold_distance
 	
-	target_pos = _check_wall_between_player(space_state, player_pos, target_pos, excl, min_dist)
+	var ground_result = _check_ground_below(space_state, target_pos, excl)
+	var ground_y = player_pos.y - 1.0 + held_aabb_half_extents.y + surface_offset
+	if ground_result.hit:
+		ground_y = ground_result.position.y + held_aabb_half_extents.y + surface_offset
 	
-	var new_pos = current_pos.lerp(target_pos, delta * pull_strength)
+	if target_pos.y < ground_y:
+		target_pos.y = ground_y
+	
+	target_pos = _resolve_surface_collision(space_state, cam_pos, target_pos, excl)
+	
+	if target_pos.y < ground_y:
+		target_pos.y = ground_y
+	
+	var new_pos = current_pos.lerp(target_pos, clamp(delta * pull_strength, 0.0, 1.0))
 	var new_rot = Vector3(held_rot_x, held_rot, 0)
+	
+	var frame_velocity = (new_pos - last_frame_pos) / max(delta, 0.001)
+	if frame_velocity.length() > max_impact_velocity * 2.0:
+		frame_velocity = frame_velocity.normalized() * max_impact_velocity * 0.5
+	velocity_buffer.append(frame_velocity)
+	if velocity_buffer.size() > buffer_size:
+		velocity_buffer.pop_front()
 	
 	if held.has_method("update_held_position") and _is_multiplayer_active():
 		var my_id = held.multiplayer.get_unique_id()
@@ -216,94 +283,50 @@ func _update_held_motion(delta):
 	held.global_position = new_pos
 	held.global_rotation = new_rot
 	held.scale = held_original_scale
-	last_frame_pos = current_pos
+	last_frame_pos = new_pos
 	last_frame_dt = delta
 
-func _adjust_for_walls(space_state, from: Vector3, to: Vector3, excl: Array) -> Vector3:
+func _check_ground_below(space_state: PhysicsDirectSpaceState3D, pos: Vector3, excl: Array[RID]) -> Dictionary:
+	var ray_start = pos + Vector3(0, held_aabb_half_extents.y + 0.5, 0)
+	var ray_end = pos - Vector3(0, 20.0, 0)
+	var params = PhysicsRayQueryParameters3D.create(ray_start, ray_end)
+	params.exclude = excl
+	params.collide_with_bodies = true
+	var result = space_state.intersect_ray(params)
+	if result and _is_static_surface(result.collider):
+		return {"hit": true, "position": result.position, "normal": result.normal}
+	return {"hit": false}
+
+func _resolve_surface_collision(space_state: PhysicsDirectSpaceState3D, from: Vector3, to: Vector3, excl: Array[RID]) -> Vector3:
 	var params = PhysicsRayQueryParameters3D.create(from, to)
 	params.exclude = excl
 	params.collide_with_bodies = true
 	var result = space_state.intersect_ray(params)
-	if result and _is_wall_or_ground(result.collider):
-		return result.position + result.normal * (wall_push_distance + 0.3)
+	
+	if result and _is_static_surface(result.collider):
+		var normal = result.normal
+		var offset = held_aabb_half_extents.length() * 0.5 + surface_offset
+		return result.position + normal * offset
+	
+	var directions = [
+		Vector3(1, 0, 0), Vector3(-1, 0, 0),
+		Vector3(0, 0, 1), Vector3(0, 0, -1),
+		Vector3(0, 1, 0), Vector3(0, -1, 0)
+	]
+	
+	for dir in directions:
+		var check_dist = held_aabb_half_extents.length() + surface_offset
+		var check_params = PhysicsRayQueryParameters3D.create(to, to + dir * check_dist)
+		check_params.exclude = excl
+		check_params.collide_with_bodies = true
+		var check_result = space_state.intersect_ray(check_params)
+		
+		if check_result and _is_static_surface(check_result.collider):
+			var penetration = check_dist - to.distance_to(check_result.position)
+			if penetration > 0:
+				to -= dir * (penetration + surface_offset)
+	
 	return to
-
-func _check_wall_between_player(space_state, player_pos: Vector3, target_pos: Vector3, excl: Array, min_dist: float) -> Vector3:
-	if not player_node:
-		return target_pos
-	var dir = target_pos - player_pos
-	dir.y = 0
-	if dir.length() < 0.1:
-		return target_pos
-	var params = PhysicsRayQueryParameters3D.create(player_pos, player_pos + dir.normalized() * (dir.length() + 1.0))
-	params.exclude = excl
-	params.collide_with_bodies = true
-	var result = space_state.intersect_ray(params)
-	if result and _is_wall_or_ground(result.collider):
-		var wall_dist = player_pos.distance_to(result.position)
-		if player_pos.distance_to(target_pos) > wall_dist - 0.5:
-			var new_pos = result.position + result.normal * (wall_push_distance + 0.8)
-			if new_pos.distance_to(player_pos) < min_dist:
-				new_pos = player_pos + result.normal * min_dist
-			return new_pos
-	return target_pos
-
-func _prevent_wall_clipping():
-	if not held:
-		return
-	var space_state = get_world_3d().direct_space_state
-	var held_pos = held.global_transform.origin
-	var cam_pos = global_transform.origin
-	var player_pos = player_node.global_transform.origin if player_node else cam_pos
-	var min_dist = hold_distance * 0.5
-	var excl = [held.get_rid()]
-	if player_node and player_node is CollisionObject3D:
-		excl.append(player_node.get_rid())
-	
-	var dir = (held_pos - player_pos)
-	dir.y = 0
-	if dir.length() > 0.1:
-		var params = PhysicsRayQueryParameters3D.create(held_pos, held_pos + dir.normalized())
-		params.exclude = excl
-		params.collide_with_bodies = true
-		var result = space_state.intersect_ray(params)
-		if result and _is_wall_or_ground(result.collider):
-			held.global_position = result.position + result.normal * (wall_push_distance + 0.8)
-			last_frame_pos = held.global_position
-			if held.global_position.distance_to(player_pos) < min_dist:
-				held.global_position = player_pos + result.normal * min_dist
-				last_frame_pos = held.global_position
-			return
-	
-	var params = PhysicsRayQueryParameters3D.create(cam_pos, held_pos)
-	params.exclude = excl
-	params.collide_with_bodies = true
-	var result = space_state.intersect_ray(params)
-	if result and _is_wall_or_ground(result.collider):
-		held.global_position = result.position + result.normal * (wall_push_distance + 0.5)
-		last_frame_pos = held.global_position
-		return
-	
-	var shape_node = _find_collision_shape(held)
-	if not shape_node or not shape_node.shape:
-		return
-	var query = PhysicsShapeQueryParameters3D.new()
-	query.shape = shape_node.shape
-	query.transform = Transform3D(Basis().scaled(shape_node.global_transform.basis.get_scale()), held_pos)
-	query.collide_with_bodies = true
-	query.exclude = excl
-	
-	for r in space_state.intersect_shape(query, 16):
-		if _is_wall_or_ground(r.collider):
-			var to_player = (player_pos - held_pos)
-			to_player.y = 0
-			to_player = to_player.normalized() if to_player.length() > 0.01 else (cam_pos - held_pos).normalized()
-			held.global_position += to_player * wall_push_distance * 2.0
-			last_frame_pos = held.global_position
-			if held.global_position.distance_to(player_pos) < min_dist:
-				held.global_position = player_pos - to_player * min_dist
-				last_frame_pos = held.global_position
-			break
 
 func _handle_resize():
 	var target = held if held else hovered
@@ -348,6 +371,7 @@ func _scale_object(obj: Node3D, factor: float):
 	
 	if obj == held:
 		held_original_scale = obj.scale
+		held_aabb_half_extents = _get_object_half_extents(obj)
 	
 	if obj is RigidBody3D:
 		obj.mass = new_mass

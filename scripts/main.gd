@@ -4,13 +4,15 @@ var peer = ENetMultiplayerPeer.new()
 @export var player_scene : PackedScene
 var used_spawn_points = []
 
+func _ready():
+	$MultiplayerSpawner.spawn_function = custom_spawn
+
 func _on_host_pressed() -> void:
 	peer.create_server(1027)
 	multiplayer.multiplayer_peer = peer
 	multiplayer.peer_connected.connect(_on_peer_connected)
 	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
 	add_player(1)
-	# temporary stuff
 	$CanvasLayer/Host.hide()
 	$CanvasLayer/Join.hide()
 
@@ -39,13 +41,16 @@ func get_spawn_position() -> Vector3:
 		return spawn_nodes[randi() % spawn_nodes.size()].global_position
 	return Vector3(0, 0, 0)
 
-func add_player(id):
+func custom_spawn(data):
 	var player = player_scene.instantiate()
-	player.name = str(id)
+	player.name = str(data.id)
+	player.position = data.pos
+	player.sync_position = data.pos
+	return player
+
+func add_player(id):
 	var spawn_pos = get_spawn_position()
-	player.position = spawn_pos
-	player.sync_position = spawn_pos
-	add_child(player)
+	$MultiplayerSpawner.spawn({"id": id, "pos": spawn_pos})
 	
 func exit_game(id):
 	del_player(id)

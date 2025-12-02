@@ -40,9 +40,6 @@ func _ready():
 	
 	multiplayer_sync.set_multiplayer_authority(name.to_int())
 	
-	if sync_position != Vector3.ZERO:
-		global_position = sync_position
-	
 	if _is_local_authority():
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 		camera.current = true

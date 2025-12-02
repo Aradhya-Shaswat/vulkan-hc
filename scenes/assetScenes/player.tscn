@@ -48,4 +48,3 @@ highlight_material = SubResource("StandardMaterial3D_iqu8w")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_ac1ej")
-public_visibility = true
