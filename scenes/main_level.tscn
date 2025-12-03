@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://cnew6x2hwvjyh"]
+[gd_scene load_steps=38 format=3 uid="uid://cnew6x2hwvjyh"]
 
 [ext_resource type="FontFile" uid="uid://gunvccib1svm" path="res://assets/fonts/Poppins-Regular.ttf" id="1_iqu8w"]
 [ext_resource type="Script" uid="uid://b27u1ptmiviqb" path="res://scripts/main.gd" id="1_mwgft"]
@@ -6,10 +6,13 @@
 [ext_resource type="PackedScene" uid="uid://cva3jmdk0sqdm" path="res://scenes/assetScenes/player.tscn" id="3_fkrx8"]
 [ext_resource type="PackedScene" uid="uid://dubjdyiae8baa" path="res://scenes/assetScenes/brick_wall.tscn" id="6_bq26l"]
 [ext_resource type="PackedScene" uid="uid://c75miugiquori" path="res://scenes/assetScenes/brick_wall_curve.tscn" id="7_u2c82"]
+[ext_resource type="PackedScene" uid="uid://b52nsqkuh5mqk" path="res://scenes/assetScenes/cross.tscn" id="10_5fr2l"]
+[ext_resource type="PackedScene" uid="uid://dkdhu84jhqjn5" path="res://scenes/assetScenes/crypt.tscn" id="11_fkrx8"]
+[ext_resource type="PackedScene" uid="uid://c73mkdvaw1m4p" path="res://scenes/assetScenes/brick_wall_end.tscn" id="12_mwgft"]
+[ext_resource type="PackedScene" uid="uid://idvvck1xoxwe" path="res://scenes/assetScenes/border_pillar.tscn" id="13_mwgft"]
 [ext_resource type="PackedScene" uid="uid://dj2q7ckihe14y" path="res://scenes/assetScenes/stone_wall.tscn" id="15_siio1"]
 [ext_resource type="PackedScene" uid="uid://dhe2vdggcxcmo" path="res://scenes/assetScenes/stone_wall_curve.tscn" id="16_ndwfr"]
 [ext_resource type="PackedScene" uid="uid://dny03htroscuh" path="res://scenes/assetScenes/stone_wall_column.tscn" id="17_nc5r2"]
-[ext_resource type="Script" uid="uid://crdgml8a8yh0a" path="res://scripts/synced_rigid_body.gd" id="18_sync"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mwgft"]
 bg_color = Color(0.51381, 0.68613404, 0.62646294, 1)
@@ -73,9 +76,11 @@ corner_radius_bottom_left = 8
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2sb77"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_playerlist"]
-bg_color = Color(0.1, 0.1, 0.1, 0.85)
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
+bg_color = Color(0.18717614, 0.18717614, 0.18717614, 0.8509804)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pausemenu"]
 bg_color = Color(0.05, 0.05, 0.05, 0.95)
@@ -83,6 +88,36 @@ corner_radius_top_left = 15
 corner_radius_top_right = 15
 corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ff0s2"]
+bg_color = Color(0.29954746, 0.29954746, 0.29954743, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0.00011382803, 0.00011382803, 0.00011382803, 0.6)
+shadow_size = 2
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uk2yf"]
+bg_color = Color(0.15254769, 0.067020185, 0.07938167, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0.00011382803, 0.00011382803, 0.00011382803, 0.6)
+shadow_size = 2
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_uk2yf"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fkrx8"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mwgft"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_adxub"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ff0s2"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_v3uhd"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -100,45 +135,6 @@ glow_enabled = true
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8ra5a"]
 albedo_texture = ExtResource("2_ufxs0")
 uv1_triplanar = true
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_iqu8w"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2sb77"]
-albedo_color = Color(0.4840049, 1, 0.7420714, 1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_fkrx8"]
-material = SubResource("StandardMaterial3D_2sb77")
-
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_rigid"]
-properties/0/path = NodePath(".:sync_position")
-properties/0/spawn = true
-properties/0/replication_mode = 1
-properties/1/path = NodePath(".:sync_rotation")
-properties/1/spawn = true
-properties/1/replication_mode = 1
-properties/2/path = NodePath(".:sync_linear_velocity")
-properties/2/spawn = true
-properties/2/replication_mode = 1
-properties/3/path = NodePath(".:sync_angular_velocity")
-properties/3/spawn = true
-properties/3/replication_mode = 1
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5fr2l"]
-albedo_color = Color(1.0107458e-06, 0.67199695, 0.4142134, 1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_k5pu3"]
-material = SubResource("StandardMaterial3D_5fr2l")
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_iqu8w"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fkrx8"]
-albedo_color = Color(0, 0, 0, 1)
-
-[sub_resource type="SphereMesh" id="SphereMesh_iqu8w"]
-
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_iqu8w"]
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_5fr2l"]
 
 [node name="MainLevel" type="Node3D"]
 script = ExtResource("1_mwgft")
@@ -167,30 +163,6 @@ theme_override_constants/outline_size = 3
 theme_override_fonts/font = ExtResource("1_iqu8w")
 theme_override_font_sizes/font_size = 20
 text = "VULKAN-HC (BETA_0.4)"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="title" type="Label" parent="CanvasLayer"]
-z_index = 12
-anchors_preset = -1
-anchor_left = 0.5
-anchor_top = 0.46300003
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -574.0
-offset_top = -161.02402
-offset_right = -55.0
-offset_bottom = -45.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(1, 1, 0.8235294, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 1
-theme_override_constants/shadow_offset_y = 1
-theme_override_constants/outline_size = 7
-theme_override_fonts/font = ExtResource("1_iqu8w")
-theme_override_font_sizes/font_size = 58
-text = "Game Options"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -370,8 +342,9 @@ visible = false
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
+offset_left = 14.0
 offset_top = -150.0
-offset_right = 200.0
+offset_right = 214.0
 offset_bottom = 150.0
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_playerlist")
@@ -463,6 +436,51 @@ text = "Connecting to server..."
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="CancelButton" type="Button" parent="CanvasLayer/LoadingPanel"]
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -60.0
+offset_top = 60.0
+offset_right = 60.0
+offset_bottom = 95.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_5fr2l")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ff0s2")
+theme_override_styles/hover = SubResource("StyleBoxFlat_uk2yf")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_uk2yf")
+text = "Cancel"
+
+[node name="title" type="Label" parent="CanvasLayer"]
+z_index = 12
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.46300003
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -574.0
+offset_top = -161.02402
+offset_right = -55.0
+offset_bottom = -45.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 0.8235294, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/outline_size = 7
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 58
+text = "Game Options"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="Hotbar" type="Panel" parent="CanvasLayer"]
 visible = false
 anchors_preset = 7
@@ -470,9 +488,9 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -180.0
+offset_left = -121.5
 offset_top = -70.0
-offset_right = 180.0
+offset_right = 121.5
 offset_bottom = -10.0
 grow_horizontal = 2
 grow_vertical = 0
@@ -502,13 +520,29 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_bottom = -12.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_iqu8w")
-theme_override_font_sizes/font_size = 11
-text = "1
-Cube"
+theme_override_font_sizes/font_size = 10
+text = "Cube"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Count" type="Label" parent="CanvasLayer/Hotbar/HBoxContainer/Slot1"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -14.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.3, 0.3, 0.3, 1)
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 8
+text = "0/10"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -522,13 +556,29 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_bottom = -12.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_iqu8w")
-theme_override_font_sizes/font_size = 11
-text = "2
-Sphere"
+theme_override_font_sizes/font_size = 10
+text = "Ball"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Count" type="Label" parent="CanvasLayer/Hotbar/HBoxContainer/Slot2"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -14.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.3, 0.3, 0.3, 1)
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 8
+text = "0/10"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -542,13 +592,29 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_bottom = -12.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_iqu8w")
-theme_override_font_sizes/font_size = 11
-text = "3
-Cylinder"
+theme_override_font_sizes/font_size = 10
+text = "Cylinder"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Count" type="Label" parent="CanvasLayer/Hotbar/HBoxContainer/Slot3"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -14.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.3, 0.3, 0.3, 1)
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 8
+text = "0/10"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -562,13 +628,29 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_bottom = -12.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_iqu8w")
-theme_override_font_sizes/font_size = 11
-text = "4
-Capsule"
+theme_override_font_sizes/font_size = 10
+text = "Capsule"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Count" type="Label" parent="CanvasLayer/Hotbar/HBoxContainer/Slot4"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -14.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.3, 0.3, 0.3, 1)
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 8
+text = "0/10"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -625,10 +707,11 @@ anchor_bottom = 0.5
 offset_left = -100.0
 offset_top = -30.0
 offset_right = 100.0
-offset_bottom = 90.0
+offset_bottom = 74.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 10
+alignment = 1
 
 [node name="ResumeButton" type="Button" parent="CanvasLayer/PauseMenu/PauseButtons"]
 layout_mode = 2
@@ -639,6 +722,7 @@ theme_override_font_sizes/font_size = 20
 theme_override_styles/normal = SubResource("StyleBoxFlat_5fr2l")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_2sb77")
 theme_override_styles/hover = SubResource("StyleBoxFlat_fkrx8")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_fkrx8")
 text = "Resume"
 
 [node name="OptionsButton" type="Button" parent="CanvasLayer/PauseMenu/PauseButtons"]
@@ -650,6 +734,7 @@ theme_override_font_sizes/font_size = 20
 theme_override_styles/normal = SubResource("StyleBoxFlat_5fr2l")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_2sb77")
 theme_override_styles/hover = SubResource("StyleBoxFlat_fkrx8")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_mwgft")
 text = "Options"
 
 [node name="QuitButton" type="Button" parent="CanvasLayer/PauseMenu/PauseButtons"]
@@ -661,6 +746,7 @@ theme_override_font_sizes/font_size = 20
 theme_override_styles/normal = SubResource("StyleBoxFlat_5fr2l")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_2sb77")
 theme_override_styles/hover = SubResource("StyleBoxFlat_fkrx8")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_adxub")
 text = "Quit to Menu"
 
 [node name="InGameOptions" type="Panel" parent="CanvasLayer"]
@@ -874,10 +960,11 @@ theme_override_font_sizes/font_size = 20
 theme_override_styles/normal = SubResource("StyleBoxFlat_5fr2l")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_2sb77")
 theme_override_styles/hover = SubResource("StyleBoxFlat_fkrx8")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ff0s2")
 text = "Back"
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.8660254, -0.43301275, 0.25000003, 0.49600145, -0.6808939, 0.53885627, -0.063108146, 0.59066355, 0.80444634, 32.54878, 1.767848, -25.480614)
+transform = Transform3D(-0.8660254, -0.43301275, 0.25000003, 0.27299982, 0.009393036, 0.9619683, -0.41889283, 0.90133893, 0.1100778, 32.54878, 1.767848, -25.824705)
 shadow_enabled = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -1204,254 +1291,62 @@ visible = false
 use_collision = true
 size = Vector3(150, 100, 1)
 
-[node name="Objects" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -6.6105556, 0)
+[node name="cross2" parent="walls" instance=ExtResource("10_5fr2l")]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 25.242638, 1.0002375, 57.84619)
 
-[node name="box" type="RigidBody3D" parent="Objects"]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 33.042732, 2.580927, -48.97306)
-script = ExtResource("18_sync")
+[node name="cross4" parent="walls" instance=ExtResource("10_5fr2l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.033255, 1.0002375, 57.84619)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/box"]
-shape = SubResource("BoxShape3D_iqu8w")
+[node name="cross3" parent="walls" instance=ExtResource("10_5fr2l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.313469, 1.0002375, -59.54147)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/box"]
-mesh = SubResource("BoxMesh_fkrx8")
+[node name="crypt" parent="walls" instance=ExtResource("11_fkrx8")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, -0.8149414, 1.0002375, -0.44093704)
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Objects/box"]
-replication_config = SubResource("SceneReplicationConfig_rigid")
+[node name="brick-wall-end2" parent="walls" instance=ExtResource("12_mwgft")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.856024, 1.0002375, -17.015175)
 
-[node name="box4" type="RigidBody3D" parent="Objects"]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 33.042732, 2.580927, -46.474236)
-script = ExtResource("18_sync")
+[node name="brick-wall2" parent="walls" instance=ExtResource("6_bq26l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 48.54159, 1.0002375, -17.029894)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/box4"]
-shape = SubResource("BoxShape3D_iqu8w")
+[node name="brick-wall3" parent="walls" instance=ExtResource("6_bq26l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 42.54159, 1.0002375, -17.029894)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/box4"]
-mesh = SubResource("BoxMesh_fkrx8")
+[node name="brick-wall4" parent="walls" instance=ExtResource("6_bq26l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.54159, 1.0002375, -17.029894)
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Objects/box4"]
-replication_config = SubResource("SceneReplicationConfig_rigid")
+[node name="brick-wall-end3" parent="walls" instance=ExtResource("12_mwgft")]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -27.615625, 1.0002375, 17.96275)
 
-[node name="box2" type="RigidBody3D" parent="Objects"]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 33.042732, 2.580927, -52.89889)
-mass = 0.165
-script = ExtResource("18_sync")
+[node name="brick-wall5" parent="walls" instance=ExtResource("6_bq26l")]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -45.301193, 1.0002375, 17.977468)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/box2"]
-shape = SubResource("BoxShape3D_iqu8w")
+[node name="brick-wall6" parent="walls" instance=ExtResource("6_bq26l")]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -39.301193, 1.0002375, 17.977468)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/box2"]
-mesh = SubResource("BoxMesh_k5pu3")
+[node name="brick-wall7" parent="walls" instance=ExtResource("6_bq26l")]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -33.301193, 1.0002375, 17.977468)
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Objects/box2"]
-replication_config = SubResource("SceneReplicationConfig_rigid")
+[node name="cross5" parent="walls" instance=ExtResource("10_5fr2l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.748499, 1.0002375, -59.54147)
 
-[node name="box3" type="RigidBody3D" parent="Objects"]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 33.042732, 2.580927, -56.16922)
-mass = 0.165
-script = ExtResource("18_sync")
+[node name="border-pillar2" parent="walls" instance=ExtResource("13_mwgft")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -19.904032, 1.0002356, 7.0744286)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/box3"]
-shape = SubResource("BoxShape3D_iqu8w")
+[node name="border-pillar3" parent="walls" instance=ExtResource("13_mwgft")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 26.411592, 1.0002356, 21.605593)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/box3"]
-mesh = SubResource("BoxMesh_k5pu3")
+[node name="border-pillar4" parent="walls" instance=ExtResource("13_mwgft")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -10.508776, 1.0002356, 30.026468)
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Objects/box3"]
-replication_config = SubResource("SceneReplicationConfig_rigid")
+[node name="border-pillar5" parent="walls" instance=ExtResource("13_mwgft")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -10.508776, 1.0002356, -34.747322)
 
-[node name="box9" type="RigidBody3D" parent="Objects"]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -19.957268, 2.580927, -48.97306)
-script = ExtResource("18_sync")
+[node name="border-pillar6" parent="walls" instance=ExtResource("13_mwgft")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -43.7623, 1.0002356, -16.012459)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/box9"]
-shape = SubResource("BoxShape3D_iqu8w")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/box9"]
-mesh = SubResource("BoxMesh_fkrx8")
-
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Objects/box9"]
-replication_config = SubResource("SceneReplicationConfig_rigid")
-
-[node name="box10" type="RigidBody3D" parent="Objects"]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -19.957268, 2.580927, -46.474236)
-script = ExtResource("18_sync")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/box10"]
-shape = SubResource("BoxShape3D_iqu8w")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/box10"]
-mesh = SubResource("BoxMesh_fkrx8")
-
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Objects/box10"]
-replication_config = SubResource("SceneReplicationConfig_rigid")
-
-[node name="box11" type="RigidBody3D" parent="Objects"]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -19.957268, 2.580927, -52.89889)
-mass = 0.165
-script = ExtResource("18_sync")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/box11"]
-shape = SubResource("BoxShape3D_iqu8w")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/box11"]
-mesh = SubResource("BoxMesh_k5pu3")
-
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Objects/box11"]
-replication_config = SubResource("SceneReplicationConfig_rigid")
-
-[node name="box12" type="RigidBody3D" parent="Objects"]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -19.957268, 2.580927, -56.16922)
-mass = 0.165
-script = ExtResource("18_sync")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/box12"]
-shape = SubResource("BoxShape3D_iqu8w")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/box12"]
-mesh = SubResource("BoxMesh_k5pu3")
-
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Objects/box12"]
-replication_config = SubResource("SceneReplicationConfig_rigid")
-
-[node name="box5" type="RigidBody3D" parent="Objects"]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 19.967499, 2.580927, 50.62213)
-script = ExtResource("18_sync")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/box5"]
-shape = SubResource("BoxShape3D_iqu8w")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/box5"]
-mesh = SubResource("BoxMesh_fkrx8")
-
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Objects/box5"]
-replication_config = SubResource("SceneReplicationConfig_rigid")
-
-[node name="box6" type="RigidBody3D" parent="Objects"]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 19.967499, 2.580927, 53.12095)
-script = ExtResource("18_sync")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/box6"]
-shape = SubResource("BoxShape3D_iqu8w")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/box6"]
-mesh = SubResource("BoxMesh_fkrx8")
-
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Objects/box6"]
-replication_config = SubResource("SceneReplicationConfig_rigid")
-
-[node name="box7" type="RigidBody3D" parent="Objects"]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 19.967499, 2.580927, 46.696297)
-mass = 0.165
-script = ExtResource("18_sync")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/box7"]
-shape = SubResource("BoxShape3D_iqu8w")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/box7"]
-mesh = SubResource("BoxMesh_k5pu3")
-
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Objects/box7"]
-replication_config = SubResource("SceneReplicationConfig_rigid")
-
-[node name="box8" type="RigidBody3D" parent="Objects"]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 19.967499, 2.580927, 43.42597)
-mass = 0.165
-script = ExtResource("18_sync")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/box8"]
-shape = SubResource("BoxShape3D_iqu8w")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/box8"]
-mesh = SubResource("BoxMesh_k5pu3")
-
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Objects/box8"]
-replication_config = SubResource("SceneReplicationConfig_rigid")
-
-[node name="box13" type="RigidBody3D" parent="Objects"]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -32.0325, 2.580927, 50.62213)
-script = ExtResource("18_sync")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/box13"]
-shape = SubResource("BoxShape3D_iqu8w")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/box13"]
-mesh = SubResource("BoxMesh_fkrx8")
-
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Objects/box13"]
-replication_config = SubResource("SceneReplicationConfig_rigid")
-
-[node name="box14" type="RigidBody3D" parent="Objects"]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -32.0325, 2.580927, 53.12095)
-script = ExtResource("18_sync")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/box14"]
-shape = SubResource("BoxShape3D_iqu8w")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/box14"]
-mesh = SubResource("BoxMesh_fkrx8")
-
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Objects/box14"]
-replication_config = SubResource("SceneReplicationConfig_rigid")
-
-[node name="box15" type="RigidBody3D" parent="Objects"]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -32.0325, 2.580927, 46.696297)
-mass = 0.165
-script = ExtResource("18_sync")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/box15"]
-shape = SubResource("BoxShape3D_iqu8w")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/box15"]
-mesh = SubResource("BoxMesh_k5pu3")
-
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Objects/box15"]
-replication_config = SubResource("SceneReplicationConfig_rigid")
-
-[node name="box16" type="RigidBody3D" parent="Objects"]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -32.0325, 2.580927, 43.42597)
-mass = 0.165
-script = ExtResource("18_sync")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/box16"]
-shape = SubResource("BoxShape3D_iqu8w")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/box16"]
-mesh = SubResource("BoxMesh_k5pu3")
-
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Objects/box16"]
-replication_config = SubResource("SceneReplicationConfig_rigid")
-
-[node name="ball" type="RigidBody3D" parent="Objects"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 41.593597, 2.6604323, -60.707924)
-visible = false
-script = ExtResource("18_sync")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/ball"]
-shape = SubResource("SphereShape3D_iqu8w")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/ball"]
-material_overlay = SubResource("StandardMaterial3D_fkrx8")
-mesh = SubResource("SphereMesh_iqu8w")
-
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Objects/ball"]
-replication_config = SubResource("SceneReplicationConfig_rigid")
-
-[node name="cylinder" type="RigidBody3D" parent="Objects"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 41.593597, 2.6604323, -57.083923)
-visible = false
-script = ExtResource("18_sync")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/cylinder"]
-shape = SubResource("CylinderShape3D_iqu8w")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/cylinder"]
-material_overlay = SubResource("StandardMaterial3D_fkrx8")
-mesh = SubResource("CylinderMesh_5fr2l")
-
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Objects/cylinder"]
-replication_config = SubResource("SceneReplicationConfig_rigid")
+[node name="border-pillar7" parent="walls" instance=ExtResource("13_mwgft")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 41.94597, 1.0002356, -10.064644)
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("uid://cva3jmdk0sqdm")
@@ -1471,11 +1366,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.491024, -5, -57.63561)
 [node name="SpawnPoint4" type="Marker3D" parent="SpawnPoints" groups=["spawn_points"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.923948, -5, 54.51059)
 
+[node name="Objects" type="Node3D" parent="."]
+
 [connection signal="pressed" from="CanvasLayer/Host" to="." method="_on_host_pressed"]
 [connection signal="pressed" from="CanvasLayer/Back" to="." method="_on_back_pressed"]
 [connection signal="pressed" from="CanvasLayer/Join" to="." method="_on_join_pressed"]
 [connection signal="text_changed" from="CanvasLayer/UsernameEdit" to="." method="_on_username_text_changed"]
 [connection signal="text_changed" from="CanvasLayer/IPEdit" to="." method="_on_ip_text_changed"]
+[connection signal="pressed" from="CanvasLayer/LoadingPanel/CancelButton" to="." method="_on_cancel_connection_pressed"]
 [connection signal="pressed" from="CanvasLayer/PauseMenu/PauseButtons/ResumeButton" to="." method="_on_resume_pressed"]
 [connection signal="pressed" from="CanvasLayer/PauseMenu/PauseButtons/OptionsButton" to="." method="_on_pause_options_pressed"]
 [connection signal="pressed" from="CanvasLayer/PauseMenu/PauseButtons/QuitButton" to="." method="_on_quit_to_menu_pressed"]

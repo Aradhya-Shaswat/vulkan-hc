@@ -17,6 +17,7 @@ var server_port: int = 1027
 var selected_hotbar_slot = 0
 var next_object_id = 1000
 var spawn_counts = {}
+var spawned_objects = {}
 const MAX_SPAWNS_PER_TYPE = 10
 
 const COLOR_GREEN = Color(0.2, 0.92, 0, 1)
@@ -89,6 +90,23 @@ func _update_hotbar_selection():
 			else:
 				slot_node.modulate = Color(1, 1, 1, 1)
 
+func _update_hotbar_counts():
+	if not has_node("CanvasLayer/Hotbar"):
+		return
+	if not multiplayer or not multiplayer.multiplayer_peer:
+		return
+	var my_id = multiplayer.get_unique_id()
+	for i in range(4):
+		var slot_node = $CanvasLayer/Hotbar/HBoxContainer.get_child(i)
+		if slot_node and slot_node.has_node("Count"):
+			var shape = HOTBAR_ITEMS[i]
+			var count = _get_spawn_count(my_id, shape)
+			slot_node.get_node("Count").text = str(count) + "/" + str(MAX_SPAWNS_PER_TYPE)
+			if count >= MAX_SPAWNS_PER_TYPE:
+				slot_node.get_node("Count").modulate = Color(1, 0.3, 0.3, 1)
+			else:
+				slot_node.get_node("Count").modulate = Color(1, 1, 1, 1)
+
 func _spawn_selected_object():
 	if selected_hotbar_slot >= 0 and selected_hotbar_slot < HOTBAR_ITEMS.size():
 		_spawn_object(HOTBAR_ITEMS[selected_hotbar_slot])
@@ -101,7 +119,7 @@ func _toggle_player_list():
 	if player_list_visible:
 		$CanvasLayer/PlayerList.show()
 		player_list_tween.set_parallel(true)
-		player_list_tween.tween_property($CanvasLayer/PlayerList, "position:x", 0.0, 0.3)
+		player_list_tween.tween_property($CanvasLayer/PlayerList, "position:x", 14, 0.3)
 		player_list_tween.tween_property($CanvasLayer/PlayerList, "modulate:a", 1.0, 0.2)
 	else:
 		player_list_tween.set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_BACK)
@@ -194,7 +212,7 @@ func _on_quit_to_menu_pressed():
 	if multiplayer and multiplayer.multiplayer_peer:
 		multiplayer.multiplayer_peer.close()
 	if get_tree():
-		get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
+		SceneTransition.change_scene("res://scenes/main_menu.tscn")
 
 @rpc("authority", "reliable", "call_remote")
 func _notify_session_ended():
@@ -207,7 +225,7 @@ func _notify_session_ended():
 	if multiplayer and multiplayer.multiplayer_peer:
 		multiplayer.multiplayer_peer.close()
 	if get_tree():
-		get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
+		SceneTransition.change_scene("res://scenes/main_menu.tscn")
 
 func _on_username_text_changed(new_text: String) -> void:
 	local_username = new_text.strip_edges()
@@ -233,6 +251,7 @@ func _on_host_pressed() -> void:
 	if has_node("CanvasLayer/Hotbar"):
 		$CanvasLayer/Hotbar.show()
 		_update_hotbar_selection()
+		_update_hotbar_counts()
 
 func _on_join_pressed() -> void:
 	GameSettings.is_paused = false
@@ -250,6 +269,7 @@ func _on_join_pressed() -> void:
 	is_connecting = true
 	$CanvasLayer/LoadingPanel.show()
 	$CanvasLayer/LoadingPanel/LoadingLabel.text = "Connecting to server..."
+	$CanvasLayer/title.hide()
 	_start_loading_animation()
 	_start_connection_timeout()
 
@@ -274,7 +294,7 @@ func _on_server_disconnected():
 	if multiplayer and multiplayer.multiplayer_peer:
 		multiplayer.multiplayer_peer.close()
 	if get_tree():
-		get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
+		SceneTransition.change_scene("res://scenes/main_menu.tscn")
 
 func _hide_menu():
 	$CanvasLayer/Host.hide()
@@ -297,6 +317,7 @@ func _on_connected_to_server():
 	if has_node("CanvasLayer/Hotbar"):
 		$CanvasLayer/Hotbar.show()
 		_update_hotbar_selection()
+		_update_hotbar_counts()
 	
 	var my_id = multiplayer.get_unique_id()
 	player_list[my_id] = local_username
@@ -306,6 +327,12 @@ func _on_connection_failed():
 	is_connecting = false
 	$CanvasLayer/LoadingPanel/LoadingLabel.text = "Connection failed!"
 	await get_tree().create_timer(1.5).timeout
+	$CanvasLayer/LoadingPanel.hide()
+	if multiplayer and multiplayer.multiplayer_peer:
+		multiplayer.multiplayer_peer.close()
+
+func _on_cancel_connection_pressed():
+	is_connecting = false
 	$CanvasLayer/LoadingPanel.hide()
 	if multiplayer and multiplayer.multiplayer_peer:
 		multiplayer.multiplayer_peer.close()
@@ -322,6 +349,7 @@ func _start_connection_timeout():
 		$CanvasLayer/LoadingPanel/LoadingLabel.text = "Connection timed out!"
 		await get_tree().create_timer(1.5).timeout
 		$CanvasLayer/LoadingPanel.hide()
+		$CanvasLayer/title.show()
 		if multiplayer and multiplayer.multiplayer_peer:
 			multiplayer.multiplayer_peer.close()
 
@@ -357,6 +385,11 @@ func _update_player_list_ui():
 func _on_peer_connected(id):
 	if multiplayer.is_server():
 		add_player(id)
+		for obj_name in spawned_objects:
+			var data = spawned_objects[obj_name]
+			var obj = get_node_or_null("Objects/" + obj_name)
+			if obj:
+				_sync_spawn_object.rpc_id(id, obj_name, data.shape, obj.global_position, data.color)
 
 func _on_peer_disconnected(id):
 	del_player(id)
@@ -396,7 +429,7 @@ func del_player(id):
 
 
 func _on_back_pressed() -> void:
-	get_tree().change_scene_to_file('res://scenes/main_menu.tscn')
+	SceneTransition.change_scene('res://scenes/main_menu.tscn')
 
 func _get_spawn_count(player_id: int, shape: String) -> int:
 	var key = str(player_id) + "_" + shape
@@ -426,7 +459,10 @@ func _spawn_object(shape: String):
 	var spawn_pos = cam.global_position - cam.global_transform.basis.z * 4.0
 	var color = Color(randf(), randf(), randf())
 	
-	_request_spawn_object.rpc_id(1, shape, spawn_pos, color)
+	if multiplayer.is_server():
+		_request_spawn_object(shape, spawn_pos, color)
+	else:
+		_request_spawn_object.rpc_id(1, shape, spawn_pos, color)
 
 @rpc("any_peer", "reliable")
 func _request_spawn_object(shape: String, pos: Vector3, color: Color):
@@ -444,6 +480,7 @@ func _request_spawn_object(shape: String, pos: Vector3, color: Color):
 	var obj_name = "spawned_" + str(next_object_id)
 	next_object_id += 1
 	
+	spawned_objects[obj_name] = {"shape": shape, "pos": pos, "color": color}
 	_sync_spawn_object.rpc(obj_name, shape, pos, color)
 
 func _create_spawned_object(shape: String, pos: Vector3, color: Color, obj_name: String):
@@ -452,6 +489,8 @@ func _create_spawned_object(shape: String, pos: Vector3, color: Color, obj_name:
 	
 	var obj = RigidBody3D.new()
 	obj.name = obj_name
+	obj.collision_layer = 2
+	obj.collision_mask = 3
 	
 	var mesh = MeshInstance3D.new()
 	var collision = CollisionShape3D.new()
@@ -492,3 +531,4 @@ func _create_spawned_object(shape: String, pos: Vector3, color: Color, obj_name:
 @rpc("authority", "reliable", "call_local")
 func _sync_spawn_object(obj_name: String, shape: String, pos: Vector3, color: Color):
 	_create_spawned_object(shape, pos, color, obj_name)
+	_update_hotbar_counts()

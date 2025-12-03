@@ -14,6 +14,10 @@ const PUSH_FORCE = 1.0
 
 var gravity = 15
 
+var in_cart: bool = false
+var current_cart: Node = null
+var nearby_cart: Node = null
+
 @onready var head = $Head
 @onready var camera = $Head/Camera3D
 @onready var player_mesh = $MeshInstance3D

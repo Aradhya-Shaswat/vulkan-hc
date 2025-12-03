@@ -102,7 +102,7 @@ func update_held_position(peer_id: int, pos: Vector3, rot: Vector3):
 				global_position = pos
 				global_rotation = rot
 
-@rpc("any_peer", "call_local", "reliable")
+@rpc("any_peer", "reliable")
 func request_scale(mesh_scale: Vector3, shape_scale: Vector3, new_mass: float):
 	if multiplayer.is_server():
 		_apply_scale(mesh_scale, shape_scale, new_mass)
@@ -135,7 +135,7 @@ func _find_collision_shape(root: Node) -> CollisionShape3D:
 			return r
 	return null
 
-@rpc("authority", "call_local", "reliable")
+@rpc("authority", "call_remote", "reliable")
 func _sync_scale(mesh_scale: Vector3, shape_scale: Vector3, new_mass: float):
 	_apply_scale(mesh_scale, shape_scale, new_mass)
 

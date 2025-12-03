@@ -69,7 +69,7 @@ func _ready():
 	if power_indicator_path != NodePath("") and has_node(power_indicator_path):
 		power_indicator = get_node(power_indicator_path)
 		power_indicator.visible = false
-	print("scaleObject ready, player_node: ", player_node, " is_local: ", _is_local_authority())
+	#print("scaleObject ready, player_node: ", player_node, " is_local: ", _is_local_authority())
 	set_process_input(true)
 
 func _process(delta):
@@ -91,10 +91,10 @@ func _process(delta):
 
 func _unhandled_input(event):
 	if not _is_local_authority():
-		print("Not local authority, skipping input")
+		#print("Not local authority, skipping input")
 		return
 	if event is InputEventMouseButton:
-		print("Mouse button event: ", event.button_index, " pressed: ", event.pressed)
+		#print("Mouse button event: ", event.button_index, " pressed: ", event.pressed)
 		match event.button_index:
 			MOUSE_BUTTON_WHEEL_UP:
 				if event.pressed: wheel_delta = 1.0
@@ -271,7 +271,7 @@ func _start_throw_charge():
 	is_charging_throw = true
 	throw_charge = 0.0
 	throw_target = target
-	print("Started charging throw on: ", throw_target.name)
+	#print("Started charging throw on: ", throw_target.name)
 	if power_indicator:
 		power_indicator.visible = true
 		_update_power_indicator(0.0)
@@ -289,7 +289,7 @@ func _update_throw_charge(delta):
 func _execute_throw():
 	if not is_charging_throw:
 		return
-	print("Executing throw with power: ", throw_charge)
+	#print("Executing throw with power: ", throw_charge)
 	if throw_target and is_instance_valid(throw_target) and throw_target is RigidBody3D:
 		var cam_forward = -global_transform.basis.z
 		var power = lerp(throw_min_power, throw_max_power, throw_charge)
@@ -498,30 +498,33 @@ func _scale_object(obj: Node3D, factor: float):
 	var new_shape_scale = shape.scale * factor if shape else Vector3.ONE
 	var new_mass = obj.mass * factor * factor * factor if obj is RigidBody3D else 1.0
 	
-	if mesh:
-		mesh.scale = new_mesh_scale
-	if shape:
-		shape.scale = new_shape_scale
+	if obj is RigidBody3D and obj.has_method("request_scale") and _is_multiplayer_active():
+		if obj.multiplayer.is_server():
+			obj.request_scale(new_mesh_scale, new_shape_scale, new_mass)
+		else:
+			obj.request_scale.rpc_id(1, new_mesh_scale, new_shape_scale, new_mass)
+	else:
+		if mesh:
+			mesh.scale = new_mesh_scale
+		if shape:
+			shape.scale = new_shape_scale
+		if obj is RigidBody3D:
+			obj.mass = new_mass
+	
 	obj.global_transform.origin = original_pos
 	
 	if obj == held:
 		held_original_scale = obj.scale
 		held_aabb_half_extents = _get_object_half_extents(obj)
-	
-	if obj is RigidBody3D:
-		obj.mass = new_mass
-		if obj == held:
+		if obj is RigidBody3D:
 			held_prev_mass = new_mass
-		
-		if obj.has_method("request_scale") and _is_multiplayer_active():
-			obj.request_scale.rpc(new_mesh_scale, new_shape_scale, new_mass)
-		
-		if was_frozen:
-			await get_tree().process_frame
-			await get_tree().process_frame
-			if obj:
-				obj.freeze = false
-				obj.sleeping = false
+	
+	if was_frozen and not _is_multiplayer_active():
+		await get_tree().process_frame
+		await get_tree().process_frame
+		if obj:
+			obj.freeze = false
+			obj.sleeping = false
 
 func _apply_highlight(obj: Node3D):
 	if obj and highlight_material:

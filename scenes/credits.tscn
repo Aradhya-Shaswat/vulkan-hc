@@ -1,0 +1,205 @@
+[gd_scene load_steps=10 format=3 uid="uid://bugy7ou2cuwaj"]
+
+[ext_resource type="FontFile" uid="uid://gunvccib1svm" path="res://assets/fonts/Poppins-Regular.ttf" id="1_credits"]
+[ext_resource type="Script" uid="uid://cqiy6numxfuim" path="res://scripts/credits.gd" id="2_credits"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg1"]
+bg_color = Color(0.51381, 0.68613404, 0.62646294, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg2"]
+bg_color = Color(0.79613936, 0.60749817, 0.2546859, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_divider"]
+
+[sub_resource type="PrismMesh" id="PrismMesh_triangle"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button"]
+bg_color = Color(1, 1, 0.8392157, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_size = 2
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hover"]
+bg_color = Color(0.92615587, 0.79888654, 0.80990773, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_size = 2
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2ckv8"]
+
+[node name="Credits" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_credits")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_bg1")
+
+[node name="Panel2" type="Panel" parent="."]
+layout_mode = 0
+offset_left = 792.0
+offset_right = 1152.0
+offset_bottom = 648.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_bg2")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="."]
+modulate = Color(0.98898584, 0.86889833, 0.7355447, 1)
+position = Vector2(649.3062, 327.9569)
+rotation = 0.3820917
+scale = Vector2(-20.16319, 715.4113)
+mesh = SubResource("BoxMesh_divider")
+
+[node name="triangle" type="MeshInstance2D" parent="."]
+modulate = Color(0.79613936, 0.60749817, 0.2546859, 1)
+position = Vector2(730.88367, 341.4076)
+rotation = 3.3178723
+scale = Vector2(-307.19186, 720.29913)
+mesh = SubResource("PrismMesh_triangle")
+
+[node name="CreditsContent" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 44.0
+offset_top = 228.0
+offset_right = 464.0
+offset_bottom = 536.0
+size_flags_horizontal = 3
+theme_override_constants/separation = 25
+
+[node name="TestersLabel" type="Label" parent="CreditsContent"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0.8235294, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_fonts/font = ExtResource("1_credits")
+theme_override_font_sizes/font_size = 28
+text = "Game Testers (huge thanks!!)"
+
+[node name="Testers" type="Label" parent="CreditsContent"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0.8235294, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("1_credits")
+theme_override_font_sizes/font_size = 20
+text = "@chronohavoc
+@adnan
+"
+
+[node name="AssetsLabel" type="Label" parent="CreditsContent"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0.8235294, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_fonts/font = ExtResource("1_credits")
+theme_override_font_sizes/font_size = 28
+text = "Assets"
+
+[node name="Assets" type="Label" parent="CreditsContent"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0.8235294, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("1_credits")
+theme_override_font_sizes/font_size = 20
+text = "Kenney (kenney.nl)"
+
+[node name="hackclub" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.46300003
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 291.0
+offset_top = 199.97598
+offset_right = 574.0
+offset_bottom = 321.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 0.8235294, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/outline_size = 7
+theme_override_fonts/font = ExtResource("1_credits")
+theme_override_font_sizes/font_size = 40
+text = "hack club."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="hackclub2" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.46300003
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 276.0
+offset_top = -298.02402
+offset_right = 576.0
+offset_bottom = -212.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 0.8235294, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("1_credits")
+theme_override_font_sizes/font_size = 20
+text = "VULKAN-HC (BETA_0.4)"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MilkywayLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 171.0
+offset_top = -86.5
+offset_right = 543.0
+offset_bottom = -13.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 0.8235294, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_fonts/font = ExtResource("1_credits")
+theme_override_font_sizes/font_size = 24
+text = "made for milkyway,
+with coffee, by arshy ;)"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="BackButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 46.0
+offset_top = 568.0
+offset_right = 132.0
+offset_bottom = 610.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_credits")
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+theme_override_styles/hover = SubResource("StyleBoxFlat_hover")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_2ckv8")
+text = "Back"
+
+[connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
