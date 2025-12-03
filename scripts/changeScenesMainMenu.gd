@@ -1,6 +1,6 @@
 extends Node
 
-const CURRENT_VERSION = "beta-0.4"
+const CURRENT_VERSION = "beta-0.7"
 const VERSION_URL = "https://raw.githubusercontent.com/Aradhya-Shaswat/vulkan-hc/main/version.json"
 
 var http_request: HTTPRequest
@@ -10,9 +10,10 @@ var update_info: Dictionary = {}
 var is_updating: bool = false
 
 func _ready() -> void:
-	_check_for_updates()
+	if not OS.has_feature("editor"):
+		_check_for_updates()
 
-func _process(delta):
+func _process(_delta):
 	if is_updating and download_request:
 		var downloaded = download_request.get_downloaded_bytes()
 		var total = download_request.get_body_size()
@@ -27,7 +28,7 @@ func _check_for_updates():
 	http_request.request_completed.connect(_on_version_check)
 	http_request.request(VERSION_URL)
 
-func _on_version_check(result, code, headers, body):
+func _on_version_check(_result, code, _headers, body):
 	http_request.queue_free()
 	if code != 200:
 		return
@@ -56,7 +57,7 @@ func _start_auto_update():
 	download_request.request_completed.connect(_on_update_downloaded)
 	download_request.request(update_info.pck_url)
 
-func _on_update_downloaded(result, code, headers, body):
+func _on_update_downloaded(result, code, _headers, _body):
 	is_updating = false
 	download_request.queue_free()
 	

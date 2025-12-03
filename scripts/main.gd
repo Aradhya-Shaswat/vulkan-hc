@@ -303,7 +303,6 @@ func _hide_menu():
 	$CanvasLayer/Back.hide()
 	$CanvasLayer/title.hide()
 	$CanvasLayer/hackclub.hide()
-	$CanvasLayer/hackclub2.hide()
 	$CanvasLayer/SelectionUI.hide()
 	$CanvasLayer/UsernameEdit.hide()
 	$CanvasLayer/IPEdit.hide()
