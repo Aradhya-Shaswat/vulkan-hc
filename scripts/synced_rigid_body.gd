@@ -126,3 +126,37 @@ func _sync_hold_state(holder_id: int, is_frozen: bool):
 	if is_frozen:
 		linear_velocity = Vector3.ZERO
 		angular_velocity = Vector3.ZERO
+
+@rpc("any_peer", "call_local", "reliable")
+func request_glue():
+	if multiplayer.is_server():
+		is_held_by = 0
+		freeze = true
+		linear_velocity = Vector3.ZERO
+		angular_velocity = Vector3.ZERO
+		_sync_glue_state.rpc()
+
+@rpc("authority", "call_local", "reliable")
+func _sync_glue_state():
+	is_held_by = 0
+	freeze = true
+	linear_velocity = Vector3.ZERO
+	angular_velocity = Vector3.ZERO
+
+@rpc("any_peer", "call_local", "reliable")
+func request_throw(throw_velocity: Vector3):
+	if multiplayer.is_server():
+		is_held_by = 0
+		freeze = false
+		sleeping = false
+		linear_velocity = throw_velocity
+		angular_velocity = Vector3.ZERO
+		_sync_throw.rpc(throw_velocity)
+
+@rpc("authority", "call_local", "reliable")
+func _sync_throw(throw_velocity: Vector3):
+	is_held_by = 0
+	freeze = false
+	sleeping = false
+	linear_velocity = throw_velocity
+	angular_velocity = Vector3.ZERO

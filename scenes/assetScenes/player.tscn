@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://cva3jmdk0sqdm"]
+[gd_scene load_steps=9 format=3 uid="uid://cva3jmdk0sqdm"]
 
 [ext_resource type="Script" uid="uid://dgjnqo7dn7jol" path="res://scripts/character.gd" id="1_ac1ej"]
 [ext_resource type="Script" uid="uid://cckf6x335dlsg" path="res://scripts/scaleObject.gd" id="2_dq4aw"]
+[ext_resource type="Script" uid="uid://bvbkjoatblpq3" path="res://scripts/power_indicator.gd" id="3_dq4aw"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ac1ej"]
 albedo_color = Color(0.9497897, 0.7908441, 0.546439, 1)
@@ -45,6 +46,25 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 script = ExtResource("2_dq4aw")
 highlight_material = SubResource("StandardMaterial3D_iqu8w")
+power_indicator_path = NodePath("../../CanvasLayer/PowerIndicator")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_ac1ej")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="PowerIndicator" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -19.125
+offset_top = -19.125
+offset_right = 19.125
+offset_bottom = 19.125
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_dq4aw")
+radius = 5.0

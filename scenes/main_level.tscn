@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://cnew6x2hwvjyh"]
+[gd_scene load_steps=38 format=3 uid="uid://cnew6x2hwvjyh"]
 
 [ext_resource type="FontFile" uid="uid://gunvccib1svm" path="res://assets/fonts/Poppins-Regular.ttf" id="1_iqu8w"]
 [ext_resource type="Script" uid="uid://b27u1ptmiviqb" path="res://scripts/main.gd" id="1_mwgft"]
@@ -51,7 +51,31 @@ shadow_color = Color(0.00011382803, 0.00011382803, 0.00011382803, 0.6)
 shadow_size = 2
 shadow_offset = Vector2(0, 3)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_disabled"]
+bg_color = Color(0.5, 0.5, 0.5, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0.00011382803, 0.00011382803, 0.00011382803, 0.6)
+shadow_size = 2
+shadow_offset = Vector2(0, 3)
+
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5fr2l"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_username"]
+bg_color = Color(1, 1, 0.9, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2sb77"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_playerlist"]
+bg_color = Color(0.1, 0.1, 0.1, 0.85)
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_v3uhd"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -147,9 +171,9 @@ anchor_top = 0.46300003
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -574.0
-offset_top = -62.024017
-offset_right = -219.0
-offset_bottom = 54.0
+offset_top = -111.02402
+offset_right = -55.0
+offset_bottom = 5.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 1, 0.8235294, 1)
@@ -159,7 +183,7 @@ theme_override_constants/shadow_offset_y = 1
 theme_override_constants/outline_size = 7
 theme_override_fonts/font = ExtResource("1_iqu8w")
 theme_override_font_sizes/font_size = 58
-text = "VULKAN?"
+text = "Game Options"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -276,6 +300,7 @@ theme_override_font_sizes/font_size = 32
 theme_override_styles/normal = SubResource("StyleBoxFlat_5fr2l")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_2sb77")
 theme_override_styles/hover = SubResource("StyleBoxFlat_fkrx8")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_disabled")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_5fr2l")
 text = "  Host Game"
 alignment = 0
@@ -312,9 +337,65 @@ theme_override_font_sizes/font_size = 32
 theme_override_styles/normal = SubResource("StyleBoxFlat_5fr2l")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_2sb77")
 theme_override_styles/hover = SubResource("StyleBoxFlat_fkrx8")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_disabled")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_5fr2l")
 text = "  Join Game"
 alignment = 0
+
+[node name="UsernameEdit" type="LineEdit" parent="CanvasLayer"]
+modulate = Color(0.98898584, 0.86889833, 0.7355447, 1)
+offset_left = 48.0
+offset_top = 335.0
+offset_right = 375.0
+offset_bottom = 380.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_selected_color = Color(0, 0, 0, 1)
+theme_override_colors/font_placeholder_color = Color(0, 0, 0, 0.6)
+theme_override_colors/caret_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_username")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_2sb77")
+placeholder_text = "  Enter a nickname!"
+alignment = 1
+max_length = 16
+emoji_menu_enabled = false
+
+[node name="PlayerList" type="Panel" parent="CanvasLayer"]
+visible = false
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -150.0
+offset_right = 200.0
+offset_bottom = 150.0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_playerlist")
+
+[node name="Title" type="Label" parent="CanvasLayer/PlayerList"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 8.0
+offset_bottom = 35.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 18
+text = "Players"
+horizontal_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/PlayerList"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = 45.0
+offset_right = -12.0
+offset_bottom = -12.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.8660254, -0.43301275, 0.25000003, 0.49600145, -0.6808939, 0.53885627, -0.063108146, 0.59066355, 0.80444634, 32.54878, 1.767848, -25.480614)
@@ -878,3 +959,4 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.923948, -5, 54.51059)
 [connection signal="pressed" from="CanvasLayer/Host" to="." method="_on_host_pressed"]
 [connection signal="pressed" from="CanvasLayer/Back" to="." method="_on_back_pressed"]
 [connection signal="pressed" from="CanvasLayer/Join" to="." method="_on_join_pressed"]
+[connection signal="text_changed" from="CanvasLayer/UsernameEdit" to="." method="_on_username_text_changed"]

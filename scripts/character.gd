@@ -124,7 +124,10 @@ func _physics_process(delta):
 			var body = collision.get_collider()
 			
 			if body is RigidBody3D and body.has_method("apply_push"):
-				var push_dir = -collision.get_normal()
+				var normal = collision.get_normal()
+				if normal.y > 0.7:
+					continue
+				var push_dir = -normal
 				push_dir.y = 0
 				if push_dir.length() > 0.01:
 					push_dir = push_dir.normalized()
