@@ -401,6 +401,190 @@ offset_bottom = -12.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="LoadingPanel" type="Panel" parent="CanvasLayer"]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_pausemenu")
+
+[node name="LoadingContainer" type="VBoxContainer" parent="CanvasLayer/LoadingPanel"]
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -60.0
+offset_right = 100.0
+offset_bottom = 60.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="Spinner" type="Label" parent="CanvasLayer/LoadingPanel"]
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -30.0
+offset_top = -70.0
+offset_right = 30.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(30, 30)
+theme_override_colors/font_color = Color(1, 1, 0.8235294, 1)
+theme_override_font_sizes/font_size = 40
+text = "◐"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LoadingLabel" type="Label" parent="CanvasLayer/LoadingPanel"]
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = 10.0
+offset_right = 150.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 0.8235294, 1)
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 20
+text = "Connecting to server..."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Hotbar" type="Panel" parent="CanvasLayer"]
+visible = false
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -180.0
+offset_top = -70.0
+offset_right = 180.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_playerlist")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Hotbar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 5.0
+offset_right = -10.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="Slot1" type="Panel" parent="CanvasLayer/Hotbar/HBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_5fr2l")
+
+[node name="Label" type="Label" parent="CanvasLayer/Hotbar/HBoxContainer/Slot1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 11
+text = "1
+Cube"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Slot2" type="Panel" parent="CanvasLayer/Hotbar/HBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_5fr2l")
+
+[node name="Label" type="Label" parent="CanvasLayer/Hotbar/HBoxContainer/Slot2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 11
+text = "2
+Sphere"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Slot3" type="Panel" parent="CanvasLayer/Hotbar/HBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_5fr2l")
+
+[node name="Label" type="Label" parent="CanvasLayer/Hotbar/HBoxContainer/Slot3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 11
+text = "3
+Cylinder"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Slot4" type="Panel" parent="CanvasLayer/Hotbar/HBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_5fr2l")
+
+[node name="Label" type="Label" parent="CanvasLayer/Hotbar/HBoxContainer/Slot4"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 11
+text = "4
+Capsule"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HotbarHint" type="Label" parent="CanvasLayer/Hotbar"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = -18.0
+offset_right = 350.0
+offset_bottom = -2.0
+theme_override_colors/font_color = Color(1, 1, 1, 0.7)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 11
+text = "Press G to spawn selected"
+
 [node name="PauseMenu" type="Panel" parent="CanvasLayer"]
 visible = false
 anchors_preset = 8

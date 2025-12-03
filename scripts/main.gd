@@ -10,12 +10,20 @@ var player_list_tween: Tween
 var is_paused = false
 var is_in_game = false
 var in_options_menu = false
+var is_connecting = false
+var connection_timeout = 10.0
 var server_ip: String = "127.0.0.1"
 var server_port: int = 1027
+var selected_hotbar_slot = 0
+var next_object_id = 1000
+var spawn_counts = {}
+const MAX_SPAWNS_PER_TYPE = 10
 
 const COLOR_GREEN = Color(0.2, 0.92, 0, 1)
 const COLOR_RED = Color(1, 0.2, 0.2, 1)
 const COLOR_WHITE = Color(1, 1, 1, 1)
+
+const HOTBAR_ITEMS = ["cube", "sphere", "cylinder", "capsule"]
 
 func _ready():
 	$MultiplayerSpawner.spawn_function = custom_spawn
@@ -26,9 +34,11 @@ func _ready():
 	$CanvasLayer/PlayerList.hide()
 	$CanvasLayer/PauseMenu.hide()
 	$CanvasLayer/InGameOptions.hide()
+	$CanvasLayer/LoadingPanel.hide()
+	if has_node("CanvasLayer/Hotbar"):
+		$CanvasLayer/Hotbar.hide()
 	_apply_crosshair_color()
 	GameSettings.settings_changed.connect(_on_settings_changed)
-
 	GameSettings.is_paused = false
 
 func _on_settings_changed():
@@ -44,9 +54,44 @@ func _unhandled_input(event):
 			_toggle_player_list()
 	
 	if event is InputEventKey and event.pressed:
-		if event.keycode == KEY_ESCAPE or event.keycode == KEY_P:
+		if event.keycode == KEY_ESCAPE:
 			if is_in_game:
 				_toggle_pause()
+		
+		if event.keycode == KEY_P:
+			if is_in_game:
+				_toggle_pause()
+		
+		if is_in_game and not is_paused:
+			if event.keycode == KEY_1:
+				_select_hotbar_slot(0)
+			elif event.keycode == KEY_2:
+				_select_hotbar_slot(1)
+			elif event.keycode == KEY_3:
+				_select_hotbar_slot(2)
+			elif event.keycode == KEY_4:
+				_select_hotbar_slot(3)
+			elif event.keycode == KEY_G:
+				_spawn_selected_object()
+
+func _select_hotbar_slot(slot: int):
+	selected_hotbar_slot = slot
+	_update_hotbar_selection()
+
+func _update_hotbar_selection():
+	if not has_node("CanvasLayer/Hotbar"):
+		return
+	for i in range(4):
+		var slot_node = $CanvasLayer/Hotbar/HBoxContainer.get_child(i)
+		if slot_node:
+			if i == selected_hotbar_slot:
+				slot_node.modulate = Color(1, 1, 0.5, 1)
+			else:
+				slot_node.modulate = Color(1, 1, 1, 1)
+
+func _spawn_selected_object():
+	if selected_hotbar_slot >= 0 and selected_hotbar_slot < HOTBAR_ITEMS.size():
+		_spawn_object(HOTBAR_ITEMS[selected_hotbar_slot])
 
 func _toggle_player_list():
 	player_list_visible = not player_list_visible
@@ -185,12 +230,13 @@ func _on_host_pressed() -> void:
 	_update_player_list_ui()
 	_hide_menu()
 	is_in_game = true
-	print("Server started on port ", server_port)
+	if has_node("CanvasLayer/Hotbar"):
+		$CanvasLayer/Hotbar.show()
+		_update_hotbar_selection()
 
 func _on_join_pressed() -> void:
 	GameSettings.is_paused = false
 	peer = ENetMultiplayerPeer.new()
-	print("Connecting to: ", server_ip, ":", server_port)
 	var result = peer.create_client(server_ip, server_port)
 	if result != OK:
 		print("Failed to create client: ", result)
@@ -199,11 +245,15 @@ func _on_join_pressed() -> void:
 	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
 	multiplayer.connected_to_server.connect(_on_connected_to_server)
 	multiplayer.server_disconnected.connect(_on_server_disconnected)
-	_hide_menu()
-	is_in_game = true
+	multiplayer.connection_failed.connect(_on_connection_failed)
+	
+	is_connecting = true
+	$CanvasLayer/LoadingPanel.show()
+	$CanvasLayer/LoadingPanel/LoadingLabel.text = "Connecting to server..."
+	_start_loading_animation()
+	_start_connection_timeout()
 
 func _on_ip_text_changed(new_text: String) -> void:
-	# Parse IP and optional port (format: ip:port or just ip)
 	var text = new_text.strip_edges()
 	if text.contains(":"):
 		var parts = text.split(":")
@@ -240,9 +290,40 @@ func _hide_menu():
 	$CanvasLayer/version.show()
 
 func _on_connected_to_server():
+	is_connecting = false
+	$CanvasLayer/LoadingPanel.hide()
+	_hide_menu()
+	is_in_game = true
+	if has_node("CanvasLayer/Hotbar"):
+		$CanvasLayer/Hotbar.show()
+		_update_hotbar_selection()
+	
 	var my_id = multiplayer.get_unique_id()
 	player_list[my_id] = local_username
 	_register_player_on_server.rpc_id(1, my_id, local_username)
+
+func _on_connection_failed():
+	is_connecting = false
+	$CanvasLayer/LoadingPanel/LoadingLabel.text = "Connection failed!"
+	await get_tree().create_timer(1.5).timeout
+	$CanvasLayer/LoadingPanel.hide()
+	if multiplayer and multiplayer.multiplayer_peer:
+		multiplayer.multiplayer_peer.close()
+
+func _start_loading_animation():
+	var spinner = $CanvasLayer/LoadingPanel/Spinner
+	var tween = create_tween().set_loops()
+	tween.tween_property(spinner, "rotation", TAU, 1.0).from(0.0)
+
+func _start_connection_timeout():
+	await get_tree().create_timer(connection_timeout).timeout
+	if is_connecting:
+		is_connecting = false
+		$CanvasLayer/LoadingPanel/LoadingLabel.text = "Connection timed out!"
+		await get_tree().create_timer(1.5).timeout
+		$CanvasLayer/LoadingPanel.hide()
+		if multiplayer and multiplayer.multiplayer_peer:
+			multiplayer.multiplayer_peer.close()
 
 @rpc("any_peer", "reliable")
 func _register_player_on_server(id: int, username: String):
@@ -316,3 +397,98 @@ func del_player(id):
 
 func _on_back_pressed() -> void:
 	get_tree().change_scene_to_file('res://scenes/main_menu.tscn')
+
+func _get_spawn_count(player_id: int, shape: String) -> int:
+	var key = str(player_id) + "_" + shape
+	return spawn_counts.get(key, 0)
+
+func _increment_spawn_count(player_id: int, shape: String):
+	var key = str(player_id) + "_" + shape
+	spawn_counts[key] = spawn_counts.get(key, 0) + 1
+
+func _spawn_object(shape: String):
+	if not multiplayer or not multiplayer.multiplayer_peer:
+		return
+	
+	var my_id = multiplayer.get_unique_id()
+	
+	if _get_spawn_count(my_id, shape) >= MAX_SPAWNS_PER_TYPE:
+		return
+	
+	var player_node = get_node_or_null(str(my_id))
+	if not player_node:
+		return
+	
+	var cam = player_node.get_node_or_null("Head/Camera3D")
+	if not cam:
+		return
+	
+	var spawn_pos = cam.global_position - cam.global_transform.basis.z * 4.0
+	var color = Color(randf(), randf(), randf())
+	
+	_request_spawn_object.rpc_id(1, shape, spawn_pos, color)
+
+@rpc("any_peer", "reliable")
+func _request_spawn_object(shape: String, pos: Vector3, color: Color):
+	if not multiplayer.is_server():
+		return
+	
+	var sender_id = multiplayer.get_remote_sender_id()
+	if sender_id == 0:
+		sender_id = 1
+	
+	if _get_spawn_count(sender_id, shape) >= MAX_SPAWNS_PER_TYPE:
+		return
+	
+	_increment_spawn_count(sender_id, shape)
+	var obj_name = "spawned_" + str(next_object_id)
+	next_object_id += 1
+	
+	_sync_spawn_object.rpc(obj_name, shape, pos, color)
+
+func _create_spawned_object(shape: String, pos: Vector3, color: Color, obj_name: String):
+	if has_node("Objects/" + obj_name):
+		return
+	
+	var obj = RigidBody3D.new()
+	obj.name = obj_name
+	
+	var mesh = MeshInstance3D.new()
+	var collision = CollisionShape3D.new()
+	
+	var material = StandardMaterial3D.new()
+	material.albedo_color = color
+	
+	match shape:
+		"cube":
+			mesh.mesh = BoxMesh.new()
+			mesh.mesh.material = material
+			collision.shape = BoxShape3D.new()
+		"sphere":
+			mesh.mesh = SphereMesh.new()
+			mesh.mesh.material = material
+			collision.shape = SphereShape3D.new()
+		"cylinder":
+			mesh.mesh = CylinderMesh.new()
+			mesh.mesh.material = material
+			collision.shape = CylinderShape3D.new()
+		"capsule":
+			mesh.mesh = CapsuleMesh.new()
+			mesh.mesh.material = material
+			collision.shape = CapsuleShape3D.new()
+	
+	obj.add_child(mesh)
+	obj.add_child(collision)
+	
+	var script = load("res://scripts/synced_rigid_body.gd")
+	obj.set_script(script)
+	
+	obj.sync_position = pos
+	obj.sync_rotation = Vector3.ZERO
+	
+	$Objects.add_child(obj, true)
+	obj.global_position = pos
+
+@rpc("authority", "reliable", "call_local")
+func _sync_spawn_object(obj_name: String, shape: String, pos: Vector3, color: Color):
+	_create_spawned_object(shape, pos, color, obj_name)

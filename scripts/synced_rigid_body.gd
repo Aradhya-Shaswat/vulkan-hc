@@ -8,10 +8,17 @@ extends RigidBody3D
 var is_held_by: int = 0
 var held_target_pos: Vector3
 var held_target_rot: Vector3
+var is_dynamic_spawn: bool = false
+var sync_timer: float = 0.0
 
 func _ready():
-	sync_position = global_position
-	sync_rotation = rotation
+	if sync_position != Vector3.ZERO:
+		global_position = sync_position
+		rotation = sync_rotation
+		is_dynamic_spawn = true
+	else:
+		sync_position = global_position
+		sync_rotation = rotation
 	sync_linear_velocity = linear_velocity
 	sync_angular_velocity = angular_velocity
 	held_target_pos = global_position
@@ -34,12 +41,25 @@ func _physics_process(delta):
 		sync_rotation = rotation
 		sync_linear_velocity = linear_velocity
 		sync_angular_velocity = angular_velocity
+		
+		if is_dynamic_spawn:
+			sync_timer += delta
+			if sync_timer >= 0.05:
+				sync_timer = 0.0
+				_rpc_sync_state.rpc(sync_position, sync_rotation, sync_linear_velocity, sync_angular_velocity)
 	else:
 		if is_held_by != my_id:
 			global_position = global_position.lerp(sync_position, delta * 15.0)
 			rotation = rotation.lerp(sync_rotation, delta * 15.0)
 			linear_velocity = sync_linear_velocity
 			angular_velocity = sync_angular_velocity
+
+@rpc("authority", "unreliable_ordered", "call_remote")
+func _rpc_sync_state(pos: Vector3, rot: Vector3, lin_vel: Vector3, ang_vel: Vector3):
+	sync_position = pos
+	sync_rotation = rot
+	sync_linear_velocity = lin_vel
+	sync_angular_velocity = ang_vel
 
 @rpc("any_peer", "call_local", "reliable")
 func apply_push(push_velocity: Vector3):
