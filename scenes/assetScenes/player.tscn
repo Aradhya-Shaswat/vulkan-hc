@@ -1,11 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://cva3jmdk0sqdm"]
+[gd_scene load_steps=15 format=3 uid="uid://cva3jmdk0sqdm"]
 
 [ext_resource type="Script" uid="uid://dgjnqo7dn7jol" path="res://scripts/character.gd" id="1_ac1ej"]
 [ext_resource type="Script" uid="uid://cckf6x335dlsg" path="res://scripts/scaleObject.gd" id="2_dq4aw"]
 [ext_resource type="Script" uid="uid://bvbkjoatblpq3" path="res://scripts/power_indicator.gd" id="3_dq4aw"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ac1ej"]
-albedo_color = Color(0.9497897, 0.7908441, 0.546439, 1)
+albedo_color = Color(0.83448726, 0.78031343, 1, 1)
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_ufxs0"]
 material = SubResource("StandardMaterial3D_ac1ej")
@@ -15,6 +15,20 @@ points = PackedVector3Array(-0.12520654, -0.532801, -0.4805069, 0.022783129, 0.4
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_iqu8w"]
 albedo_color = Color(0.8965428, 0.8928584, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dq4aw"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_xvr75"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xvr75"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tgck5"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="PrismMesh" id="PrismMesh_57kla"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_dq4aw"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_ac1ej"]
 properties/0/path = NodePath(".:position")
@@ -31,6 +45,7 @@ properties/3/spawn = true
 properties/3/replication_mode = 1
 
 [node name="player" type="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 script = ExtResource("1_ac1ej")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
@@ -40,13 +55,49 @@ mesh = SubResource("CapsuleMesh_ufxs0")
 shape = SubResource("ConvexPolygonShape3D_6we3w")
 
 [node name="Head" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4069364, 0)
 
 [node name="Camera3D" type="Camera3D" parent="Head"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5801393, 0)
 script = ExtResource("2_dq4aw")
 highlight_material = SubResource("StandardMaterial3D_iqu8w")
 power_indicator_path = NodePath("../../CanvasLayer/PowerIndicator")
+
+[node name="eye" type="MeshInstance3D" parent="Head/Camera3D"]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0.12243241, -0.55118334, -0.4216762)
+material_override = SubResource("StandardMaterial3D_dq4aw")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_xvr75")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Head/Camera3D/eye"]
+transform = Transform3D(0.20000002, 0, 0, 0, 0.20000002, 0, 0, 0, 0.20000002, 0, 0, -0.50906754)
+material_override = SubResource("StandardMaterial3D_xvr75")
+mesh = SubResource("SphereMesh_xvr75")
+skeleton = NodePath("../..")
+
+[node name="eye2" type="MeshInstance3D" parent="Head/Camera3D"]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, -0.11947179, -0.55118334, -0.4216762)
+material_override = SubResource("StandardMaterial3D_dq4aw")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_xvr75")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Head/Camera3D/eye2"]
+transform = Transform3D(0.20000002, 0, 0, 0, 0.20000002, 0, 0, 0, 0.20000002, 0, 0, -0.50906754)
+material_override = SubResource("StandardMaterial3D_xvr75")
+mesh = SubResource("SphereMesh_xvr75")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Head/Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 0.19449592, 0, 0, 0, 1, -0.008913994, -0.03534293, 0)
+material_override = SubResource("StandardMaterial3D_tgck5")
+cast_shadow = 0
+mesh = SubResource("PrismMesh_57kla")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Head/Camera3D"]
+transform = Transform3D(0.5, 0, 0, 0, 0.16206521, 0, 0, 0, 0.06471497, -0.008913994, -0.9558689, -0.47904867)
+material_override = SubResource("StandardMaterial3D_tgck5")
+cast_shadow = 0
+mesh = SubResource("BoxMesh_dq4aw")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_ac1ej")

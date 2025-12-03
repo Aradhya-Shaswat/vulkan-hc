@@ -15,6 +15,14 @@ func _ready():
 	$CanvasLayer/PlayerList.modulate.a = 0.0
 	$CanvasLayer/PlayerList.position.x = -200
 	$CanvasLayer/PlayerList.hide()
+	_apply_crosshair_color()
+	GameSettings.settings_changed.connect(_on_settings_changed)
+
+func _on_settings_changed():
+	_apply_crosshair_color()
+
+func _apply_crosshair_color():
+	$CanvasLayer/CenterContainer/Crosshair.modulate = GameSettings.crosshair_color
 
 func _unhandled_input(event):
 	if event.is_action_pressed("ui_focus_next"):
@@ -72,7 +80,6 @@ func _hide_menu():
 	$CanvasLayer/SelectionUI.hide()
 	$CanvasLayer/UsernameEdit.hide()
 	$CanvasLayer/CenterContainer/Crosshair.show()
-	$CanvasLayer/guide.show()
 	$CanvasLayer/version.show()
 
 func _on_connected_to_server():

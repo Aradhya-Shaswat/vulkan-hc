@@ -11,9 +11,15 @@ config_version=5
 [application]
 
 config/name="Vulkan"
-run/main_scene="uid://cnew6x2hwvjyh"
+run/main_scene="uid://dqc48gytnhsn6"
 config/features=PackedStringArray("4.5", "Forward Plus")
+boot_splash/show_image=false
 config/icon="res://icon.svg"
+run/show_image=false
+
+[autoload]
+
+GameSettings="*res://scripts/game_settings.gd"
 
 [display]
 

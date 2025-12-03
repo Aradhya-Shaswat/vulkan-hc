@@ -81,7 +81,7 @@ func _process(delta):
 	_update_throw_charge(delta)
 	_update_zoom(delta)
 	if held and wheel_delta != 0.0:
-		if Input.is_action_pressed("ui_focus_next"):
+		if Input.is_key_pressed(KEY_CTRL):
 			held_rot_x += wheel_delta * 0.2
 		else:
 			held_rot += wheel_delta * 0.2
@@ -556,10 +556,11 @@ func _find_collision_shape(root: Node) -> CollisionShape3D:
 	return null
 
 func _is_part_of_player(node: Node) -> bool:
-	if not player_node: return false
+	if node is CharacterBody3D:
+		return true
 	var current = node
 	while current:
-		if current == player_node or current.is_in_group("player"):
+		if current is CharacterBody3D or current.is_in_group("player"):
 			return true
 		current = current.get_parent()
 	return false

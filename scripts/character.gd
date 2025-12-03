@@ -4,7 +4,6 @@ var speed
 const WALK_SPEED = 6.5
 const SPRINT_SPEED = 8.0
 const JUMP_VELOCITY = 6
-const SENSITIVITY = 0.005
 
 const BOB_FREQ = 2.0
 const BOB_AMP = 0.09
@@ -53,8 +52,9 @@ func _unhandled_input(event):
 	if not _is_local_authority():
 		return
 	if event is InputEventMouseMotion:
-		head.rotate_y(-event.relative.x * SENSITIVITY)
-		var new_x = camera.rotation.x - event.relative.y * SENSITIVITY
+		var sens = GameSettings.sensitivity
+		head.rotate_y(-event.relative.x * sens)
+		var new_x = camera.rotation.x - event.relative.y * sens
 		new_x = clamp(new_x, deg_to_rad(-80), deg_to_rad(90))
 		camera.rotation.x = new_x
 
