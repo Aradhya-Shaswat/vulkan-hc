@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://cnew6x2hwvjyh"]
+[gd_scene load_steps=39 format=3 uid="uid://cnew6x2hwvjyh"]
 
 [ext_resource type="FontFile" uid="uid://gunvccib1svm" path="res://assets/fonts/Poppins-Regular.ttf" id="1_iqu8w"]
 [ext_resource type="Script" uid="uid://b27u1ptmiviqb" path="res://scripts/main.gd" id="1_mwgft"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://c75miugiquori" path="res://scenes/assetScenes/brick_wall_curve.tscn" id="7_u2c82"]
 [ext_resource type="PackedScene" uid="uid://b52nsqkuh5mqk" path="res://scenes/assetScenes/cross.tscn" id="10_5fr2l"]
 [ext_resource type="PackedScene" uid="uid://dkdhu84jhqjn5" path="res://scenes/assetScenes/crypt.tscn" id="11_fkrx8"]
+[ext_resource type="PackedScene" uid="uid://c73mkdvaw1m4p" path="res://scenes/assetScenes/brick_wall_end.tscn" id="13_adxub"]
 [ext_resource type="PackedScene" uid="uid://idvvck1xoxwe" path="res://scenes/assetScenes/border_pillar.tscn" id="13_mwgft"]
 [ext_resource type="PackedScene" uid="uid://b72y5ihcd300g" path="res://scenes/assetScenes/cart.tscn" id="14_cart"]
 [ext_resource type="PackedScene" uid="uid://dj2q7ckihe14y" path="res://scenes/assetScenes/stone_wall.tscn" id="15_siio1"]
@@ -83,10 +84,6 @@ corner_radius_bottom_left = 12
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pausemenu"]
 bg_color = Color(0.05, 0.05, 0.05, 0.95)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ff0s2"]
 bg_color = Color(0.29954746, 0.29954746, 0.29954743, 1)
@@ -133,6 +130,10 @@ glow_enabled = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8ra5a"]
 albedo_color = Color(0, 0, 0, 1)
+uv1_triplanar = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mwgft"]
+albedo_color = Color(0.34615496, 3.3691526e-07, 2.4065375e-07, 1)
 uv1_triplanar = true
 
 [node name="MainLevel" type="Node3D"]
@@ -424,6 +425,8 @@ offset_bottom = 95.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_iqu8w")
 theme_override_font_sizes/font_size = 16
 theme_override_styles/normal = SubResource("StyleBoxFlat_5fr2l")
@@ -691,6 +694,7 @@ alignment = 1
 [node name="ResumeButton" type="Button" parent="CanvasLayer/PauseMenu/PauseButtons"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
 theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_iqu8w")
 theme_override_font_sizes/font_size = 20
@@ -703,6 +707,7 @@ text = "Resume"
 [node name="OptionsButton" type="Button" parent="CanvasLayer/PauseMenu/PauseButtons"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
 theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_iqu8w")
 theme_override_font_sizes/font_size = 20
@@ -712,9 +717,23 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_fkrx8")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_mwgft")
 text = "Options"
 
+[node name="ResetCharacterButton" type="Button" parent="CanvasLayer/PauseMenu/PauseButtons"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_5fr2l")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_2sb77")
+theme_override_styles/hover = SubResource("StyleBoxFlat_fkrx8")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_mwgft")
+text = "Reset Character"
+
 [node name="QuitButton" type="Button" parent="CanvasLayer/PauseMenu/PauseButtons"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
 theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_iqu8w")
 theme_override_font_sizes/font_size = 20
@@ -951,6 +970,42 @@ material_override = SubResource("StandardMaterial3D_8ra5a")
 use_collision = true
 size = Vector3(130.74866, 1, 124.67514)
 
+[node name="ground2" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -0.00047465682, 0, 0, 0, 1, 1.3479424, -5.6105556, 82.03224)
+material_override = SubResource("StandardMaterial3D_mwgft")
+use_collision = true
+size = Vector3(19.77874, 1, 40.217285)
+
+[node name="ground3" type="CSGBox3D" parent="."]
+transform = Transform3D(0.79419196, 0, -0.60766697, 0, -0.00047465682, 0, 0.60766697, 0, 0.79419196, -8.810239, -5.6105556, 111.97106)
+material_override = SubResource("StandardMaterial3D_mwgft")
+use_collision = true
+size = Vector3(19.77874, 1, 40.217285)
+
+[node name="ground4" type="CSGBox3D" parent="."]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, -0.00047465682, 0, 1, 0, -4.371139e-08, -33.220406, -5.6105556, 124.07521)
+material_override = SubResource("StandardMaterial3D_mwgft")
+use_collision = true
+size = Vector3(19.77874, 1, 40.217285)
+
+[node name="ground5" type="CSGBox3D" parent="."]
+transform = Transform3D(-0.60766697, 0, -0.79419196, 0, -0.00047465682, 0, 0.79419196, 0, -0.60766697, -62.70057, -5.6105556, 113.92256)
+material_override = SubResource("StandardMaterial3D_mwgft")
+use_collision = true
+size = Vector3(19.77874, 1, 40.217285)
+
+[node name="ground6" type="CSGBox3D" parent="."]
+transform = Transform3D(-0.50000006, 0, -0.8660254, 0, -0.00047465682, 0, 0.8660254, 0, -0.50000006, -92.718544, -5.6105556, 93.788994)
+material_override = SubResource("StandardMaterial3D_mwgft")
+use_collision = true
+size = Vector3(19.77874, 1, 35.51587)
+
+[node name="ground7" type="CSGBox3D" parent="."]
+transform = Transform3D(-0.923351, 0, -0.383957, 0, -0.00047465682, 0, 0.383957, 0, -0.923351, -110.18761, -5.6105556, 72.23262)
+material_override = SubResource("StandardMaterial3D_mwgft")
+use_collision = true
+size = Vector3(19.77874, 1, 40.217285)
+
 [node name="walls" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -6.6105556, 0)
 
@@ -981,12 +1036,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40.564762, 1.0003803, -49.24
 [node name="brick-wall52" parent="walls" instance=ExtResource("6_bq26l")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.564762, 1.0003803, -49.2404)
 
-[node name="brick-wall53" parent="walls" instance=ExtResource("6_bq26l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.564762, 1.0003803, -49.2404)
-
-[node name="brick-wall54" parent="walls" instance=ExtResource("6_bq26l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.435238, 1.0003803, -49.2404)
-
 [node name="brick-wall55" parent="walls" instance=ExtResource("6_bq26l")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.435238, 1.0003803, -49.2404)
 
@@ -1004,9 +1053,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38.50228, 1.0003803, -49.2404
 
 [node name="brick-wall60" parent="walls" instance=ExtResource("6_bq26l")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43.435238, 1.0003803, -49.2404)
-
-[node name="brick-wall61" parent="walls" instance=ExtResource("6_bq26l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4352379, 1.0003803, -49.2404)
 
 [node name="brick-wall17" parent="walls" instance=ExtResource("6_bq26l")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 49.345535, 1.0003803, -43.318268)
@@ -1276,10 +1322,16 @@ use_collision = true
 size = Vector3(86.64905, 57.54004, 1)
 
 [node name="extremeWalllllll6" type="CSGBox3D" parent="walls"]
-transform = Transform3D(0.41817534, 0, 0, 0, 1, 0, 0, 0, 1, -0.43696696, 27.840536, 49.63674)
+transform = Transform3D(0.41817534, 0, 0, 0, 1, 0, 0, 0, 1, -10.150798, 27.840536, 49.63674)
 visible = false
 use_collision = true
-size = Vector3(82.87065, 57.54004, 1)
+size = Vector3(36.412483, 57.54004, 1)
+
+[node name="extremeWalllllll15" type="CSGBox3D" parent="walls"]
+transform = Transform3D(0.41817534, 0, 0, 0, 1, 0, 0, 0, 1, 10.884463, 27.840536, 49.63674)
+visible = false
+use_collision = true
+size = Vector3(27.015759, 57.54004, 1)
 
 [node name="extremeWalllllll11" type="CSGBox3D" parent="walls"]
 transform = Transform3D(0.41817534, 0, 0, 0, 1, 0, 0, 0, 1, 45.087666, 27.840536, 49.63674)
@@ -1330,10 +1382,16 @@ use_collision = true
 size = Vector3(82.87065, 57.54004, 1)
 
 [node name="extremeWalllllll2" type="CSGBox3D" parent="walls"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.008110046, 6.6105556, 61.19049)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -42.029594, 6.6105556, 61.19049)
 visible = false
 use_collision = true
-size = Vector3(150, 100, 1)
+size = Vector3(65.95703, 100, 1)
+
+[node name="extremeWalllllll16" type="CSGBox3D" parent="walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43.970406, 6.6105556, 61.19049)
+visible = false
+use_collision = true
+size = Vector3(65.95703, 100, 1)
 
 [node name="extremeWalllllll3" type="CSGBox3D" parent="walls"]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 62.978554, 6.6105556, -7.708496)
@@ -1405,6 +1463,18 @@ transform = Transform3D(1.3113416e-07, 0, 1, 0, 1, 0, -1, 0, 1.3113416e-07, -28,
 [node name="Cart7" parent="walls" instance=ExtResource("14_cart")]
 transform = Transform3D(-4.371138e-08, 0, -1, 0, 1, 0, 1, 0, -4.371138e-08, 25, 1.1105556, 2.5274925)
 
+[node name="brick-wall-end2" parent="walls" instance=ExtResource("13_adxub")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.689765, 0.9987221, 50.671577)
+
+[node name="brick-wall-end3" parent="walls" instance=ExtResource("13_adxub")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -5.310235, 0.9987221, 46.452545)
+
+[node name="brick-wall-end4" parent="walls" instance=ExtResource("13_adxub")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.689765, 0.9987221, -49.200554)
+
+[node name="brick-wall-end5" parent="walls" instance=ExtResource("13_adxub")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -5.310235, 0.9987221, -53.419586)
+
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("uid://cva3jmdk0sqdm")
 spawn_path = NodePath("..")
@@ -1420,11 +1490,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.562923, -5, 54.71348)
 [node name="SpawnPoint3" type="Marker3D" parent="SpawnPoints" groups=["spawn_points"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.491024, -5, -57.63561)
 
+[node name="SpawnPoint4" type="Marker3D" parent="SpawnPoints" groups=["spawn_points"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 56.07605, -5, 3.8268652)
+
 [node name="SpawnPoint5" type="Marker3D" parent="SpawnPoints" groups=["spawn_points"]]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -58.040176, -5, 1.8816681)
 
-[node name="SpawnPoint4" type="Marker3D" parent="SpawnPoints" groups=["spawn_points"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 56.07605, -5, 3.8268652)
+[node name="SpawnPoint6" type="Marker3D" parent="SpawnPoints" groups=["spawn_points"]]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -26.040176, -5, 52.881668)
 
 [node name="Objects" type="Node3D" parent="."]
 
@@ -1436,6 +1509,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 56.07605, -5, 3.8268652)
 [connection signal="pressed" from="CanvasLayer/LoadingPanel/CancelButton" to="." method="_on_cancel_connection_pressed"]
 [connection signal="pressed" from="CanvasLayer/PauseMenu/PauseButtons/ResumeButton" to="." method="_on_resume_pressed"]
 [connection signal="pressed" from="CanvasLayer/PauseMenu/PauseButtons/OptionsButton" to="." method="_on_pause_options_pressed"]
+[connection signal="pressed" from="CanvasLayer/PauseMenu/PauseButtons/ResetCharacterButton" to="." method="_on_reset_character_pressed"]
 [connection signal="pressed" from="CanvasLayer/PauseMenu/PauseButtons/QuitButton" to="." method="_on_quit_to_menu_pressed"]
 [connection signal="value_changed" from="CanvasLayer/InGameOptions/OptionsContainer/SFXContainer/SFXSlider" to="." method="_on_ingame_sfx_slider_value_changed"]
 [connection signal="value_changed" from="CanvasLayer/InGameOptions/OptionsContainer/MusicContainer/MusicSlider" to="." method="_on_ingame_music_slider_value_changed"]

@@ -45,19 +45,19 @@ mass = 500.0
 script = ExtResource("1_cart")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -2.7492087e-08, 0.4, -0.37105435)
 shape = SubResource("BoxShape3D_body")
 
 [node name="Body" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -2.7492087e-08, 0.4, -0.37105435)
 mesh = SubResource("BoxMesh_body")
 
 [node name="Seat" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, -0.4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0.06878421)
 mesh = SubResource("BoxMesh_seat")
 
 [node name="SeatPosition" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.9640346, -0.4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.9640346, 0.06878421)
 
 [node name="ExitPosition" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.5, 0)
@@ -66,21 +66,21 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.5, 0)
 replication_config = SubResource("SceneReplicationConfig_cart")
 
 [node name="wheel" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0.7443466, 0.14070344, 0.7805729)
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0.7443466, 0.14070344, 0.4506817)
 mesh = SubResource("BoxMesh_5lybg")
 
 [node name="wheel2" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0.7443466, 0.14070344, -0.8367722)
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0.7443466, 0.14070344, -1.1666634)
 mesh = SubResource("BoxMesh_5lybg")
 
 [node name="wheel3" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, -0.7217021, 0.14070344, 0.7805729)
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, -0.7217021, 0.14070344, 0.4506817)
 mesh = SubResource("BoxMesh_5lybg")
 
 [node name="wheel4" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, -0.7217021, 0.14070344, -0.8367722)
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, -0.7217021, 0.14070344, -1.1666634)
 mesh = SubResource("BoxMesh_5lybg")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(-2.434243e-08, 0, -1, 0, 0.45668226, 0, 0.5568899, 0, -4.371139e-08, 0, 0.86615086, 0.9434185)
+transform = Transform3D(7.3027294e-08, 0, 1.434965, 0, 0.45668226, 0, -0.5568899, 0, 1.8817293e-07, 5.498418e-08, 0.86615086, -1.3144729)
 mesh = SubResource("PrismMesh_5lybg")

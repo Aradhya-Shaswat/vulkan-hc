@@ -21,6 +21,7 @@ run/show_image=false
 
 GameSettings="*res://scripts/game_settings.gd"
 SceneTransition="*res://scenes/scene_transition.tscn"
+Console="*res://scenes/console.tscn"
 
 [display]
 

@@ -96,9 +96,9 @@ anchor_top = 0.46300003
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -574.0
-offset_top = -54.024017
+offset_top = -173.02402
 offset_right = -294.0
-offset_bottom = 31.975983
+offset_bottom = -87.02402
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 1, 0.8235294, 1)
@@ -164,9 +164,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -530.0
-offset_top = 35.0
+offset_top = -40.0
 offset_right = -100.0
-offset_bottom = 216.0
+offset_bottom = 141.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 18
@@ -320,9 +320,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = 194.0
-offset_top = -168.0
+offset_top = -205.0
 offset_right = 549.0
-offset_bottom = 173.0
+offset_bottom = 207.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_controls")
@@ -422,6 +422,34 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("1_c2u1v")
 theme_override_font_sizes/font_size = 14
 text = "TAB - Toggle player list"
+
+[node name="Control11" type="Label" parent="ControlsPanel/ControlsList"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("1_c2u1v")
+theme_override_font_sizes/font_size = 14
+text = "F - Enter/Exit cart"
+
+[node name="Control12" type="Label" parent="ControlsPanel/ControlsList"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("1_c2u1v")
+theme_override_font_sizes/font_size = 14
+text = "1-4 - Select hotbar slot"
+
+[node name="Control13" type="Label" parent="ControlsPanel/ControlsList"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("1_c2u1v")
+theme_override_font_sizes/font_size = 14
+text = "ESC - Pause menu"
+
+[node name="Control14" type="Label" parent="ControlsPanel/ControlsList"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("1_c2u1v")
+theme_override_font_sizes/font_size = 14
+text = "` (Backtick) - Developer console"
 
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
 [connection signal="value_changed" from="SettingsContainer/SFXContainer/SFXSlider" to="." method="_on_sfx_slider_value_changed"]

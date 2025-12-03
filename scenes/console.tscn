@@ -1,0 +1,59 @@
+[gd_scene load_steps=3 format=3 uid="uid://dq53rmxiwy7ty"]
+
+[ext_resource type="Script" uid="uid://tn8tddnxgxeo" path="res://scripts/console.gd" id="1_console"]
+[ext_resource type="FontFile" uid="uid://gunvccib1svm" path="res://assets/fonts/Poppins-Regular.ttf" id="2_font"]
+
+[node name="Console" type="CanvasLayer"]
+layer = 100
+script = ExtResource("1_console")
+
+[node name="ConsolePanel" type="Panel" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ConsolePanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="OutputScroll" type="ScrollContainer" parent="ConsolePanel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Output" type="RichTextLabel" parent="ConsolePanel/VBoxContainer/OutputScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_colors/default_color = Color(0.9, 0.9, 0.9, 1)
+theme_override_fonts/normal_font = ExtResource("2_font")
+theme_override_font_sizes/normal_font_size = 14
+bbcode_enabled = true
+scroll_following = true
+
+[node name="InputContainer" type="HBoxContainer" parent="ConsolePanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Prefix" type="Label" parent="ConsolePanel/VBoxContainer/InputContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 0, 1)
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 14
+text = "] "
+
+[node name="InputField" type="LineEdit" parent="ConsolePanel/VBoxContainer/InputContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 14
+placeholder_text = "Enter command..."
+caret_blink = true

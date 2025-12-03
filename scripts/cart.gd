@@ -21,12 +21,17 @@ var prev_sync_position: Vector3
 var prev_sync_rotation: Vector3
 var sync_lerp_factor: float = 0.0
 var was_server_last_check: bool = false
+var spawn_position: Vector3 = Vector3.ZERO
+var spawn_rotation: Vector3 = Vector3.ZERO
+const FALL_THRESHOLD: float = -50.0
 
 @onready var seat_position: Node3D = $SeatPosition
 @onready var exit_position: Node3D = $ExitPosition
 
 func _ready():
 	add_to_group("carts")
+	spawn_position = global_position
+	spawn_rotation = rotation
 	sync_position = global_position
 	sync_rotation = rotation
 	prev_sync_position = sync_position
@@ -60,6 +65,9 @@ func _physics_process(delta):
 		_update_freeze_state()
 	
 	if multiplayer.is_server():
+		if global_position.y < FALL_THRESHOLD:
+			_respawn_cart()
+		
 		if is_occupied and driver_id != 0:
 			_apply_movement(delta)
 		else:
@@ -180,3 +188,11 @@ func _server_exit(peer_id: int):
 		linear_velocity = Vector3.ZERO
 		angular_velocity = Vector3.ZERO
 		_sync_driver.rpc(0)
+
+func _respawn_cart():
+	global_position = spawn_position
+	global_rotation = spawn_rotation
+	linear_velocity = Vector3.ZERO
+	angular_velocity = Vector3.ZERO
+	sync_position = spawn_position
+	sync_rotation = spawn_rotation

@@ -1,8 +1,8 @@
 extends CharacterBody3D
 
 var speed
-const WALK_SPEED = 8.5
-const SPRINT_SPEED = 10.0
+var WALK_SPEED = 8.5
+var SPRINT_SPEED = 10.0
 const JUMP_VELOCITY = 6
 
 const BOB_FREQ = 2.0
@@ -13,10 +13,14 @@ var t_bob = 0.0
 const PUSH_FORCE = 1.0
 
 var gravity = 15
+const FALL_THRESHOLD = -50.0
+var spawn_position: Vector3 = Vector3.ZERO
 
 var in_cart: bool = false
 var current_cart: Node = null
 var nearby_cart: Node = null
+var cart_look_timer: float = 0.0
+const CART_LOOK_TIMEOUT: float = 0.25
 
 @onready var head = $Head
 @onready var camera = $Head/Camera3D
@@ -53,6 +57,7 @@ func _is_local_authority() -> bool:
 
 func _ready():
 	cam_default_pos = camera.transform.origin
+	spawn_position = global_position
 	
 	multiplayer_sync.set_multiplayer_authority(name.to_int())
 	
@@ -105,16 +110,24 @@ func _unhandled_input(event):
 		return
 	if GameSettings.is_paused:
 		return
+	if Console.is_open:
+		return
 	if event is InputEventMouseMotion:
 		var sens = GameSettings.sensitivity
 		head.rotate_y(-event.relative.x * sens)
 		var new_x = camera.rotation.x - event.relative.y * sens
 		new_x = clamp(new_x, deg_to_rad(-80), deg_to_rad(90))
 		camera.rotation.x = new_x
+		if in_cart:
+			cart_look_timer = 0.0
 
 func _physics_process(delta):
 	if _is_local_authority():
-		if GameSettings.is_paused:
+		if global_position.y < FALL_THRESHOLD:
+			respawn()
+			return
+		
+		if GameSettings.is_paused or Console.is_open:
 			velocity.x = 0
 			velocity.z = 0
 			if not in_cart:
@@ -127,8 +140,13 @@ func _physics_process(delta):
 			_toggle_cart()
 		
 		if in_cart and current_cart:
-			_handle_cart_driving()
+			_handle_cart_driving(delta)
 			global_position = current_cart.get_seat_global_position()
+			cart_look_timer += delta
+			if cart_look_timer >= CART_LOOK_TIMEOUT:
+				var target_head_y = current_cart.global_rotation.y
+				head.global_rotation.y = lerp_angle(head.global_rotation.y, target_head_y, delta * 5.0)
+				camera.rotation.x = lerp(camera.rotation.x, 0.0, delta * 5.0)
 			sync_position = global_position
 			sync_rotation = rotation
 			sync_head_rotation = head.rotation.y
@@ -272,13 +290,23 @@ func _exit_cart():
 	$CollisionShape3D.disabled = false
 	global_position = exit_pos
 
-func _handle_cart_driving():
+func _handle_cart_driving(delta):
 	if not current_cart:
 		return
 	
 	var input_dir = Vector2.ZERO
-	input_dir.y = Input.get_axis("up", "down")
-	input_dir.x = Input.get_axis("right", "left")
+	input_dir.y = Input.get_axis("down", "up")
+	input_dir.x = Input.get_axis("left", "right")
 	var brake = Input.is_action_pressed("sprint")
 	
 	current_cart.set_input(input_dir, brake)
+
+func respawn():
+	if in_cart and current_cart:
+		_exit_cart()
+	
+	global_position = spawn_position
+	velocity = Vector3.ZERO
+	sync_position = spawn_position
+	head.rotation.y = 0
+	camera.rotation.x = 0

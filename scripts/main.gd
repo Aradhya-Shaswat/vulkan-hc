@@ -147,6 +147,13 @@ func _toggle_pause():
 func _on_resume_pressed():
 	_toggle_pause()
 
+func _on_reset_character_pressed():
+	var my_id = multiplayer.get_unique_id()
+	var player_node = get_node_or_null(str(my_id))
+	if player_node and player_node.has_method("respawn"):
+		player_node.respawn()
+	_toggle_pause()
+
 func _on_pause_options_pressed():
 	$CanvasLayer/PauseMenu.hide()
 	$CanvasLayer/InGameOptions.show()
