@@ -190,7 +190,7 @@ offset_bottom = 37.0
 theme_override_colors/font_color = Color(0.6955032, 0.6955031, 0.6955031, 1)
 theme_override_fonts/font = ExtResource("1_iqu8w")
 theme_override_font_sizes/font_size = 11
-text = "VULKAN-HC BETA 0.7"
+text = "VULKAN-HC BETA 0.8"
 
 [node name="SelectionUI" type="Node2D" parent="CanvasLayer"]
 

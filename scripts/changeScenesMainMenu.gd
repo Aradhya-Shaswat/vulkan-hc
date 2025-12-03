@@ -1,6 +1,6 @@
 extends Node
 
-const CURRENT_VERSION = "beta-0.7"
+const CURRENT_VERSION = "beta-0.8"
 const VERSION_URL = "https://raw.githubusercontent.com/Aradhya-Shaswat/vulkan-hc/main/version.json"
 
 var http_request: HTTPRequest
