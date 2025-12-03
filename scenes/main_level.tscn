@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://cnew6x2hwvjyh"]
+[gd_scene load_steps=39 format=3 uid="uid://cnew6x2hwvjyh"]
 
 [ext_resource type="FontFile" uid="uid://gunvccib1svm" path="res://assets/fonts/Poppins-Regular.ttf" id="1_iqu8w"]
 [ext_resource type="Script" uid="uid://b27u1ptmiviqb" path="res://scripts/main.gd" id="1_mwgft"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://dkdhu84jhqjn5" path="res://scenes/assetScenes/crypt.tscn" id="11_fkrx8"]
 [ext_resource type="PackedScene" uid="uid://c73mkdvaw1m4p" path="res://scenes/assetScenes/brick_wall_end.tscn" id="12_mwgft"]
 [ext_resource type="PackedScene" uid="uid://idvvck1xoxwe" path="res://scenes/assetScenes/border_pillar.tscn" id="13_mwgft"]
+[ext_resource type="PackedScene" uid="uid://b72y5ihcd300g" path="res://scenes/assetScenes/cart.tscn" id="14_cart"]
 [ext_resource type="PackedScene" uid="uid://dj2q7ckihe14y" path="res://scenes/assetScenes/stone_wall.tscn" id="15_siio1"]
 [ext_resource type="PackedScene" uid="uid://dhe2vdggcxcmo" path="res://scenes/assetScenes/stone_wall_curve.tscn" id="16_ndwfr"]
 [ext_resource type="PackedScene" uid="uid://dny03htroscuh" path="res://scenes/assetScenes/stone_wall_column.tscn" id="17_nc5r2"]
@@ -214,7 +215,7 @@ offset_bottom = 37.0
 theme_override_colors/font_color = Color(0.6955032, 0.6955031, 0.6955031, 1)
 theme_override_fonts/font = ExtResource("1_iqu8w")
 theme_override_font_sizes/font_size = 11
-text = "VULKAN - HC, BUILD BETA 0.3"
+text = "VULKAN-HC BETA 0.4"
 
 [node name="SelectionUI" type="Node2D" parent="CanvasLayer"]
 
@@ -1347,6 +1348,18 @@ transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -43.7623, 1.0002356, -16.0124
 
 [node name="border-pillar7" parent="walls" instance=ExtResource("13_mwgft")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 41.94597, 1.0002356, -10.064644)
+
+[node name="Cart" parent="walls" instance=ExtResource("14_cart")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 1.1105556, -20.897589)
+
+[node name="Cart3" parent="walls" instance=ExtResource("14_cart")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6155157, 1.1105556, -26.479078)
+
+[node name="Cart4" parent="walls" instance=ExtResource("14_cart")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5911419, 1.1105556, -23.496264)
+
+[node name="Cart2" parent="walls" instance=ExtResource("14_cart")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 1.1105556, -19.953106)
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("uid://cva3jmdk0sqdm")

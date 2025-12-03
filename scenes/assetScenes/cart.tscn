@@ -1,6 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://cart_vehicle_001"]
+[gd_scene load_steps=11 format=3 uid="uid://b72y5ihcd300g"]
 
-[ext_resource type="Script" path="res://scripts/cart.gd" id="1_cart"]
+[ext_resource type="Script" uid="uid://dji7rqewp7jcx" path="res://scripts/cart.gd" id="1_cart"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_body"]
 size = Vector3(1.5, 0.6, 2.5)
@@ -9,14 +9,39 @@ size = Vector3(1.5, 0.6, 2.5)
 albedo_color = Color(0.8, 0.2, 0.2, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_body"]
-size = Vector3(1.5, 0.5, 2.5)
 material = SubResource("StandardMaterial3D_body")
+size = Vector3(1.5, 0.5, 2.5)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_seat"]
 albedo_color = Color(0.2, 0.2, 0.2, 1)
 
+[sub_resource type="BoxMesh" id="BoxMesh_seat"]
+material = SubResource("StandardMaterial3D_seat")
+size = Vector3(0.8, 0.2, 0.8)
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_cart"]
+properties/0/path = NodePath(".:sync_position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:sync_rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath(".:driver_id")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+
+[sub_resource type="BoxMesh" id="BoxMesh_5lybg"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5lybg"]
+albedo_color = Color(0.4879306, 0.99999994, 0.9966716, 1)
+
+[sub_resource type="PrismMesh" id="PrismMesh_5lybg"]
+material = SubResource("StandardMaterial3D_5lybg")
+
 [node name="Cart" type="RigidBody3D"]
-mass = 50.0
+collision_layer = 2
+collision_mask = 5
+mass = 500.0
 script = ExtResource("1_cart")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
@@ -28,12 +53,34 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
 mesh = SubResource("BoxMesh_body")
 
 [node name="Seat" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0.2)
-mesh = SubResource("BoxMesh_body")
-skeleton = NodePath("../Body")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, -0.4)
+mesh = SubResource("BoxMesh_seat")
 
 [node name="SeatPosition" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.9640346, -0.4)
 
 [node name="ExitPosition" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.5, 0)
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_cart")
+
+[node name="wheel" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0.7443466, 0.14070344, 0.7805729)
+mesh = SubResource("BoxMesh_5lybg")
+
+[node name="wheel2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0.7443466, 0.14070344, -0.8367722)
+mesh = SubResource("BoxMesh_5lybg")
+
+[node name="wheel3" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, -0.7217021, 0.14070344, 0.7805729)
+mesh = SubResource("BoxMesh_5lybg")
+
+[node name="wheel4" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, -0.7217021, 0.14070344, -0.8367722)
+mesh = SubResource("BoxMesh_5lybg")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(-2.434243e-08, 0, -1, 0, 0.45668226, 0, 0.5568899, 0, -4.371139e-08, 0, 0.86615086, 0.9434185)
+mesh = SubResource("PrismMesh_5lybg")

@@ -38,7 +38,6 @@ var held_prev_mass := 1.0
 var last_frame_pos := Vector3.ZERO
 var last_frame_dt := 0.0
 var held_original_scale := Vector3.ONE
-var object_scales: Dictionary = {}
 var held_aabb_half_extents := Vector3.ZERO
 var velocity_buffer: Array = []
 var buffer_size: int = 5
@@ -163,9 +162,9 @@ func _update_hover():
 	
 	if res:
 		var c = res.collider
-		if not _is_static_surface(c) and not _is_part_of_player(c):
+		if not _is_static_surface(c) and not _is_part_of_player(c) and not _is_cart(c):
 			var root = _get_interactable_root(c)
-			if root and not _is_static_surface(root) and not _is_part_of_player(root) and not _is_player_standing_on(root):
+			if root and not _is_static_surface(root) and not _is_part_of_player(root) and not _is_cart(root) and not _is_player_standing_on(root):
 				hovered = root
 	
 	if hovered != previous:
@@ -480,19 +479,20 @@ func _start_cooldown():
 	can_resize = true
 
 func _scale_object(obj: Node3D, factor: float):
-	var current = object_scales.get(obj, 1.0)
-	var new_val = current * factor
+	var mesh = _find_mesh(obj)
+	var shape = _find_collision_shape(obj)
+	
+	var current_mesh_scale = mesh.scale.x if mesh else 1.0
+	var new_val = current_mesh_scale * factor
+	
 	if new_val < min_scale or new_val > max_scale:
 		return
-	object_scales[obj] = new_val
 	
 	var was_frozen = obj is RigidBody3D and not obj.freeze
 	if was_frozen:
 		obj.freeze = true
 	
 	var original_pos = obj.global_transform.origin
-	var mesh = _find_mesh(obj)
-	var shape = _find_collision_shape(obj)
 	
 	var new_mesh_scale = mesh.scale * factor if mesh else Vector3.ONE
 	var new_shape_scale = shape.scale * factor if shape else Vector3.ONE
@@ -564,6 +564,18 @@ func _is_part_of_player(node: Node) -> bool:
 	var current = node
 	while current:
 		if current is CharacterBody3D or current.is_in_group("player"):
+			return true
+		current = current.get_parent()
+	return false
+
+func _is_cart(node: Node) -> bool:
+	if node == null:
+		return false
+	if node.is_in_group("carts"):
+		return true
+	var current = node
+	while current:
+		if current.is_in_group("carts"):
 			return true
 		current = current.get_parent()
 	return false

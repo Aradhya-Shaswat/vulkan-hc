@@ -246,6 +246,7 @@ func _on_host_pressed() -> void:
 	player_list[1] = local_username
 	add_player(1)
 	_update_player_list_ui()
+	_update_player_nametags()
 	_hide_menu()
 	is_in_game = true
 	if has_node("CanvasLayer/Hotbar"):
@@ -365,6 +366,14 @@ func _register_player_on_server(id: int, username: String):
 func _sync_player_list(list: Dictionary):
 	player_list = list
 	_update_player_list_ui()
+	_update_player_nametags()
+
+func _update_player_nametags():
+	for id in player_list.keys():
+		var player_node = get_node_or_null(str(id))
+		if player_node and player_node.has_node("Nametag"):
+			var nametag = player_node.get_node("Nametag")
+			nametag.text = player_list[id]
 
 func _update_player_list_ui():
 	var container = $CanvasLayer/PlayerList/VBoxContainer
