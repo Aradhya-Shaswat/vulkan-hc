@@ -1,5 +1,5 @@
 {
-    "version": "beta-0.4",
-    "pck_url": "https://github.com/Aradhya-Shaswat/vulkan-hc/releases/download/v0.4/Vulkan.pck",
-    "download_url": "https://github.com/Aradhya-Shaswat/vulkan-hc/releases/latest"
+	"version": "beta-0.6",
+	"pck_url": "https://github.com/Aradhya-Shaswat/vulkan-hc/releases/download/v0.6/vulkan.pck",
+	"download_url": "https://github.com/Aradhya-Shaswat/vulkan-hc/releases/latest"
 }
