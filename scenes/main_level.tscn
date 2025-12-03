@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://cnew6x2hwvjyh"]
+[gd_scene load_steps=39 format=3 uid="uid://cnew6x2hwvjyh"]
 
 [ext_resource type="FontFile" uid="uid://gunvccib1svm" path="res://assets/fonts/Poppins-Regular.ttf" id="1_iqu8w"]
 [ext_resource type="Script" uid="uid://b27u1ptmiviqb" path="res://scripts/main.gd" id="1_mwgft"]
@@ -76,6 +76,13 @@ corner_radius_bottom_left = 8
 bg_color = Color(0.1, 0.1, 0.1, 0.85)
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pausemenu"]
+bg_color = Color(0.05, 0.05, 0.05, 0.95)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_v3uhd"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -171,9 +178,9 @@ anchor_top = 0.46300003
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -574.0
-offset_top = -111.02402
+offset_top = -161.02402
 offset_right = -55.0
-offset_bottom = 5.0
+offset_bottom = -45.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 1, 0.8235294, 1)
@@ -323,9 +330,9 @@ alignment = 0
 [node name="UsernameEdit" type="LineEdit" parent="CanvasLayer"]
 modulate = Color(0.98898584, 0.86889833, 0.7355447, 1)
 offset_left = 48.0
-offset_top = 335.0
+offset_top = 281.0
 offset_right = 375.0
-offset_bottom = 380.0
+offset_bottom = 326.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_selected_color = Color(0, 0, 0, 1)
 theme_override_colors/font_placeholder_color = Color(0, 0, 0, 0.6)
@@ -337,6 +344,25 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_2sb77")
 placeholder_text = "  Enter a nickname!"
 alignment = 1
 max_length = 16
+emoji_menu_enabled = false
+
+[node name="IPEdit" type="LineEdit" parent="CanvasLayer"]
+modulate = Color(0.98898584, 0.86889833, 0.7355447, 1)
+offset_left = 48.0
+offset_top = 339.0
+offset_right = 375.0
+offset_bottom = 384.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_selected_color = Color(0, 0, 0, 1)
+theme_override_colors/font_placeholder_color = Color(0, 0, 0, 0.6)
+theme_override_colors/caret_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_username")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_2sb77")
+placeholder_text = "  Server IP (leave blank for localhost)"
+alignment = 1
+max_length = 50
 emoji_menu_enabled = false
 
 [node name="PlayerList" type="Panel" parent="CanvasLayer"]
@@ -374,6 +400,297 @@ offset_right = -12.0
 offset_bottom = -12.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="PauseMenu" type="Panel" parent="CanvasLayer"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -130.0
+offset_right = 150.0
+offset_bottom = 130.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_pausemenu")
+
+[node name="PauseTitle" type="Label" parent="CanvasLayer/PauseMenu"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 15.0
+offset_bottom = 50.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 1, 0.8235294, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 28
+text = "PAUSED"
+horizontal_alignment = 1
+
+[node name="PauseButtons" type="VBoxContainer" parent="CanvasLayer/PauseMenu"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -30.0
+offset_right = 100.0
+offset_bottom = 90.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+
+[node name="ResumeButton" type="Button" parent="CanvasLayer/PauseMenu/PauseButtons"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_5fr2l")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_2sb77")
+theme_override_styles/hover = SubResource("StyleBoxFlat_fkrx8")
+text = "Resume"
+
+[node name="OptionsButton" type="Button" parent="CanvasLayer/PauseMenu/PauseButtons"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_5fr2l")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_2sb77")
+theme_override_styles/hover = SubResource("StyleBoxFlat_fkrx8")
+text = "Options"
+
+[node name="QuitButton" type="Button" parent="CanvasLayer/PauseMenu/PauseButtons"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_5fr2l")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_2sb77")
+theme_override_styles/hover = SubResource("StyleBoxFlat_fkrx8")
+text = "Quit to Menu"
+
+[node name="InGameOptions" type="Panel" parent="CanvasLayer"]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="ColorRect" parent="CanvasLayer/InGameOptions"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.05, 0.05, 0.05, 0.9)
+
+[node name="OptionsTitle" type="Label" parent="CanvasLayer/InGameOptions"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -150.0
+offset_top = 40.0
+offset_right = 150.0
+offset_bottom = 90.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 1, 0.8235294, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 36
+text = "OPTIONS"
+horizontal_alignment = 1
+
+[node name="OptionsContainer" type="VBoxContainer" parent="CanvasLayer/InGameOptions"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -220.0
+offset_top = -80.0
+offset_right = 220.0
+offset_bottom = 120.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 18
+
+[node name="SFXContainer" type="HBoxContainer" parent="CanvasLayer/InGameOptions/OptionsContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="SFXLabel" type="Label" parent="CanvasLayer/InGameOptions/OptionsContainer/SFXContainer"]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0.8235294, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 20
+text = "SFX Volume"
+
+[node name="SFXSlider" type="HSlider" parent="CanvasLayer/InGameOptions/OptionsContainer/SFXContainer"]
+modulate = Color(0.98898584, 0.86889833, 0.7355447, 1)
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_vertical = 1
+value = 100.0
+
+[node name="SFXValue" type="Label" parent="CanvasLayer/InGameOptions/OptionsContainer/SFXContainer"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0.8235294, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 16
+text = "100%"
+horizontal_alignment = 2
+
+[node name="MusicContainer" type="HBoxContainer" parent="CanvasLayer/InGameOptions/OptionsContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="MusicLabel" type="Label" parent="CanvasLayer/InGameOptions/OptionsContainer/MusicContainer"]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0.8235294, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 20
+text = "Music Volume"
+
+[node name="MusicSlider" type="HSlider" parent="CanvasLayer/InGameOptions/OptionsContainer/MusicContainer"]
+modulate = Color(0.98898584, 0.86889833, 0.7355447, 1)
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_vertical = 1
+value = 100.0
+
+[node name="MusicValue" type="Label" parent="CanvasLayer/InGameOptions/OptionsContainer/MusicContainer"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0.8235294, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 16
+text = "100%"
+horizontal_alignment = 2
+
+[node name="SensitivityContainer" type="HBoxContainer" parent="CanvasLayer/InGameOptions/OptionsContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="SensitivityLabel" type="Label" parent="CanvasLayer/InGameOptions/OptionsContainer/SensitivityContainer"]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0.8235294, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 20
+text = "Sensitivity"
+
+[node name="SensitivitySlider" type="HSlider" parent="CanvasLayer/InGameOptions/OptionsContainer/SensitivityContainer"]
+modulate = Color(0.98898584, 0.86889833, 0.7355447, 1)
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_vertical = 1
+min_value = 1.0
+max_value = 20.0
+value = 5.0
+
+[node name="SensitivityValue" type="Label" parent="CanvasLayer/InGameOptions/OptionsContainer/SensitivityContainer"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0.8235294, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 16
+text = "0.005"
+horizontal_alignment = 2
+
+[node name="CrosshairContainer" type="HBoxContainer" parent="CanvasLayer/InGameOptions/OptionsContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="CrosshairLabel" type="Label" parent="CanvasLayer/InGameOptions/OptionsContainer/CrosshairContainer"]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0.8235294, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 20
+text = "Crosshair"
+
+[node name="GreenButton" type="Button" parent="CanvasLayer/InGameOptions/OptionsContainer/CrosshairContainer"]
+custom_minimum_size = Vector2(40, 30)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.92, 0, 1)
+theme_override_font_sizes/font_size = 18
+text = "●"
+
+[node name="RedButton" type="Button" parent="CanvasLayer/InGameOptions/OptionsContainer/CrosshairContainer"]
+custom_minimum_size = Vector2(40, 30)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.2, 0.2, 1)
+theme_override_font_sizes/font_size = 18
+text = "●"
+
+[node name="WhiteButton" type="Button" parent="CanvasLayer/InGameOptions/OptionsContainer/CrosshairContainer"]
+custom_minimum_size = Vector2(40, 30)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "●"
+
+[node name="CrosshairPreview" type="Label" parent="CanvasLayer/InGameOptions/OptionsContainer/CrosshairContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2087988, 0.92084754, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_font_sizes/font_size = 24
+text = "•"
+
+[node name="OptionsBackButton" type="Button" parent="CanvasLayer/InGameOptions"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -60.0
+offset_top = -80.0
+offset_right = 60.0
+offset_bottom = -45.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_5fr2l")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_2sb77")
+theme_override_styles/hover = SubResource("StyleBoxFlat_fkrx8")
+text = "Back"
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.8660254, -0.43301275, 0.25000003, 0.49600145, -0.6808939, 0.53885627, -0.063108146, 0.59066355, 0.80444634, 32.54878, 1.767848, -25.480614)
@@ -667,6 +984,42 @@ transform = Transform3D(-4.3711395e-08, 0, 1, 0, 1, 0, -1, 0, -4.3711395e-08, 10
 [node name="stone-wall-curve9" parent="walls/starting_room" instance=ExtResource("16_ndwfr")]
 transform = Transform3D(-1.0000001, 0, 0, 0, 1, 0, 0, 0, -1.0000001, 105.716675, 1.0003767, -19.15085)
 
+[node name="extremeWalllllll" type="CSGBox3D" parent="walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.6105556, -64.708496)
+visible = false
+use_collision = true
+size = Vector3(100, 100, 1)
+
+[node name="extremeWalllllll5" type="CSGBox3D" parent="walls"]
+transform = Transform3D(0.41817534, 0, 0, 0, 1, 0, 0, 0, 1, 0.5095297, 27.840536, -52.203148)
+visible = false
+use_collision = true
+size = Vector3(86.64905, 57.54004, 1)
+
+[node name="extremeWalllllll6" type="CSGBox3D" parent="walls"]
+transform = Transform3D(0.41817534, 0, 0, 0, 1, 0, 0, 0, 1, -0.43696696, 27.840536, 49.63674)
+visible = false
+use_collision = true
+size = Vector3(82.87065, 57.54004, 1)
+
+[node name="extremeWalllllll2" type="CSGBox3D" parent="walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.008110046, 6.6105556, 61.19049)
+visible = false
+use_collision = true
+size = Vector3(150, 100, 1)
+
+[node name="extremeWalllllll3" type="CSGBox3D" parent="walls"]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 53, 6.6105556, -7.708496)
+visible = false
+use_collision = true
+size = Vector3(150, 100, 1)
+
+[node name="extremeWalllllll4" type="CSGBox3D" parent="walls"]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -49.88404, 6.6105556, -7.708496)
+visible = false
+use_collision = true
+size = Vector3(150, 100, 1)
+
 [node name="Objects" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -6.6105556, 0)
 
@@ -938,3 +1291,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.923948, -5, 54.51059)
 [connection signal="pressed" from="CanvasLayer/Back" to="." method="_on_back_pressed"]
 [connection signal="pressed" from="CanvasLayer/Join" to="." method="_on_join_pressed"]
 [connection signal="text_changed" from="CanvasLayer/UsernameEdit" to="." method="_on_username_text_changed"]
+[connection signal="text_changed" from="CanvasLayer/IPEdit" to="." method="_on_ip_text_changed"]
+[connection signal="pressed" from="CanvasLayer/PauseMenu/PauseButtons/ResumeButton" to="." method="_on_resume_pressed"]
+[connection signal="pressed" from="CanvasLayer/PauseMenu/PauseButtons/OptionsButton" to="." method="_on_pause_options_pressed"]
+[connection signal="pressed" from="CanvasLayer/PauseMenu/PauseButtons/QuitButton" to="." method="_on_quit_to_menu_pressed"]
+[connection signal="value_changed" from="CanvasLayer/InGameOptions/OptionsContainer/SFXContainer/SFXSlider" to="." method="_on_ingame_sfx_slider_value_changed"]
+[connection signal="value_changed" from="CanvasLayer/InGameOptions/OptionsContainer/MusicContainer/MusicSlider" to="." method="_on_ingame_music_slider_value_changed"]
+[connection signal="value_changed" from="CanvasLayer/InGameOptions/OptionsContainer/SensitivityContainer/SensitivitySlider" to="." method="_on_ingame_sensitivity_slider_value_changed"]
+[connection signal="pressed" from="CanvasLayer/InGameOptions/OptionsContainer/CrosshairContainer/GreenButton" to="." method="_on_ingame_green_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/InGameOptions/OptionsContainer/CrosshairContainer/RedButton" to="." method="_on_ingame_red_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/InGameOptions/OptionsContainer/CrosshairContainer/WhiteButton" to="." method="_on_ingame_white_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/InGameOptions/OptionsBackButton" to="." method="_on_ingame_options_back_pressed"]

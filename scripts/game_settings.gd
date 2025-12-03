@@ -6,6 +6,7 @@ var sfx_volume: float = 1.0
 var music_volume: float = 1.0
 var sensitivity: float = 0.005
 var crosshair_color: Color = Color(0.2087988, 0.92084754, 0, 1)
+var is_paused: bool = false
 
 func _ready():
 	load_settings()

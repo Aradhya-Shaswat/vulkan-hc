@@ -51,6 +51,8 @@ func _ready():
 func _unhandled_input(event):
 	if not _is_local_authority():
 		return
+	if GameSettings.is_paused:
+		return
 	if event is InputEventMouseMotion:
 		var sens = GameSettings.sensitivity
 		head.rotate_y(-event.relative.x * sens)
@@ -60,6 +62,12 @@ func _unhandled_input(event):
 
 func _physics_process(delta):
 	if _is_local_authority():
+		if GameSettings.is_paused:
+			velocity.x = 0
+			velocity.z = 0
+			move_and_slide()
+			return
+		
 		if not is_on_floor():
 			velocity.y -= gravity * delta
 
