@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://jlggd3ot6ph0"
+path="res://.godot/imported/Sand.wav-6922a539149331c354e2eb2c10d5c438.sample"
+
+[deps]
+
+source_file="res://assets/sounds/Free Footsteps Pack/Sand.wav"
+dest_files=["res://.godot/imported/Sand.wav-6922a539149331c354e2eb2c10d5c438.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

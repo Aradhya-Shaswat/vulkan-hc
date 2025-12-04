@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://doujeytsvc01a"
+path="res://.godot/imported/Modern8.ogg-b518d8bd14204dbc7d4cdb37e88b4aec.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/sounds/UI Soundpack/OGG/Modern8.ogg"
+dest_files=["res://.godot/imported/Modern8.ogg-b518d8bd14204dbc7d4cdb37e88b4aec.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

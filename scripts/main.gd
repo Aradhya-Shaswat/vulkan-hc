@@ -25,6 +25,13 @@ var spawn_counts = {}
 var spawned_objects = {}
 const MAX_SPAWNS_PER_TYPE = 10
 
+var game_time_limit: float = 300.0
+var game_time_remaining: float = 300.0
+var game_timer_active: bool = false
+var kill_counts: Dictionary = {}
+var game_ended: bool = false
+var return_to_menu_timer: float = 10.0
+
 const COLOR_GREEN = Color(0.2, 0.92, 0, 1)
 const COLOR_RED = Color(1, 0.2, 0.2, 1)
 const COLOR_WHITE = Color(1, 1, 1, 1)
@@ -42,17 +49,72 @@ func _ready():
 	$CanvasLayer/InGameOptions.hide()
 	$CanvasLayer/LoadingPanel.hide()
 	$CanvasLayer/PasswordPanel.hide()
+	$CanvasLayer/GameTimerLabel.hide()
+	$CanvasLayer/GameEndOverlay.hide()
 	if has_node("CanvasLayer/Hotbar"):
 		$CanvasLayer/Hotbar.hide()
 	_apply_crosshair_color()
 	GameSettings.settings_changed.connect(_on_settings_changed)
 	GameSettings.is_paused = false
+	_connect_hover_sounds()
+	SoundManager.start_menu_music()
 	
 	if GameSettings.saved_nickname != "":
 		$CanvasLayer/UsernameEdit.text = GameSettings.saved_nickname
 		local_username = GameSettings.saved_nickname
 		$CanvasLayer/Host.disabled = false
 		$CanvasLayer/Join.disabled = false
+
+func _connect_hover_sounds():
+	_connect_buttons_recursive($CanvasLayer)
+
+func _connect_buttons_recursive(node: Node):
+	if node is Button:
+		if not node.mouse_entered.is_connected(_on_button_hover):
+			node.mouse_entered.connect(_on_button_hover)
+	for child in node.get_children():
+		_connect_buttons_recursive(child)
+
+func _on_button_hover():
+	SoundManager.play_ui_hover()
+
+var time_sync_timer: float = 0.0
+var last_countdown_second: int = -1
+
+func _process(delta):
+	if game_timer_active and not game_ended:
+		if multiplayer.is_server():
+			game_time_remaining -= delta
+			time_sync_timer += delta
+			if time_sync_timer >= 1.0:
+				time_sync_timer = 0.0
+				_sync_game_time.rpc(game_time_remaining)
+			if game_time_remaining <= 0:
+				game_time_remaining = 0
+				_end_game()
+		_update_timer_display()
+		
+		var current_second = int(game_time_remaining)
+		if game_time_remaining <= 10 and current_second != last_countdown_second and current_second > 0:
+			last_countdown_second = current_second
+			SoundManager.play_countdown_tick()
+	
+	if game_ended:
+		return_to_menu_timer -= delta
+		$CanvasLayer/GameEndOverlay/ReturnTimer.text = "Returning to menu in " + str(int(return_to_menu_timer)) + "..."
+		if return_to_menu_timer <= 0:
+			_return_to_menu()
+
+func _update_timer_display():
+	var minutes = int(game_time_remaining) / 60
+	var seconds = int(game_time_remaining) % 60
+	$CanvasLayer/GameTimerLabel.text = "%d:%02d" % [minutes, seconds]
+	if game_time_remaining <= 30:
+		$CanvasLayer/GameTimerLabel.modulate = Color(1, 0.3, 0.3, 1)
+	elif game_time_remaining <= 60:
+		$CanvasLayer/GameTimerLabel.modulate = Color(1, 0.7, 0.3, 1)
+	else:
+		$CanvasLayer/GameTimerLabel.modulate = Color(1, 1, 1, 1)
 
 func _on_settings_changed():
 	_apply_crosshair_color()
@@ -65,6 +127,13 @@ func _unhandled_input(event):
 		get_viewport().set_input_as_handled()
 		if is_in_game and not is_paused and not Console.is_open and multiplayer.multiplayer_peer and multiplayer.multiplayer_peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED:
 			_toggle_player_list()
+	
+	if event is InputEventMouseButton and event.pressed:
+		if is_in_game and not is_paused and not Console.is_open:
+			if event.button_index == MOUSE_BUTTON_WHEEL_UP:
+				_select_hotbar_slot((selected_hotbar_slot - 1 + 4) % 4)
+			elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+				_select_hotbar_slot((selected_hotbar_slot + 1) % 4)
 	
 	if event is InputEventKey and event.pressed:
 		if event.keycode == KEY_ESCAPE:
@@ -158,9 +227,11 @@ func _toggle_pause():
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func _on_resume_pressed():
+	SoundManager.play_ui_click()
 	_toggle_pause()
 
 func _on_reset_character_pressed():
+	SoundManager.play_ui_click()
 	var my_id = multiplayer.get_unique_id()
 	var player_node = get_node_or_null(str(my_id))
 	if player_node and player_node.has_method("respawn"):
@@ -168,6 +239,7 @@ func _on_reset_character_pressed():
 	_toggle_pause()
 
 func _on_pause_options_pressed():
+	SoundManager.play_ui_click()
 	$CanvasLayer/PauseMenu.hide()
 	$CanvasLayer/InGameOptions.show()
 	in_options_menu = true
@@ -205,21 +277,26 @@ func _set_ingame_crosshair_color(color: Color):
 	$CanvasLayer/InGameOptions/OptionsContainer/CrosshairContainer/CrosshairPreview.modulate = color
 
 func _on_ingame_green_button_pressed():
+	SoundManager.play_ui_click()
 	_set_ingame_crosshair_color(COLOR_GREEN)
 
 func _on_ingame_red_button_pressed():
+	SoundManager.play_ui_click()
 	_set_ingame_crosshair_color(COLOR_RED)
 
 func _on_ingame_white_button_pressed():
+	SoundManager.play_ui_click()
 	_set_ingame_crosshair_color(COLOR_WHITE)
 
 func _on_ingame_options_back_pressed():
+	SoundManager.play_ui_back()
 	GameSettings.save_settings()
 	$CanvasLayer/InGameOptions.hide()
 	$CanvasLayer/PauseMenu.show()
 	in_options_menu = false
 
 func _on_quit_to_menu_pressed():
+	SoundManager.play_ui_click()
 	if multiplayer and multiplayer.is_server():
 		_notify_session_ended.rpc()
 		if get_tree():
@@ -278,19 +355,23 @@ func _on_username_text_changed(new_text: String) -> void:
 	)
 
 func _on_host_pressed() -> void:
+	SoundManager.play_ui_click()
 	pending_action = "host"
 	$CanvasLayer/PasswordPanel/PasswordTitle.text = "Set Server Password"
 	$CanvasLayer/PasswordPanel/PasswordHint.text = "Leave empty for public server"
 	$CanvasLayer/PasswordPanel/PasswordInput.text = ""
 	$CanvasLayer/PasswordPanel/PasswordInput.placeholder_text = "Password"
+	$CanvasLayer/PasswordPanel/TimerContainer.show()
 	$CanvasLayer/title.hide()
 	$CanvasLayer/PasswordPanel.show()
 	$CanvasLayer/PasswordPanel/PasswordInput.grab_focus()
 
 func _on_join_pressed() -> void:
+	SoundManager.play_ui_click()
 	_start_joining("")
 
 func _on_password_confirm_pressed() -> void:
+	SoundManager.play_ui_click()
 	var password = $CanvasLayer/PasswordPanel/PasswordInput.text.strip_edges()
 	$CanvasLayer/PasswordPanel.hide()
 	
@@ -300,6 +381,7 @@ func _on_password_confirm_pressed() -> void:
 		_start_joining(password)
 
 func _on_password_cancel_pressed() -> void:
+	SoundManager.play_ui_back()
 	$CanvasLayer/PasswordPanel.hide()
 	$CanvasLayer/title.show()
 	pending_action = ""
@@ -307,6 +389,12 @@ func _on_password_cancel_pressed() -> void:
 func _start_hosting(password: String) -> void:
 	GameSettings.is_paused = false
 	server_password = password
+	
+	var timer_minutes = $CanvasLayer/PasswordPanel/TimerContainer/TimerInput.value
+	game_time_limit = timer_minutes * 60.0
+	game_time_remaining = game_time_limit
+	game_ended = false
+	kill_counts.clear()
 	
 	$CanvasLayer/LoadingPanel/CancelButton.hide()
 	$CanvasLayer/LoadingPanel/LoadingLabel.text = "Starting server on port " + str(server_port) + "..."
@@ -336,6 +424,13 @@ func _start_hosting(password: String) -> void:
 	_update_player_nametags()
 	_hide_menu()
 	is_in_game = true
+	game_timer_active = true
+	$CanvasLayer/GameTimerLabel.show()
+	SoundManager.stop_menu_music()
+	SoundManager.play_game_start()
+	var host_player = get_node_or_null("1")
+	if host_player and host_player.has_method("show_health_ui"):
+		host_player.show_health_ui()
 	if has_node("CanvasLayer/Hotbar"):
 		$CanvasLayer/Hotbar.show()
 		_update_hotbar_selection()
@@ -427,6 +522,7 @@ func _on_connection_failed():
 		multiplayer.multiplayer_peer.close()
 
 func _on_cancel_connection_pressed():
+	SoundManager.play_ui_back()
 	is_connecting = false
 	$CanvasLayer/LoadingPanel.hide()
 	if multiplayer and multiplayer.multiplayer_peer:
@@ -468,6 +564,9 @@ func _verify_password(id: int, username: String, password: String):
 	
 	var final_username = _get_unique_username(username)
 	_password_accepted.rpc_id(id, final_username)
+	_sync_game_time.rpc_id(id, game_time_remaining)
+	_sync_kill_counts.rpc_id(id, kill_counts)
+	game_timer_active = true
 	player_list[id] = final_username
 	_sync_player_list.rpc(player_list)
 	_update_player_list_ui()
@@ -501,6 +600,9 @@ func _password_accepted(final_username: String = ""):
 	$CanvasLayer/PasswordPanel.hide()
 	_hide_menu()
 	is_in_game = true
+	game_ended = false
+	SoundManager.stop_menu_music()
+	$CanvasLayer/GameTimerLabel.show()
 	if has_node("CanvasLayer/Hotbar"):
 		$CanvasLayer/Hotbar.show()
 		_update_hotbar_selection()
@@ -508,6 +610,10 @@ func _password_accepted(final_username: String = ""):
 	
 	var my_id = multiplayer.get_unique_id()
 	player_list[my_id] = local_username
+	
+	var my_player = get_node_or_null(str(my_id))
+	if my_player and my_player.has_method("show_health_ui"):
+		my_player.show_health_ui()
 
 @rpc("authority", "reliable")
 func _password_rejected():
@@ -536,6 +642,7 @@ func _password_rejected():
 		$CanvasLayer/PasswordPanel/PasswordHint.text = "This server requires a password"
 	$CanvasLayer/PasswordPanel/PasswordInput.text = ""
 	$CanvasLayer/PasswordPanel/PasswordInput.placeholder_text = "Enter password"
+	$CanvasLayer/PasswordPanel/TimerContainer.hide()
 	pending_action = "retry_join"
 	$CanvasLayer/PasswordPanel.show()
 	$CanvasLayer/PasswordPanel/PasswordInput.grab_focus()
@@ -623,6 +730,7 @@ func del_player(id):
 
 
 func _on_back_pressed() -> void:
+	SoundManager.play_ui_back()
 	SceneTransition.change_scene('res://scenes/main_menu.tscn')
 
 func _get_spawn_count(player_id: int, shape: String) -> int:
@@ -661,6 +769,8 @@ func _spawn_object(shape: String):
 		spawn_pos.y = result.position.y + 1.0
 	
 	var color = Color(randf(), randf(), randf())
+	
+	SoundManager.play_spawn()
 	
 	if multiplayer.is_server():
 		_request_spawn_object(shape, spawn_pos, color)
@@ -735,3 +845,125 @@ func _sync_spawn_object(obj_name: String, shape: String, pos: Vector3, color: Co
 	_create_spawned_object(shape, pos, color, obj_name)
 	_increment_spawn_count(spawner_id, shape)
 	_update_hotbar_counts()
+
+func register_kill(killer_id: int):
+	if not multiplayer.is_server():
+		return
+	if killer_id == 0:
+		return
+	kill_counts[killer_id] = kill_counts.get(killer_id, 0) + 1
+	_sync_kill_counts.rpc(kill_counts)
+	_play_kill_sound.rpc_id(killer_id)
+
+@rpc("authority", "reliable")
+func _play_kill_sound():
+	SoundManager.play_kill()
+
+@rpc("authority", "reliable", "call_local")
+func _sync_kill_counts(counts: Dictionary):
+	kill_counts = counts
+
+@rpc("authority", "reliable", "call_local")
+func _sync_game_time(time_remaining: float):
+	game_time_remaining = time_remaining
+	if not game_ended:
+		game_timer_active = true
+
+func _end_game():
+	if game_ended:
+		return
+	game_ended = true
+	game_timer_active = false
+	SoundManager.play_game_end()
+	_show_game_end.rpc()
+
+@rpc("authority", "reliable", "call_local")
+func _show_game_end():
+	game_ended = true
+	game_timer_active = false
+	return_to_menu_timer = 10.0
+	
+	$CanvasLayer/GameTimerLabel.hide()
+	$CanvasLayer/GameEndOverlay.show()
+	$CanvasLayer/PauseMenu.hide()
+	if has_node("CanvasLayer/Hotbar"):
+		$CanvasLayer/Hotbar.hide()
+	
+	var my_id = multiplayer.get_unique_id()
+	var my_player = get_node_or_null(str(my_id))
+	if my_player and my_player.has_node("CanvasLayer/HealthBarUI"):
+		my_player.get_node("CanvasLayer/HealthBarUI").visible = false
+	
+	var container = $CanvasLayer/GameEndOverlay/LeaderboardContainer
+	for child in container.get_children():
+		child.queue_free()
+	
+	var sorted_players = []
+	for id in player_list:
+		sorted_players.append({
+			"id": id,
+			"name": player_list[id],
+			"kills": kill_counts.get(id, 0)
+		})
+	sorted_players.sort_custom(func(a, b): return a.kills > b.kills)
+	
+	var header = Label.new()
+	header.text = "LEADERBOARD"
+	header.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	header.add_theme_font_size_override("font_size", 24)
+	header.add_theme_color_override("font_color", Color(1, 1, 0.8, 1))
+	container.add_child(header)
+	
+	var spacer = Control.new()
+	spacer.custom_minimum_size = Vector2(0, 20)
+	container.add_child(spacer)
+	
+	var rank = 1
+	for p in sorted_players:
+		var row = HBoxContainer.new()
+		row.alignment = BoxContainer.ALIGNMENT_CENTER
+		
+		var rank_label = Label.new()
+		var rank_color = Color(1, 1, 1, 1)
+		if rank == 1:
+			rank_color = Color(1, 0.85, 0.2, 1)
+		elif rank == 2:
+			rank_color = Color(0.75, 0.75, 0.75, 1)
+		elif rank == 3:
+			rank_color = Color(0.8, 0.5, 0.2, 1)
+		rank_label.text = "#" + str(rank) + "  "
+		rank_label.add_theme_font_size_override("font_size", 20)
+		rank_label.add_theme_color_override("font_color", rank_color)
+		row.add_child(rank_label)
+		
+		var name_label = Label.new()
+		var display_name = p.name
+		if p.id == multiplayer.get_unique_id():
+			display_name += " (you)"
+		name_label.text = display_name
+		name_label.add_theme_font_size_override("font_size", 20)
+		name_label.add_theme_color_override("font_color", Color(1, 1, 1, 1))
+		name_label.custom_minimum_size.x = 150
+		row.add_child(name_label)
+		
+		var kills_label = Label.new()
+		kills_label.text = str(p.kills) + " kills"
+		kills_label.add_theme_font_size_override("font_size", 20)
+		kills_label.add_theme_color_override("font_color", Color(0.5, 1, 0.5, 1))
+		row.add_child(kills_label)
+		
+		container.add_child(row)
+		rank += 1
+	
+	if sorted_players.size() > 0 and sorted_players[0].kills > 0:
+		$CanvasLayer/GameEndOverlay/Title.text = sorted_players[0].name + " WINS!"
+	else:
+		$CanvasLayer/GameEndOverlay/Title.text = "GAME OVER"
+	
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+
+func _return_to_menu():
+	if multiplayer.multiplayer_peer:
+		multiplayer.multiplayer_peer.close()
+		multiplayer.multiplayer_peer = null
+	SceneTransition.change_scene("res://scenes/main_menu.tscn")

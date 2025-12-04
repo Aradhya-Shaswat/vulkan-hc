@@ -199,6 +199,7 @@ func _sync_throw(throw_velocity: Vector3):
 	sleeping = false
 	linear_velocity = throw_velocity
 	angular_velocity = Vector3.ZERO
+	SoundManager.play_throw()
 
 func _on_body_entered(body: Node):
 	if not multiplayer.is_server():
@@ -207,7 +208,14 @@ func _on_body_entered(body: Node):
 	if damage_cooldown > 0:
 		return
 	
+	if last_thrower_id == 0:
+		return
+	
 	if body is CharacterBody3D and body.has_method("request_damage"):
+		var target_id = body.name.to_int()
+		if target_id == last_thrower_id:
+			return
+		
 		var current_velocity = linear_velocity.length()
 		var effective_velocity = max(current_velocity, throw_velocity_magnitude * 0.7)
 		if effective_velocity >= MIN_DAMAGE_VELOCITY:
@@ -216,3 +224,8 @@ func _on_body_entered(body: Node):
 			body.request_damage(damage, last_thrower_id)
 			damage_cooldown = DAMAGE_COOLDOWN_TIME
 			throw_velocity_magnitude = 0.0
+			_play_impact_sound.rpc()
+
+@rpc("authority", "reliable", "call_local")
+func _play_impact_sound():
+	SoundManager.play_impact()

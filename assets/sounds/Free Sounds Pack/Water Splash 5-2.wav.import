@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://bv3p4wjd5fapj"
+path="res://.godot/imported/Water Splash 5-2.wav-38d33f40785b62bb34d978a17f1dcfef.sample"
+
+[deps]
+
+source_file="res://assets/sounds/Free Sounds Pack/Water Splash 5-2.wav"
+dest_files=["res://.godot/imported/Water Splash 5-2.wav-38d33f40785b62bb34d978a17f1dcfef.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

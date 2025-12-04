@@ -84,11 +84,18 @@ func load_settings():
 func _apply_audio_settings():
 	var sfx_bus = AudioServer.get_bus_index("SFX")
 	var music_bus = AudioServer.get_bus_index("Music")
-	var master_bus = AudioServer.get_bus_index("Master")
 	if sfx_bus >= 0:
-		AudioServer.set_bus_volume_db(sfx_bus, linear_to_db(sfx_volume))
+		if sfx_volume <= 0.0:
+			AudioServer.set_bus_mute(sfx_bus, true)
+		else:
+			AudioServer.set_bus_mute(sfx_bus, false)
+			AudioServer.set_bus_volume_db(sfx_bus, linear_to_db(sfx_volume))
 	if music_bus >= 0:
-		AudioServer.set_bus_volume_db(music_bus, linear_to_db(music_volume))
+		if music_volume <= 0.0:
+			AudioServer.set_bus_mute(music_bus, true)
+		else:
+			AudioServer.set_bus_mute(music_bus, false)
+			AudioServer.set_bus_volume_db(music_bus, linear_to_db(music_volume))
 
 func set_sfx_volume(value: float):
 	sfx_volume = value

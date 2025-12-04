@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://ceqjeuv7o1a4p"
+path="res://.godot/imported/Draw Weapon Metal 1-1.wav-4f76d34b13c1df72be20044b07947a3e.sample"
+
+[deps]
+
+source_file="res://assets/sounds/Free Sounds Pack/Draw Weapon Metal 1-1.wav"
+dest_files=["res://.godot/imported/Draw Weapon Metal 1-1.wav-4f76d34b13c1df72be20044b07947a3e.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

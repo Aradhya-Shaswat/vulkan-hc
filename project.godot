@@ -10,15 +10,16 @@ config_version=5
 
 [application]
 
-config/name="Vulkan Beta 0.8"
+config/name="Vulkan Release Beta"
 config/description="Multiplayer Sandbox Simulator for Milkyway - Hack Club."
-config/version="0.8"
+config/version="0.9"
 run/main_scene="uid://dqc48gytnhsn6"
 config/features=PackedStringArray("4.5", "Forward Plus")
 boot_splash/bg_color=Color(1, 1, 1, 1)
 boot_splash/fullsize=false
 boot_splash/image="uid://b3itvkiffqoj5"
 config/icon="uid://b3itvkiffqoj5"
+config/macos_native_icon="res://assets/VULKAN.icns"
 config/windows_native_icon="res://assets/VULKAN.ico"
 boot_splash/minimum_display_time=3000
 run/show_image=false
@@ -28,6 +29,7 @@ run/show_image=false
 GameSettings="*res://scripts/game_settings.gd"
 SceneTransition="*res://scenes/scene_transition.tscn"
 Console="*res://scenes/console.tscn"
+SoundManager="*res://scripts/sound_manager.gd"
 
 [display]
 

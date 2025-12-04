@@ -10,6 +10,21 @@ var update_info: Dictionary = {}
 func _ready() -> void:
 	if not OS.has_feature("editor"):
 		_check_for_updates()
+	_connect_hover_sounds()
+	SoundManager.start_menu_music()
+
+func _connect_hover_sounds():
+	_connect_buttons_recursive(self)
+
+func _connect_buttons_recursive(node: Node):
+	if node is Button:
+		if not node.mouse_entered.is_connected(_on_button_hover):
+			node.mouse_entered.connect(_on_button_hover)
+	for child in node.get_children():
+		_connect_buttons_recursive(child)
+
+func _on_button_hover():
+	SoundManager.play_ui_hover()
 
 func _check_for_updates():
 	http_request = HTTPRequest.new()
@@ -38,16 +53,20 @@ func _on_update_button_pressed():
 
 
 func _on_play_button_pressed() -> void:
+	SoundManager.play_ui_click()
 	SceneTransition.change_scene("res://scenes/main_level.tscn")
 
 
 func _on_options_button_pressed() -> void:
+	SoundManager.play_ui_click()
 	SceneTransition.change_scene("res://scenes/options.tscn")
 
 
 func _on_credits_button_pressed() -> void:
+	SoundManager.play_ui_click()
 	SceneTransition.change_scene("res://scenes/credits.tscn")
 
 
 func _on_quit_button_pressed() -> void:
+	SoundManager.play_ui_click()
 	get_tree().quit()

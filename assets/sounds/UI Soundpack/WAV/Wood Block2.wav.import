@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://b0jejfl57ftxi"
+path="res://.godot/imported/Wood Block2.wav-d9e4a03cd114fc2d19ab26c204c4584f.sample"
+
+[deps]
+
+source_file="res://assets/sounds/UI Soundpack/WAV/Wood Block2.wav"
+dest_files=["res://.godot/imported/Wood Block2.wav-d9e4a03cd114fc2d19ab26c204c4584f.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

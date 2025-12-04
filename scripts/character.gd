@@ -26,6 +26,7 @@ var health_regen_timer: float = 0.0
 const HEALTH_REGEN_DELAY = 5.0
 const HEALTH_REGEN_RATE = 10.0
 var last_damage_time: float = 0.0
+var last_attacker_id: int = 0
 
 var in_cart: bool = false
 var current_cart: Node = null
@@ -35,6 +36,9 @@ const CART_LOOK_TIMEOUT: float = 0.25
 
 var noclip_enabled: bool = false
 const NOCLIP_SPEED_MULT = 2.0
+
+var footstep_timer: float = 0.0
+const FOOTSTEP_INTERVAL = 0.4
 
 @onready var head = $Head
 @onready var camera = $Head/Camera3D
@@ -99,8 +103,7 @@ func _ready():
 		if health_bar_3d:
 			health_bar_3d.visible = false
 		if health_bar_ui:
-			health_bar_ui.visible = true
-			_update_health_ui()
+			health_bar_ui.visible = false
 	else:
 		camera.current = false
 		player_mesh.layers = 1
@@ -135,6 +138,11 @@ func _setup_nametag():
 			nametag.text = "Player " + str(player_id)
 	else:
 		nametag.text = "Player " + str(player_id)
+
+func show_health_ui():
+	if _is_local_authority() and health_bar_ui:
+		health_bar_ui.visible = true
+		_update_health_ui()
 
 func _update_health_ui():
 	if not health_bar_ui:
@@ -179,6 +187,11 @@ func take_damage(amount: float, from_peer_id: int = 0):
 	health = max(health, 0)
 	sync_health = health
 	last_damage_time = Time.get_ticks_msec() / 1000.0
+	if from_peer_id != 0:
+		last_attacker_id = from_peer_id
+	
+	if _is_local_authority():
+		SoundManager.play_hit()
 	
 	_update_health_ui()
 	_update_health_bar_3d()
@@ -217,7 +230,14 @@ func _die():
 	respawn_timer = RESPAWN_DELAY
 	player_mesh.visible = false
 	call_deferred("_disable_collision_shape")
+	
+	if multiplayer.is_server() and last_attacker_id != 0:
+		var main = get_parent()
+		if main and main.has_method("register_kill"):
+			main.register_kill(last_attacker_id)
+	
 	if _is_local_authority():
+		SoundManager.play_death()
 		velocity = Vector3.ZERO
 		if noclip_enabled:
 			call_deferred("set_noclip", false)
@@ -233,6 +253,7 @@ func _respawn_after_death():
 	is_dead = false
 	health = MAX_HEALTH
 	sync_health = MAX_HEALTH
+	last_attacker_id = 0
 	player_mesh.visible = true
 	if death_overlay:
 		death_overlay.visible = false
@@ -349,9 +370,15 @@ func _physics_process(delta):
 		if is_on_floor() and horiz_speed > 0.01:
 			t_bob += delta * horiz_speed
 			target_pos = cam_default_pos + _headbob(t_bob)
+			footstep_timer += delta
+			var step_interval = FOOTSTEP_INTERVAL if speed == WALK_SPEED else FOOTSTEP_INTERVAL * 0.7
+			if footstep_timer >= step_interval:
+				footstep_timer = 0.0
+				SoundManager.play_footstep()
 		else:
 			target_pos = cam_default_pos
 			t_bob = lerp(t_bob, 0.0, clamp(delta * 2.0, 0, 1))
+			footstep_timer = 0.0
 
 		var right_dir = head.transform.basis.x.normalized()
 		var lateral_speed = right_dir.dot(Vector3(velocity.x, 0, velocity.z))
@@ -425,6 +452,8 @@ func _enter_cart(cart: Node):
 	if cart.is_cart_occupied():
 		return
 	
+	SoundManager.play_cart_enter()
+	SoundManager.start_cart_loop()
 	current_cart = cart
 	in_cart = true
 	
@@ -441,6 +470,8 @@ func _exit_cart():
 	if not current_cart:
 		return
 	
+	SoundManager.play_cart_exit()
+	SoundManager.stop_cart_loop()
 	var exit_pos = _find_safe_exit_position()
 	
 	var peer_id = name.to_int()

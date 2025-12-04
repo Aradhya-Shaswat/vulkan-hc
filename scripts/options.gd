@@ -20,6 +20,21 @@ func _ready():
 	crosshair_preview.modulate = GameSettings.crosshair_color
 	
 	_update_labels()
+	_connect_hover_sounds()
+	SoundManager.start_menu_music()
+
+func _connect_hover_sounds():
+	_connect_buttons_recursive(self)
+
+func _connect_buttons_recursive(node: Node):
+	if node is Button:
+		if not node.mouse_entered.is_connected(_on_button_hover):
+			node.mouse_entered.connect(_on_button_hover)
+	for child in node.get_children():
+		_connect_buttons_recursive(child)
+
+func _on_button_hover():
+	SoundManager.play_ui_hover()
 
 func _update_labels():
 	sfx_value_label.text = str(int(sfx_slider.value)) + "%"
@@ -43,14 +58,18 @@ func _set_crosshair_color(color: Color) -> void:
 	crosshair_preview.modulate = color
 
 func _on_green_button_pressed() -> void:
+	SoundManager.play_ui_click()
 	_set_crosshair_color(COLOR_GREEN)
 
 func _on_red_button_pressed() -> void:
+	SoundManager.play_ui_click()
 	_set_crosshair_color(COLOR_RED)
 
 func _on_white_button_pressed() -> void:
+	SoundManager.play_ui_click()
 	_set_crosshair_color(COLOR_WHITE)
 
 func _on_back_button_pressed() -> void:
+	SoundManager.play_ui_back()
 	GameSettings.save_settings()
 	SceneTransition.change_scene("res://scenes/main_menu.tscn")

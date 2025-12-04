@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://cn6112pmqvcc2"
+path="res://.godot/imported/Retro3.ogg-545ad28e9ce2eea0a3b6ef278c1c9988.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/sounds/UI Soundpack/OGG/Retro3.ogg"
+dest_files=["res://.godot/imported/Retro3.ogg-545ad28e9ce2eea0a3b6ef278c1c9988.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
