@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://c65w50vk2yanl"
 path.s3tc="res://.godot/imported/tree.png-37efe6945e67ecf0f4fb8a4cb0986eed.s3tc.ctex"
+path.etc2="res://.godot/imported/tree.png-37efe6945e67ecf0f4fb8a4cb0986eed.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/models/medieval-kit/Textures/tree.png"
-dest_files=["res://.godot/imported/tree.png-37efe6945e67ecf0f4fb8a4cb0986eed.s3tc.ctex"]
+dest_files=["res://.godot/imported/tree.png-37efe6945e67ecf0f4fb8a4cb0986eed.s3tc.ctex", "res://.godot/imported/tree.png-37efe6945e67ecf0f4fb8a4cb0986eed.etc2.ctex"]
 
 [params]
 

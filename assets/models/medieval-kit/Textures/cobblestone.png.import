@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://dbt0tnvo10x62"
 path.s3tc="res://.godot/imported/cobblestone.png-64ca100308831c6b66a5814dbc743476.s3tc.ctex"
+path.etc2="res://.godot/imported/cobblestone.png-64ca100308831c6b66a5814dbc743476.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/models/medieval-kit/Textures/cobblestone.png"
-dest_files=["res://.godot/imported/cobblestone.png-64ca100308831c6b66a5814dbc743476.s3tc.ctex"]
+dest_files=["res://.godot/imported/cobblestone.png-64ca100308831c6b66a5814dbc743476.s3tc.ctex", "res://.godot/imported/cobblestone.png-64ca100308831c6b66a5814dbc743476.etc2.ctex"]
 
 [params]
 

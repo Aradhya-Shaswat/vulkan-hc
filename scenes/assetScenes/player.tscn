@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://cva3jmdk0sqdm"]
+[gd_scene load_steps=20 format=3 uid="uid://cva3jmdk0sqdm"]
 
 [ext_resource type="Script" uid="uid://dgjnqo7dn7jol" path="res://scripts/character.gd" id="1_ac1ej"]
 [ext_resource type="Script" uid="uid://cckf6x335dlsg" path="res://scripts/scaleObject.gd" id="2_dq4aw"]
@@ -30,8 +30,10 @@ albedo_color = Color(0, 0, 0, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_dq4aw"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_keqbv"]
+albedo_color = Color(1, 0, 0, 1)
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_57kla"]
-albedo_color = Color(0.9723615, 0.034280885, 1.92523e-07, 1)
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_ac1ej"]
 properties/0/path = NodePath(".:position")
@@ -46,6 +48,29 @@ properties/2/replication_mode = 1
 properties/3/path = NodePath(".:sync_head_rotation")
 properties/3/spawn = true
 properties/3/replication_mode = 1
+properties/4/path = NodePath(".:sync_health")
+properties/4/spawn = true
+properties/4/replication_mode = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_healthfill"]
+bg_color = Color(0.07040397, 0.3238471, 0.06693058, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_health3d"]
+shading_mode = 0
+albedo_color = Color(0.07040397, 0.3238471, 0.06693058, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_health3d"]
+material = SubResource("StandardMaterial3D_health3d")
+size = Vector3(0.8, 0.08, 0.02)
 
 [node name="player" type="CharacterBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -112,6 +137,12 @@ material_override = SubResource("StandardMaterial3D_tgck5")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_dq4aw")
 
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="Head/Camera3D"]
+transform = Transform3D(-5.7563248e-09, -0.11595219, 0, 0.13168934, -5.0684306e-09, 0, 0, 0, 0.06471497, -0.008913994, -1.036026, -0.47904867)
+material_override = SubResource("StandardMaterial3D_keqbv")
+cast_shadow = 0
+mesh = SubResource("BoxMesh_dq4aw")
+
 [node name="MeshInstance3D4" type="MeshInstance3D" parent="Head/Camera3D"]
 transform = Transform3D(-1.1381217e-09, -0.040221646, 0, 0.026037188, -1.7581437e-09, 0, 0, 0, 0.02077231, -0.008913994, -0.7576355, -0.5016387)
 material_override = SubResource("StandardMaterial3D_57kla")
@@ -159,3 +190,68 @@ theme_override_font_sizes/font_size = 16
 text = "Press F to drive"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="HealthBarUI" type="Control" parent="CanvasLayer"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 220.0
+offset_bottom = 70.0
+
+[node name="HealthBar" type="ProgressBar" parent="CanvasLayer/HealthBarUI"]
+layout_mode = 0
+offset_right = 200.0
+offset_bottom = 25.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 9
+theme_override_styles/fill = SubResource("StyleBoxFlat_healthfill")
+value = 100.0
+show_percentage = false
+
+[node name="HealthLabel" type="Label" parent="CanvasLayer/HealthBarUI"]
+layout_mode = 0
+offset_top = 28.0
+offset_right = 200.0
+offset_bottom = 48.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 14
+text = "100/100"
+
+[node name="DeathOverlay" type="ColorRect" parent="CanvasLayer"]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.7)
+
+[node name="DeathLabel" type="Label" parent="CanvasLayer/DeathOverlay"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -30.0
+offset_right = 150.0
+offset_bottom = 30.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 0.3, 0.3, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 32
+text = "Respawning"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HealthBar3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, 0)
+mesh = SubResource("BoxMesh_health3d")
+surface_material_override/0 = SubResource("StandardMaterial3D_health3d")

@@ -14,6 +14,11 @@ var is_connecting = false
 var connection_timeout = 10.0
 var server_ip: String = "127.0.0.1"
 var server_port: int = 1027
+var server_password: String = ""
+var client_password: String = ""
+var pending_action: String = ""
+var password_rejection_id: int = 0
+var password_attempted: bool = false
 var selected_hotbar_slot = 0
 var next_object_id = 1000
 var spawn_counts = {}
@@ -36,11 +41,18 @@ func _ready():
 	$CanvasLayer/PauseMenu.hide()
 	$CanvasLayer/InGameOptions.hide()
 	$CanvasLayer/LoadingPanel.hide()
+	$CanvasLayer/PasswordPanel.hide()
 	if has_node("CanvasLayer/Hotbar"):
 		$CanvasLayer/Hotbar.hide()
 	_apply_crosshair_color()
 	GameSettings.settings_changed.connect(_on_settings_changed)
 	GameSettings.is_paused = false
+	
+	if GameSettings.saved_nickname != "":
+		$CanvasLayer/UsernameEdit.text = GameSettings.saved_nickname
+		local_username = GameSettings.saved_nickname
+		$CanvasLayer/Host.disabled = false
+		$CanvasLayer/Join.disabled = false
 
 func _on_settings_changed():
 	_apply_crosshair_color()
@@ -51,19 +63,19 @@ func _apply_crosshair_color():
 func _unhandled_input(event):
 	if event.is_action_pressed("ui_focus_next"):
 		get_viewport().set_input_as_handled()
-		if is_in_game and not is_paused and multiplayer.multiplayer_peer and multiplayer.multiplayer_peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED:
+		if is_in_game and not is_paused and not Console.is_open and multiplayer.multiplayer_peer and multiplayer.multiplayer_peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED:
 			_toggle_player_list()
 	
 	if event is InputEventKey and event.pressed:
 		if event.keycode == KEY_ESCAPE:
-			if is_in_game:
+			if is_in_game and not Console.is_open:
 				_toggle_pause()
 		
 		if event.keycode == KEY_P:
-			if is_in_game:
+			if is_in_game and not Console.is_open:
 				_toggle_pause()
 		
-		if is_in_game and not is_paused:
+		if is_in_game and not is_paused and not Console.is_open:
 			if event.keycode == KEY_1:
 				_select_hotbar_slot(0)
 			elif event.keycode == KEY_2:
@@ -142,7 +154,8 @@ func _toggle_pause():
 		else:
 			$CanvasLayer/PauseMenu/PauseButtons/QuitButton.text = "Leave Game"
 	else:
-		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+		if not Console.is_open:
+			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func _on_resume_pressed():
 	_toggle_pause()
@@ -228,25 +241,92 @@ func _notify_session_ended():
 	is_paused = false
 	is_in_game = false
 	GameSettings.is_paused = false
-	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	
 	if multiplayer and multiplayer.multiplayer_peer:
 		multiplayer.multiplayer_peer.close()
+	
+	$CanvasLayer/PauseMenu.hide()
+	$CanvasLayer/InGameOptions.hide()
+	$CanvasLayer/LoadingPanel/CancelButton.hide()
+	$CanvasLayer/LoadingPanel/LoadingLabel.text = "Host ended the session"
+	$CanvasLayer/LoadingPanel.show()
+	
+	await get_tree().create_timer(2.0).timeout
+	
+	$CanvasLayer/LoadingPanel.hide()
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	if get_tree():
 		SceneTransition.change_scene("res://scenes/main_menu.tscn")
 
 func _on_username_text_changed(new_text: String) -> void:
-	local_username = new_text.strip_edges()
-	var is_valid = local_username.length() >= 1
-	$CanvasLayer/Host.disabled = not is_valid
-	$CanvasLayer/Join.disabled = not is_valid
+	var text = new_text.strip_edges()
+	if text.length() < 1:
+		$CanvasLayer/Host.disabled = true
+		$CanvasLayer/Join.disabled = true
+		return
+	
+	GameSettings.check_profanity(text, func(is_profane):
+		if is_profane:
+			$CanvasLayer/Host.disabled = true
+			$CanvasLayer/Join.disabled = true
+		else:
+			local_username = GameSettings.sanitize_nickname(text)
+			$CanvasLayer/Host.disabled = false
+			$CanvasLayer/Join.disabled = false
+			GameSettings.saved_nickname = local_username
+			GameSettings.save_settings()
+	)
 
 func _on_host_pressed() -> void:
-	GameSettings.is_paused = false  
+	pending_action = "host"
+	$CanvasLayer/PasswordPanel/PasswordTitle.text = "Set Server Password"
+	$CanvasLayer/PasswordPanel/PasswordHint.text = "Leave empty for public server"
+	$CanvasLayer/PasswordPanel/PasswordInput.text = ""
+	$CanvasLayer/PasswordPanel/PasswordInput.placeholder_text = "Password"
+	$CanvasLayer/title.hide()
+	$CanvasLayer/PasswordPanel.show()
+	$CanvasLayer/PasswordPanel/PasswordInput.grab_focus()
+
+func _on_join_pressed() -> void:
+	_start_joining("")
+
+func _on_password_confirm_pressed() -> void:
+	var password = $CanvasLayer/PasswordPanel/PasswordInput.text.strip_edges()
+	$CanvasLayer/PasswordPanel.hide()
+	
+	if pending_action == "host":
+		_start_hosting(password)
+	elif pending_action == "join" or pending_action == "retry_join":
+		_start_joining(password)
+
+func _on_password_cancel_pressed() -> void:
+	$CanvasLayer/PasswordPanel.hide()
+	$CanvasLayer/title.show()
+	pending_action = ""
+
+func _start_hosting(password: String) -> void:
+	GameSettings.is_paused = false
+	server_password = password
+	
+	$CanvasLayer/LoadingPanel/CancelButton.hide()
+	$CanvasLayer/LoadingPanel/LoadingLabel.text = "Starting server on port " + str(server_port) + "..."
+	$CanvasLayer/LoadingPanel.show()
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	_start_loading_animation()
+	
+	await get_tree().create_timer(1.5).timeout
+	
 	peer = ENetMultiplayerPeer.new()
 	var result = peer.create_server(server_port)
 	if result != OK:
-		print("Failed to create server: ", result)
+		$CanvasLayer/LoadingPanel/LoadingLabel.text = "Failed to start server!"
+		await get_tree().create_timer(1.5).timeout
+		$CanvasLayer/LoadingPanel.hide()
+		$CanvasLayer/title.show()
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 		return
+	
+	$CanvasLayer/LoadingPanel.hide()
 	multiplayer.multiplayer_peer = peer
 	multiplayer.peer_connected.connect(_on_peer_connected)
 	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
@@ -261,8 +341,11 @@ func _on_host_pressed() -> void:
 		_update_hotbar_selection()
 		_update_hotbar_counts()
 
-func _on_join_pressed() -> void:
+func _start_joining(password: String) -> void:
 	GameSettings.is_paused = false
+	client_password = password
+	password_attempted = password != ""
+	password_rejection_id += 1
 	peer = ENetMultiplayerPeer.new()
 	var result = peer.create_client(server_ip, server_port)
 	if result != OK:
@@ -276,8 +359,10 @@ func _on_join_pressed() -> void:
 	
 	is_connecting = true
 	$CanvasLayer/LoadingPanel.show()
+	$CanvasLayer/LoadingPanel/CancelButton.hide()
 	$CanvasLayer/LoadingPanel/LoadingLabel.text = "Connecting to server..."
 	$CanvasLayer/title.hide()
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	_start_loading_animation()
 	_start_connection_timeout()
 
@@ -310,31 +395,34 @@ func _hide_menu():
 	$CanvasLayer/Back.hide()
 	$CanvasLayer/title.hide()
 	$CanvasLayer/hackclub.hide()
+	$CanvasLayer/Axolotl.hide()
 	$CanvasLayer/SelectionUI.hide()
 	$CanvasLayer/UsernameEdit.hide()
 	$CanvasLayer/IPEdit.hide()
+	$CanvasLayer/PasswordPanel.hide()
 	$CanvasLayer/CenterContainer/Crosshair.show()
 	$CanvasLayer/version.show()
 
 func _on_connected_to_server():
 	is_connecting = false
-	$CanvasLayer/LoadingPanel.hide()
-	_hide_menu()
-	is_in_game = true
-	if has_node("CanvasLayer/Hotbar"):
-		$CanvasLayer/Hotbar.show()
-		_update_hotbar_selection()
-		_update_hotbar_counts()
+	
+	await get_tree().create_timer(1.0).timeout
+	
+	if is_in_game:
+		return
+	
+	$CanvasLayer/LoadingPanel/LoadingLabel.text = "Verifying..."
 	
 	var my_id = multiplayer.get_unique_id()
-	player_list[my_id] = local_username
-	_register_player_on_server.rpc_id(1, my_id, local_username)
+	_verify_password.rpc_id(1, my_id, local_username, client_password)
 
 func _on_connection_failed():
 	is_connecting = false
 	$CanvasLayer/LoadingPanel/LoadingLabel.text = "Connection failed!"
 	await get_tree().create_timer(1.5).timeout
 	$CanvasLayer/LoadingPanel.hide()
+	$CanvasLayer/title.show()
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	if multiplayer and multiplayer.multiplayer_peer:
 		multiplayer.multiplayer_peer.close()
 
@@ -357,6 +445,7 @@ func _start_connection_timeout():
 		await get_tree().create_timer(1.5).timeout
 		$CanvasLayer/LoadingPanel.hide()
 		$CanvasLayer/title.show()
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 		if multiplayer and multiplayer.multiplayer_peer:
 			multiplayer.multiplayer_peer.close()
 
@@ -367,6 +456,90 @@ func _register_player_on_server(id: int, username: String):
 	player_list[id] = username
 	_sync_player_list.rpc(player_list)
 	_update_player_list_ui()
+
+@rpc("any_peer", "reliable")
+func _verify_password(id: int, username: String, password: String):
+	if not multiplayer.is_server():
+		return
+	
+	if server_password != "" and password != server_password:
+		_password_rejected.rpc_id(id)
+		return
+	
+	var final_username = _get_unique_username(username)
+	_password_accepted.rpc_id(id, final_username)
+	player_list[id] = final_username
+	_sync_player_list.rpc(player_list)
+	_update_player_list_ui()
+
+func _get_unique_username(username: String) -> String:
+	var sanitized = GameSettings.sanitize_nickname(username)
+	var final_name = sanitized
+	var suffix = 1
+	
+	for existing_name in player_list.values():
+		if existing_name == final_name:
+			final_name = sanitized + "_" + str(suffix)
+			suffix += 1
+	
+	while _username_exists(final_name):
+		final_name = sanitized + "_" + str(suffix)
+		suffix += 1
+	
+	return final_name
+
+func _username_exists(username: String) -> bool:
+	for existing_name in player_list.values():
+		if existing_name == username:
+			return true
+	return false
+
+@rpc("authority", "reliable")
+func _password_accepted(final_username: String = ""):
+	pending_action = ""
+	$CanvasLayer/LoadingPanel.hide()
+	$CanvasLayer/PasswordPanel.hide()
+	_hide_menu()
+	is_in_game = true
+	if has_node("CanvasLayer/Hotbar"):
+		$CanvasLayer/Hotbar.show()
+		_update_hotbar_selection()
+		_update_hotbar_counts()
+	
+	var my_id = multiplayer.get_unique_id()
+	player_list[my_id] = local_username
+
+@rpc("authority", "reliable")
+func _password_rejected():
+	is_connecting = false
+	var my_rejection_id = password_rejection_id
+	var was_attempted = password_attempted
+	
+	if multiplayer and multiplayer.multiplayer_peer:
+		multiplayer.multiplayer_peer.close()
+	
+	if was_attempted:
+		$CanvasLayer/LoadingPanel/LoadingLabel.text = "Wrong password!"
+	else:
+		$CanvasLayer/LoadingPanel/LoadingLabel.text = "Password required!"
+	
+	await get_tree().create_timer(1.5).timeout
+	
+	if is_in_game or my_rejection_id != password_rejection_id:
+		return
+	
+	$CanvasLayer/LoadingPanel.hide()
+	$CanvasLayer/PasswordPanel/PasswordTitle.text = "Password Required"
+	if was_attempted:
+		$CanvasLayer/PasswordPanel/PasswordHint.text = "Incorrect password, try again"
+	else:
+		$CanvasLayer/PasswordPanel/PasswordHint.text = "This server requires a password"
+	$CanvasLayer/PasswordPanel/PasswordInput.text = ""
+	$CanvasLayer/PasswordPanel/PasswordInput.placeholder_text = "Enter password"
+	pending_action = "retry_join"
+	$CanvasLayer/PasswordPanel.show()
+	$CanvasLayer/PasswordPanel/PasswordInput.grab_focus()
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
 @rpc("authority", "reliable", "call_local")
 func _sync_player_list(list: Dictionary):
@@ -390,11 +563,16 @@ func _update_player_list_ui():
 		child.queue_free()
 	var sorted_ids = player_list.keys()
 	sorted_ids.sort()
+	var my_id = multiplayer.get_unique_id() if multiplayer and multiplayer.multiplayer_peer else 0
 	for id in sorted_ids:
 		var label = Label.new()
-		label.text = player_list[id]
+		if id == my_id:
+			label.text = player_list[id] + " (you)"
+			label.add_theme_color_override("font_color", Color(0.5, 1.0, 0.5))
+		else:
+			label.text = player_list[id]
+			label.add_theme_color_override("font_color", Color.WHITE)
 		label.add_theme_font_size_override("font_size", 16)
-		label.add_theme_color_override("font_color", Color.WHITE)
 		container.add_child(label)
 
 func _on_peer_connected(id):
@@ -404,7 +582,8 @@ func _on_peer_connected(id):
 			var data = spawned_objects[obj_name]
 			var obj = get_node_or_null("Objects/" + obj_name)
 			if obj:
-				_sync_spawn_object.rpc_id(id, obj_name, data.shape, obj.global_position, data.color)
+				var spawner_id = data.get("spawner", 1)
+				_sync_spawn_object.rpc_id(id, obj_name, data.shape, obj.global_position, data.color, spawner_id)
 
 func _on_peer_disconnected(id):
 	del_player(id)
@@ -471,7 +650,16 @@ func _spawn_object(shape: String):
 	if not cam:
 		return
 	
-	var spawn_pos = cam.global_position - cam.global_transform.basis.z * 4.0
+	var spawn_dir = -cam.global_transform.basis.z
+	var spawn_pos = cam.global_position + spawn_dir * 2.5 + Vector3(0, 0.5, 0)
+	
+	var space_state = get_world_3d().direct_space_state
+	var query = PhysicsRayQueryParameters3D.create(spawn_pos, spawn_pos - Vector3(0, 2, 0))
+	query.collision_mask = 1
+	var result = space_state.intersect_ray(query)
+	if result:
+		spawn_pos.y = result.position.y + 1.0
+	
 	var color = Color(randf(), randf(), randf())
 	
 	if multiplayer.is_server():
@@ -491,12 +679,11 @@ func _request_spawn_object(shape: String, pos: Vector3, color: Color):
 	if _get_spawn_count(sender_id, shape) >= MAX_SPAWNS_PER_TYPE:
 		return
 	
-	_increment_spawn_count(sender_id, shape)
 	var obj_name = "spawned_" + str(next_object_id)
 	next_object_id += 1
 	
-	spawned_objects[obj_name] = {"shape": shape, "pos": pos, "color": color}
-	_sync_spawn_object.rpc(obj_name, shape, pos, color)
+	spawned_objects[obj_name] = {"shape": shape, "pos": pos, "color": color, "spawner": sender_id}
+	_sync_spawn_object.rpc(obj_name, shape, pos, color, sender_id)
 
 func _create_spawned_object(shape: String, pos: Vector3, color: Color, obj_name: String):
 	if has_node("Objects/" + obj_name):
@@ -544,6 +731,7 @@ func _create_spawned_object(shape: String, pos: Vector3, color: Color, obj_name:
 	obj.global_position = pos
 
 @rpc("authority", "reliable", "call_local")
-func _sync_spawn_object(obj_name: String, shape: String, pos: Vector3, color: Color):
+func _sync_spawn_object(obj_name: String, shape: String, pos: Vector3, color: Color, spawner_id: int = 1):
 	_create_spawned_object(shape, pos, color, obj_name)
+	_increment_spawn_count(spawner_id, shape)
 	_update_hotbar_counts()

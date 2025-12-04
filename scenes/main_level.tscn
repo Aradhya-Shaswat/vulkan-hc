@@ -1,8 +1,9 @@
-[gd_scene load_steps=39 format=3 uid="uid://cnew6x2hwvjyh"]
+[gd_scene load_steps=40 format=3 uid="uid://cnew6x2hwvjyh"]
 
 [ext_resource type="FontFile" uid="uid://gunvccib1svm" path="res://assets/fonts/Poppins-Regular.ttf" id="1_iqu8w"]
 [ext_resource type="Script" uid="uid://b27u1ptmiviqb" path="res://scripts/main.gd" id="1_mwgft"]
 [ext_resource type="PackedScene" uid="uid://cva3jmdk0sqdm" path="res://scenes/assetScenes/player.tscn" id="3_fkrx8"]
+[ext_resource type="Texture2D" uid="uid://c6tfpyi5xltum" path="res://assets/axolotl.webp" id="4_adxub"]
 [ext_resource type="PackedScene" uid="uid://dubjdyiae8baa" path="res://scenes/assetScenes/brick_wall.tscn" id="6_bq26l"]
 [ext_resource type="PackedScene" uid="uid://c75miugiquori" path="res://scenes/assetScenes/brick_wall_curve.tscn" id="7_u2c82"]
 [ext_resource type="PackedScene" uid="uid://b52nsqkuh5mqk" path="res://scenes/assetScenes/cross.tscn" id="10_5fr2l"]
@@ -75,15 +76,15 @@ corner_radius_bottom_left = 8
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2sb77"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pausemenu"]
+bg_color = Color(0.05, 0.05, 0.05, 0.95)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_playerlist"]
 bg_color = Color(0.18717614, 0.18717614, 0.18717614, 0.8509804)
 corner_radius_top_left = 12
 corner_radius_top_right = 12
 corner_radius_bottom_right = 12
 corner_radius_bottom_left = 12
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pausemenu"]
-bg_color = Color(0.05, 0.05, 0.05, 0.95)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ff0s2"]
 bg_color = Color(0.29954746, 0.29954746, 0.29954743, 1)
@@ -190,7 +191,7 @@ offset_bottom = 37.0
 theme_override_colors/font_color = Color(0.6955032, 0.6955031, 0.6955031, 1)
 theme_override_fonts/font = ExtResource("1_iqu8w")
 theme_override_font_sizes/font_size = 11
-text = "VULKAN-HC BETA 0.8"
+text = "VULKAN-HC RELEASE 0.9"
 
 [node name="SelectionUI" type="Node2D" parent="CanvasLayer"]
 
@@ -278,9 +279,9 @@ alignment = 0
 [node name="UsernameEdit" type="LineEdit" parent="CanvasLayer"]
 modulate = Color(0.98898584, 0.86889833, 0.7355447, 1)
 offset_left = 48.0
-offset_top = 281.0
+offset_top = 280.0
 offset_right = 375.0
-offset_bottom = 326.0
+offset_bottom = 325.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_selected_color = Color(0, 0, 0, 1)
 theme_override_colors/font_placeholder_color = Color(0, 0, 0, 0.6)
@@ -297,9 +298,9 @@ emoji_menu_enabled = false
 [node name="IPEdit" type="LineEdit" parent="CanvasLayer"]
 modulate = Color(0.98898584, 0.86889833, 0.7355447, 1)
 offset_left = 48.0
-offset_top = 339.0
+offset_top = 338.0
 offset_right = 375.0
-offset_bottom = 384.0
+offset_bottom = 383.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_selected_color = Color(0, 0, 0, 1)
 theme_override_colors/font_placeholder_color = Color(0, 0, 0, 0.6)
@@ -312,6 +313,127 @@ placeholder_text = "  Server IP (leave blank for localhost)"
 alignment = 1
 max_length = 50
 emoji_menu_enabled = false
+
+[node name="PasswordPanel" type="Panel" parent="CanvasLayer"]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_pausemenu")
+
+[node name="PasswordTitle" type="Label" parent="CanvasLayer/PasswordPanel"]
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -100.0
+offset_right = 150.0
+offset_bottom = -60.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 0.8235294, 1)
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 24
+text = "Set Server Password"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PasswordHint" type="Label" parent="CanvasLayer/PasswordPanel"]
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -55.0
+offset_right = 150.0
+offset_bottom = -35.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.8, 0.8, 0.7, 1)
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 12
+text = "Leave empty for public server"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PasswordInput" type="LineEdit" parent="CanvasLayer/PasswordPanel"]
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -120.0
+offset_top = -25.0
+offset_right = 120.0
+offset_bottom = 15.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_placeholder_color = Color(0, 0, 0, 0.6)
+theme_override_colors/caret_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_username")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_2sb77")
+placeholder_text = "Password"
+alignment = 1
+max_length = 32
+secret = true
+
+[node name="ConfirmButton" type="Button" parent="CanvasLayer/PasswordPanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -121.0
+offset_top = 28.0
+offset_right = 122.0
+offset_bottom = 68.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_5fr2l")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_2sb77")
+theme_override_styles/hover = SubResource("StyleBoxFlat_fkrx8")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_5fr2l")
+text = "Continue"
+
+[node name="CancelPasswordButton" type="Button" parent="CanvasLayer/PasswordPanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -121.0
+offset_top = 80.0
+offset_right = 122.0
+offset_bottom = 120.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_5fr2l")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_2sb77")
+theme_override_styles/hover = SubResource("StyleBoxFlat_fkrx8")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_5fr2l")
+text = "Cancel"
 
 [node name="PlayerList" type="Panel" parent="CanvasLayer"]
 visible = false
@@ -443,9 +565,9 @@ anchor_top = 0.46300003
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -574.0
-offset_top = -161.02402
+offset_top = -165.02402
 offset_right = -55.0
-offset_bottom = -45.0
+offset_bottom = -49.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 1, 0.8235294, 1)
@@ -957,6 +1079,12 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_fkrx8")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_ff0s2")
 text = "Back"
 
+[node name="Axolotl" type="Sprite2D" parent="CanvasLayer"]
+position = Vector2(1067, 281.00003)
+rotation = -1.5707964
+scale = Vector2(0.28948063, 0.28948066)
+texture = ExtResource("4_adxub")
+
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.8660254, -0.43301275, 0.25000003, 0.27299982, 0.009393036, 0.9619683, -0.41889283, 0.90133893, 0.1100778, 32.54878, 1.767848, -25.824705)
 shadow_enabled = true
@@ -988,6 +1116,24 @@ material_override = SubResource("StandardMaterial3D_mwgft")
 use_collision = true
 size = Vector3(19.77874, 1, 40.217285)
 
+[node name="ground13" type="CSGBox3D" parent="."]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, -0.00047465682, 0, -1, 0, -4.371139e-08, -40.554836, -5.6105556, -117.76425)
+material_override = SubResource("StandardMaterial3D_mwgft")
+use_collision = true
+size = Vector3(19.77874, 1, 40.217285)
+
+[node name="ground14" type="CSGBox3D" parent="."]
+transform = Transform3D(0.6076669, 0, 0.794192, 0, -0.00047465682, 0, -0.794192, 0, 0.6076669, -10.616015, -5.6105556, -107.60607)
+material_override = SubResource("StandardMaterial3D_mwgft")
+use_collision = true
+size = Vector3(19.77874, 1, 40.217285)
+
+[node name="ground15" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 3.5527137e-15, 0, -0.00047465682, 0, -3.5527137e-15, 0, 1, 1.4881334, -5.6105556, -83.19591)
+material_override = SubResource("StandardMaterial3D_mwgft")
+use_collision = true
+size = Vector3(19.77874, 1, 40.217285)
+
 [node name="ground5" type="CSGBox3D" parent="."]
 transform = Transform3D(-0.60766697, 0, -0.79419196, 0, -0.00047465682, 0, 0.79419196, 0, -0.60766697, -62.70057, -5.6105556, 113.92256)
 material_override = SubResource("StandardMaterial3D_mwgft")
@@ -1001,7 +1147,37 @@ use_collision = true
 size = Vector3(19.77874, 1, 35.51587)
 
 [node name="ground7" type="CSGBox3D" parent="."]
-transform = Transform3D(-0.923351, 0, -0.383957, 0, -0.00047465682, 0, 0.383957, 0, -0.923351, -110.18761, -5.6105556, 72.23262)
+transform = Transform3D(-0.92335093, 0, -0.38395697, 0, -0.0004746568, 0, 0.38395697, 0, -0.92335093, -111.59209, -5.6105556, 71.18245)
+material_override = SubResource("StandardMaterial3D_mwgft")
+use_collision = true
+size = Vector3(19.77874, 1, 40.217285)
+
+[node name="ground11" type="CSGBox3D" parent="."]
+transform = Transform3D(-0.96592575, 0, 0.2588192, 0, -0.0004746568, 0, -0.2588192, 0, -0.96592575, -99.18609, -5.6105556, -72.83127)
+material_override = SubResource("StandardMaterial3D_mwgft")
+use_collision = true
+size = Vector3(19.77874, 1, 35.51587)
+
+[node name="ground12" type="CSGBox3D" parent="."]
+transform = Transform3D(-0.6208878, 0, 0.78389937, 0, -0.0004746568, 0, -0.78389937, 0, -0.6208878, -76.062454, -5.6105556, -102.486176)
+material_override = SubResource("StandardMaterial3D_mwgft")
+use_collision = true
+size = Vector3(19.77874, 1, 56.13806)
+
+[node name="ground8" type="CSGBox3D" parent="."]
+transform = Transform3D(-0.9916239, 0, 0.12915897, 0, -0.0004746568, 0, -0.12915897, 0, -0.9916239, -115.953384, -5.6105556, 37.856495)
+material_override = SubResource("StandardMaterial3D_mwgft")
+use_collision = true
+size = Vector3(19.77874, 1, 40.217285)
+
+[node name="ground9" type="CSGBox3D" parent="."]
+transform = Transform3D(-0.9916239, 0, 0.12915897, 0, -0.0004746568, 0, -0.12915897, 0, -0.9916239, -110.81169, -5.6105556, -1.2598696)
+material_override = SubResource("StandardMaterial3D_mwgft")
+use_collision = true
+size = Vector3(19.77874, 1, 40.217285)
+
+[node name="ground10" type="CSGBox3D" parent="."]
+transform = Transform3D(-0.9916239, 0, 0.12915897, 0, -0.0004746568, 0, -0.12915897, 0, -0.9916239, -105.96031, -5.6105556, -38.25987)
 material_override = SubResource("StandardMaterial3D_mwgft")
 use_collision = true
 size = Vector3(19.77874, 1, 40.217285)
@@ -1310,16 +1486,28 @@ transform = Transform3D(-4.3711395e-08, 0, 1, 0, 1, 0, -1, 0, -4.3711395e-08, 10
 transform = Transform3D(-1.0000001, 0, 0, 0, 1, 0, 0, 0, -1.0000001, 105.716675, 1.0003767, -19.15085)
 
 [node name="extremeWalllllll" type="CSGBox3D" parent="walls"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.95977783, 6.6105556, -62.900978)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38.60666, 6.6105556, -62.900978)
 visible = false
 use_collision = true
-size = Vector3(128.41931, 100, 1)
+size = Vector3(53.12555, 100, 1)
+
+[node name="extremeWalllllll17" type="CSGBox3D" parent="walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.39334, 6.6105556, -62.900978)
+visible = false
+use_collision = true
+size = Vector3(53.12555, 100, 1)
 
 [node name="extremeWalllllll5" type="CSGBox3D" parent="walls"]
-transform = Transform3D(0.41817534, 0, 0, 0, 1, 0, 0, 0, 1, 0.5095297, 27.840536, -52.203148)
+transform = Transform3D(0.41817534, 0, 0, 0, 1, 0, 0, 0, 1, -10.289649, 27.840536, -52.203148)
 visible = false
 use_collision = true
-size = Vector3(86.64905, 57.54004, 1)
+size = Vector3(35, 57.54004, 1)
+
+[node name="extremeWalllllll18" type="CSGBox3D" parent="walls"]
+transform = Transform3D(0.41817534, 0, 0, 0, 1, 0, 0, 0, 1, 11.919438, 27.840536, -52.203148)
+visible = false
+use_collision = true
+size = Vector3(34, 57.54004, 1)
 
 [node name="extremeWalllllll6" type="CSGBox3D" parent="walls"]
 transform = Transform3D(0.41817534, 0, 0, 0, 1, 0, 0, 0, 1, -10.150798, 27.840536, 49.63674)
@@ -1506,6 +1694,8 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -26.
 [connection signal="pressed" from="CanvasLayer/Join" to="." method="_on_join_pressed"]
 [connection signal="text_changed" from="CanvasLayer/UsernameEdit" to="." method="_on_username_text_changed"]
 [connection signal="text_changed" from="CanvasLayer/IPEdit" to="." method="_on_ip_text_changed"]
+[connection signal="pressed" from="CanvasLayer/PasswordPanel/ConfirmButton" to="." method="_on_password_confirm_pressed"]
+[connection signal="pressed" from="CanvasLayer/PasswordPanel/CancelPasswordButton" to="." method="_on_password_cancel_pressed"]
 [connection signal="pressed" from="CanvasLayer/LoadingPanel/CancelButton" to="." method="_on_cancel_connection_pressed"]
 [connection signal="pressed" from="CanvasLayer/PauseMenu/PauseButtons/ResumeButton" to="." method="_on_resume_pressed"]
 [connection signal="pressed" from="CanvasLayer/PauseMenu/PauseButtons/OptionsButton" to="." method="_on_pause_options_pressed"]

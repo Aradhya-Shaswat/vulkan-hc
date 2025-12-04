@@ -7,9 +7,53 @@ var music_volume: float = 1.0
 var sensitivity: float = 0.005
 var crosshair_color: Color = Color(0.2087988, 0.92084754, 0, 1)
 var is_paused: bool = false
+var saved_nickname: String = ""
+
+var _profanity_cache: Dictionary = {}
+var _http_request: HTTPRequest
 
 func _ready():
 	load_settings()
+
+func check_profanity(text: String, callback: Callable):
+	var lower = text.to_lower().strip_edges()
+	
+	if lower in _profanity_cache:
+		callback.call(_profanity_cache[lower])
+		return
+	
+	if lower.length() < 1:
+		callback.call(false)
+		return
+	
+	var http = HTTPRequest.new()
+	add_child(http)
+	http.request_completed.connect(func(result, code, headers, body):
+		var is_profane = false
+		if code == 200:
+			var response = body.get_string_from_utf8().strip_edges().to_lower()
+			is_profane = response == "true"
+		_profanity_cache[lower] = is_profane
+		callback.call(is_profane)
+		http.queue_free()
+	)
+	
+	var url = "https://www.purgomalum.com/service/containsprofanity?text=" + lower.uri_encode()
+	http.request(url)
+
+func is_nickname_offensive(nickname: String) -> bool:
+	var lower = nickname.to_lower().strip_edges()
+	return _profanity_cache.get(lower, false)
+
+func sanitize_nickname(nickname: String) -> String:
+	var result = nickname.strip_edges()
+	if result.length() < 1:
+		return "Player"
+	if result.length() > 16:
+		result = result.substr(0, 16)
+	if is_nickname_offensive(result):
+		return "Player"
+	return result
 
 func save_settings():
 	var config = ConfigFile.new()
@@ -19,6 +63,7 @@ func save_settings():
 	config.set_value("visuals", "crosshair_color_r", crosshair_color.r)
 	config.set_value("visuals", "crosshair_color_g", crosshair_color.g)
 	config.set_value("visuals", "crosshair_color_b", crosshair_color.b)
+	config.set_value("player", "nickname", saved_nickname)
 	config.save("user://settings.cfg")
 
 func load_settings():
@@ -33,6 +78,7 @@ func load_settings():
 	var g = config.get_value("visuals", "crosshair_color_g", 0.92084754)
 	var b = config.get_value("visuals", "crosshair_color_b", 0.0)
 	crosshair_color = Color(r, g, b, 1.0)
+	saved_nickname = config.get_value("player", "nickname", "")
 	_apply_audio_settings()
 
 func _apply_audio_settings():

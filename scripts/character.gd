@@ -16,11 +16,25 @@ var gravity = 15
 const FALL_THRESHOLD = -50.0
 var spawn_position: Vector3 = Vector3.ZERO
 
+const MAX_HEALTH = 100.0
+var health: float = MAX_HEALTH
+@export var sync_health: float = MAX_HEALTH
+var is_dead: bool = false
+var respawn_timer: float = 0.0
+const RESPAWN_DELAY = 3.0
+var health_regen_timer: float = 0.0
+const HEALTH_REGEN_DELAY = 5.0
+const HEALTH_REGEN_RATE = 10.0
+var last_damage_time: float = 0.0
+
 var in_cart: bool = false
 var current_cart: Node = null
 var nearby_cart: Node = null
 var cart_look_timer: float = 0.0
 const CART_LOOK_TIMEOUT: float = 0.25
+
+var noclip_enabled: bool = false
+const NOCLIP_SPEED_MULT = 2.0
 
 @onready var head = $Head
 @onready var camera = $Head/Camera3D
@@ -28,17 +42,21 @@ const CART_LOOK_TIMEOUT: float = 0.25
 @onready var multiplayer_sync = $MultiplayerSynchronizer
 @onready var cart_hint_label = $CanvasLayer/CartHint
 @onready var nametag = $Nametag
+@onready var health_bar_3d = $HealthBar3D
+@onready var health_bar_ui = $CanvasLayer/HealthBarUI
+@onready var health_label = $CanvasLayer/HealthBarUI/HealthLabel
+@onready var death_overlay = $CanvasLayer/DeathOverlay
 var cam_default_pos: Vector3
 
 const PLAYER_COLORS = [
-	Color(0.83, 0.78, 1.0),    # Purple (default)
-	Color(0.2, 0.8, 0.4),      # Green
-	Color(0.9, 0.4, 0.3),      # Red
-	Color(0.3, 0.6, 0.9),      # Blue
-	Color(0.95, 0.75, 0.2),    # Yellow
-	Color(0.95, 0.5, 0.8),     # Pink
-	Color(0.4, 0.9, 0.9),      # Cyan
-	Color(0.9, 0.6, 0.2),      # Orange
+	Color(0.83, 0.78, 1.0),
+	Color(0.2, 0.8, 0.4),
+	Color(0.9, 0.4, 0.3),
+	Color(0.3, 0.6, 0.9),
+	Color(0.95, 0.75, 0.2),
+	Color(0.95, 0.5, 0.8),
+	Color(0.4, 0.9, 0.9),
+	Color(0.9, 0.6, 0.2),
 ]
 
 @export var sync_position: Vector3
@@ -59,6 +77,9 @@ func _ready():
 	cam_default_pos = camera.transform.origin
 	spawn_position = global_position
 	
+	health = MAX_HEALTH
+	sync_health = MAX_HEALTH
+	
 	multiplayer_sync.set_multiplayer_authority(name.to_int())
 	
 	var player_id = name.to_int()
@@ -75,9 +96,19 @@ func _ready():
 		camera.cull_mask &= ~(1 << 1)
 		if nametag:
 			nametag.visible = false
+		if health_bar_3d:
+			health_bar_3d.visible = false
+		if health_bar_ui:
+			health_bar_ui.visible = true
+			_update_health_ui()
 	else:
 		camera.current = false
 		player_mesh.layers = 1
+		if health_bar_ui:
+			health_bar_ui.visible = false
+		if health_bar_3d:
+			health_bar_3d.visible = true
+			_update_health_bar_3d()
 
 func _set_player_color(color: Color):
 	if player_mesh and player_mesh.mesh:
@@ -105,12 +136,123 @@ func _setup_nametag():
 	else:
 		nametag.text = "Player " + str(player_id)
 
+func _update_health_ui():
+	if not health_bar_ui:
+		return
+	var health_bar = health_bar_ui.get_node_or_null("HealthBar")
+	if health_bar:
+		health_bar.value = health
+	if health_label:
+		health_label.text = str(int(health)) + "/" + str(int(MAX_HEALTH))
+
+func _update_health_bar_3d():
+	if not health_bar_3d:
+		return
+	var health_percent = health / MAX_HEALTH
+	
+	var mat = health_bar_3d.get_surface_override_material(0)
+	if mat:
+		if health_percent > 0.6:
+			mat.albedo_color = Color(0.2, 0.9, 0.2)
+		elif health_percent > 0.3:
+			mat.albedo_color = Color(0.9, 0.9, 0.2)
+		else:
+			mat.albedo_color = Color(0.9, 0.2, 0.2)
+	
+	if health_bar_3d.mesh:
+		var box_mesh = health_bar_3d.mesh as BoxMesh
+		if box_mesh:
+			box_mesh.size.x = 0.8 * max(health_percent, 0.01)
+
+func _process(_delta):
+	if health_bar_3d and health_bar_3d.visible:
+		var cam = get_viewport().get_camera_3d()
+		if cam:
+			health_bar_3d.look_at(health_bar_3d.global_position + cam.global_transform.basis.z, Vector3.UP)
+			health_bar_3d.global_position = global_position + Vector3(0, 1.55, 0)
+
+func take_damage(amount: float, from_peer_id: int = 0):
+	if is_dead:
+		return
+	
+	health -= amount
+	health = max(health, 0)
+	sync_health = health
+	last_damage_time = Time.get_ticks_msec() / 1000.0
+	
+	_update_health_ui()
+	_update_health_bar_3d()
+	
+	if _is_local_authority():
+		_sync_health_update.rpc(health)
+	
+	if health <= 0:
+		_die()
+
+@rpc("any_peer", "reliable", "call_remote")
+func apply_damage_from_server(amount: float, from_peer_id: int):
+	if multiplayer.get_remote_sender_id() != 1:
+		return
+	take_damage(amount, from_peer_id)
+
+@rpc("any_peer", "reliable", "call_local")
+func request_damage(amount: float, from_peer_id: int):
+	if not multiplayer.is_server():
+		return
+	var target_id = name.to_int()
+	if target_id == 1:
+		take_damage(amount, from_peer_id)
+	else:
+		apply_damage_from_server.rpc_id(target_id, amount, from_peer_id)
+
+@rpc("authority", "reliable", "call_remote")
+func _sync_health_update(new_health: float):
+	health = new_health
+	sync_health = new_health
+	_update_health_ui()
+	_update_health_bar_3d()
+
+func _die():
+	is_dead = true
+	respawn_timer = RESPAWN_DELAY
+	player_mesh.visible = false
+	call_deferred("_disable_collision_shape")
+	if _is_local_authority():
+		velocity = Vector3.ZERO
+		if noclip_enabled:
+			call_deferred("set_noclip", false)
+			if Console:
+				Console.disable_noclip()
+		if death_overlay:
+			death_overlay.visible = true
+
+func _disable_collision_shape():
+	$CollisionShape3D.disabled = true
+
+func _respawn_after_death():
+	is_dead = false
+	health = MAX_HEALTH
+	sync_health = MAX_HEALTH
+	player_mesh.visible = true
+	if death_overlay:
+		death_overlay.visible = false
+	respawn()
+	call_deferred("_enable_collision_shape")
+	_update_health_ui()
+	_update_health_bar_3d()
+	_sync_health_update.rpc(health)
+
+func _enable_collision_shape():
+	$CollisionShape3D.disabled = false
+
 func _unhandled_input(event):
 	if not _is_local_authority():
 		return
 	if GameSettings.is_paused:
 		return
 	if Console.is_open:
+		return
+	if is_dead:
 		return
 	if event is InputEventMouseMotion:
 		var sens = GameSettings.sensitivity
@@ -123,6 +265,22 @@ func _unhandled_input(event):
 
 func _physics_process(delta):
 	if _is_local_authority():
+		if is_dead:
+			respawn_timer -= delta
+			if respawn_timer <= 0:
+				_respawn_after_death()
+			return
+		
+		var current_time = Time.get_ticks_msec() / 1000.0
+		if health < MAX_HEALTH and (current_time - last_damage_time) > HEALTH_REGEN_DELAY:
+			health_regen_timer += delta
+			if health_regen_timer >= 0.1:
+				health_regen_timer = 0.0
+				health = min(health + HEALTH_REGEN_RATE * 0.1, MAX_HEALTH)
+				sync_health = health
+				_update_health_ui()
+				_update_health_bar_3d()
+		
 		if global_position.y < FALL_THRESHOLD:
 			respawn()
 			return
@@ -150,6 +308,10 @@ func _physics_process(delta):
 			sync_position = global_position
 			sync_rotation = rotation
 			sync_head_rotation = head.rotation.y
+			return
+		
+		if noclip_enabled:
+			_handle_noclip_movement(delta)
 			return
 		
 		if not is_on_floor():
@@ -229,6 +391,10 @@ func _physics_process(delta):
 		global_position = global_position.lerp(sync_position, delta * 15.0)
 		rotation = rotation.lerp(sync_rotation, delta * 15.0)
 		head.rotation.y = lerp_angle(head.rotation.y, sync_head_rotation, delta * 15.0)
+		
+		if health != sync_health:
+			health = sync_health
+			_update_health_bar_3d()
 
 func _headbob(time) -> Vector3:
 	var pos = Vector3.ZERO
@@ -275,7 +441,7 @@ func _exit_cart():
 	if not current_cart:
 		return
 	
-	var exit_pos = current_cart.global_position + current_cart.global_transform.basis.x * 2.5 + Vector3(0, 1, 0)
+	var exit_pos = _find_safe_exit_position()
 	
 	var peer_id = name.to_int()
 	if multiplayer.is_server():
@@ -290,6 +456,36 @@ func _exit_cart():
 	$CollisionShape3D.disabled = false
 	global_position = exit_pos
 
+func _find_safe_exit_position() -> Vector3:
+	var cart_pos = current_cart.global_position
+	var cart_basis = current_cart.global_transform.basis
+	var space_state = get_world_3d().direct_space_state
+	
+	var exit_directions = [
+		cart_basis.x * 2.5,
+		-cart_basis.x * 2.5,
+		cart_basis.z * 2.5,
+		-cart_basis.z * 2.5,
+		cart_basis.x * 1.5,
+		-cart_basis.x * 1.5,
+	]
+	
+	for dir in exit_directions:
+		var test_pos = cart_pos + dir + Vector3(0, 1, 0)
+		var query = PhysicsRayQueryParameters3D.create(cart_pos + Vector3(0, 1, 0), test_pos)
+		query.exclude = [self, current_cart]
+		var result = space_state.intersect_ray(query)
+		
+		if not result:
+			var down_query = PhysicsRayQueryParameters3D.create(test_pos, test_pos - Vector3(0, 3, 0))
+			down_query.exclude = [self, current_cart]
+			var ground_result = space_state.intersect_ray(down_query)
+			if ground_result:
+				return ground_result.position + Vector3(0, 1, 0)
+			return test_pos
+	
+	return cart_pos + Vector3(0, 2, 0)
+
 func _handle_cart_driving(delta):
 	if not current_cart:
 		return
@@ -301,12 +497,53 @@ func _handle_cart_driving(delta):
 	
 	current_cart.set_input(input_dir, brake)
 
+func _handle_noclip_movement(delta: float):
+	var fly_speed = WALK_SPEED * NOCLIP_SPEED_MULT
+	if Input.is_action_pressed("sprint"):
+		fly_speed = SPRINT_SPEED * NOCLIP_SPEED_MULT * 1.5
+	
+	var input_dir = Input.get_vector("left", "right", "up", "down")
+	var direction = (head.transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	
+	var vertical = 0.0
+	if Input.is_action_pressed("jump"):
+		vertical = 1.0
+	elif Input.is_action_pressed("crouch"):
+		vertical = -1.0
+	
+	velocity.x = direction.x * fly_speed
+	velocity.z = direction.z * fly_speed
+	velocity.y = vertical * fly_speed
+	
+	global_position += velocity * delta
+	
+	sync_position = global_position
+	sync_rotation = rotation
+	sync_head_rotation = head.rotation.y
+
+func set_noclip(enabled: bool):
+	noclip_enabled = enabled
+	velocity = Vector3.ZERO
+	if has_node("CollisionShape3D"):
+		$CollisionShape3D.disabled = enabled
+
 func respawn():
 	if in_cart and current_cart:
 		_exit_cart()
+	
+	if noclip_enabled:
+		set_noclip(false)
+		if Console:
+			Console.disable_noclip()
 	
 	global_position = spawn_position
 	velocity = Vector3.ZERO
 	sync_position = spawn_position
 	head.rotation.y = 0
 	camera.rotation.x = 0
+	
+	health = MAX_HEALTH
+	sync_health = MAX_HEALTH
+	is_dead = false
+	_update_health_ui()
+	_update_health_bar_3d()

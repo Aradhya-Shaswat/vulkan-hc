@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://lcbr61yynn7l"
 path.s3tc="res://.godot/imported/planks.png-0c09ba146b2d0c0517a2029726417079.s3tc.ctex"
+path.etc2="res://.godot/imported/planks.png-0c09ba146b2d0c0517a2029726417079.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/models/medieval-kit/Textures/planks.png"
-dest_files=["res://.godot/imported/planks.png-0c09ba146b2d0c0517a2029726417079.s3tc.ctex"]
+dest_files=["res://.godot/imported/planks.png-0c09ba146b2d0c0517a2029726417079.s3tc.ctex", "res://.godot/imported/planks.png-0c09ba146b2d0c0517a2029726417079.etc2.ctex"]
 
 [params]
 

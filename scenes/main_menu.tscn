@@ -1,7 +1,8 @@
-[gd_scene load_steps=11 format=3 uid="uid://dqc48gytnhsn6"]
+[gd_scene load_steps=12 format=3 uid="uid://dqc48gytnhsn6"]
 
 [ext_resource type="Script" uid="uid://b1qf8uq6hul16" path="res://scripts/changeScenesMainMenu.gd" id="1_ekxnf"]
 [ext_resource type="FontFile" uid="uid://gunvccib1svm" path="res://assets/fonts/Poppins-Regular.ttf" id="1_l6cm7"]
+[ext_resource type="Texture2D" uid="uid://c6tfpyi5xltum" path="res://assets/axolotl.webp" id="3_bqqt6"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l6cm7"]
 bg_color = Color(0.51381, 0.68613404, 0.62646294, 1)
@@ -254,6 +255,12 @@ theme_override_font_sizes/font_size = 18
 text = "Checking for updates..."
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Axolotl" type="Sprite2D" parent="."]
+position = Vector2(1067, 281.00003)
+rotation = -1.5707964
+scale = Vector2(0.28948063, 0.28948066)
+texture = ExtResource("3_bqqt6")
 
 [connection signal="pressed" from="VBoxContainer/PlayButton" to="." method="_on_play_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/OptionsButton" to="." method="_on_options_button_pressed"]

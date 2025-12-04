@@ -1,7 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://bugy7ou2cuwaj"]
+[gd_scene load_steps=11 format=3 uid="uid://bugy7ou2cuwaj"]
 
 [ext_resource type="FontFile" uid="uid://gunvccib1svm" path="res://assets/fonts/Poppins-Regular.ttf" id="1_credits"]
 [ext_resource type="Script" uid="uid://cqiy6numxfuim" path="res://scripts/credits.gd" id="2_credits"]
+[ext_resource type="Texture2D" uid="uid://c6tfpyi5xltum" path="res://assets/axolotl.webp" id="3_0ctdu"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg1"]
 bg_color = Color(0.51381, 0.68613404, 0.62646294, 1)
@@ -148,10 +149,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 171.0
-offset_top = -86.5
-offset_right = 543.0
-offset_bottom = -13.5
+offset_left = -531.0
+offset_top = -244.0
+offset_right = -159.0
+offset_bottom = -171.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 1, 0.8235294, 1)
@@ -161,7 +162,6 @@ theme_override_fonts/font = ExtResource("1_credits")
 theme_override_font_sizes/font_size = 24
 text = "made for milkyway,
 with coffee, by arshy ;)"
-horizontal_alignment = 2
 vertical_alignment = 1
 
 [node name="BackButton" type="Button" parent="."]
@@ -180,5 +180,11 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_button")
 theme_override_styles/hover = SubResource("StyleBoxFlat_hover")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_2ckv8")
 text = "Back"
+
+[node name="Axolotl" type="Sprite2D" parent="."]
+position = Vector2(1067, 281.00003)
+rotation = -1.5707964
+scale = Vector2(0.28948063, 0.28948066)
+texture = ExtResource("3_0ctdu")
 
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]

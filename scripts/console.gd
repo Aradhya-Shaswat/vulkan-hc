@@ -17,9 +17,10 @@ const COMMANDS = {
 	"music_volume": "  Set music volume (0 - 100)",
 	"crosshair_color": "  Set crosshair color (red/green/white/cyan/yellow/pink)",
 	"fov": "  Set field of view (60 - 120)",
-	"noclip": "  Toggle noclip mode",
+	"noclip": "  Toggle noclip/fly mode",
 	"respawn": "  Respawn at spawn point",
 	"tp": "  Teleport to coordinates (x y z)",
+	"tpp": "  Teleport to player by nickname",
 	"speed": "  Set player walk speed",
 	"version": "  Show game version",
 	"quit": "  Quit the game",
@@ -28,6 +29,7 @@ const COMMANDS = {
 var noclip_mode: bool = false
 var custom_fov: float = 75.0
 var custom_speed: float = 8.5
+var _original_collision_state: bool = false
 
 func _ready():
 	console_panel.hide()
@@ -58,8 +60,24 @@ func _toggle_console():
 		input_field.clear()
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	else:
-		if _is_in_game() and not GameSettings.is_paused:
-			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+		_restore_mouse_state()
+
+func _restore_mouse_state():
+	if not _is_in_game():
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		return
+	
+	if GameSettings.is_paused:
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		return
+	
+	var player = _get_local_player()
+	if player:
+		if player.get("is_dead") == true:
+			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+			return
+	
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func _is_in_game() -> bool:
 	var scene_name = get_tree().current_scene.name.to_lower() if get_tree().current_scene else ""
@@ -119,6 +137,8 @@ func _execute_command(cmd: String):
 			_cmd_respawn()
 		"tp":
 			_cmd_teleport(args)
+		"tpp":
+			_cmd_teleport_to_player(args)
 		"speed":
 			_cmd_speed(args)
 		"version":
@@ -202,21 +222,55 @@ func _cmd_fov(args: Array):
 	_print_line("  [color=lime]FOV set to " + str(value) + "[/color]")
 
 func _cmd_noclip():
-	noclip_mode = not noclip_mode
 	var player = _get_local_player()
-	if player:
-		if player.has_node("CollisionShape3D"):
-			player.get_node("CollisionShape3D").disabled = noclip_mode
-	var status = "enabled" if noclip_mode else "disabled"
+	if not player:
+		_print_line("  [color=red]Cannot toggle noclip - not in game[/color]")
+		return
+	
+	if player.get("is_dead") == true:
+		_print_line("  [color=red]Cannot toggle noclip while dead[/color]")
+		return
+	
+	if player.get("in_cart") == true:
+		_print_line("  [color=red]Cannot toggle noclip while in cart - exit first[/color]")
+		return
+	
+	noclip_mode = not noclip_mode
+	
+	if player.has_node("CollisionShape3D"):
+		player.get_node("CollisionShape3D").disabled = noclip_mode
+	
+	if player.has_method("set_noclip"):
+		player.set_noclip(noclip_mode)
+	elif "noclip_enabled" in player:
+		player.noclip_enabled = noclip_mode
+	
+	var status = "enabled (use jump/crouch to fly)" if noclip_mode else "disabled"
 	_print_line("  [color=lime]Noclip " + status + "[/color]")
+
+func disable_noclip():
+	if noclip_mode:
+		noclip_mode = false
+		var player = _get_local_player()
+		if player:
+			if player.has_node("CollisionShape3D"):
+				player.get_node("CollisionShape3D").disabled = false
+			if "noclip_enabled" in player:
+				player.noclip_enabled = false
 
 func _cmd_respawn():
 	var player = _get_local_player()
-	if player and player.has_method("respawn"):
+	if not player:
+		_print_line("  [color=red]Cannot respawn - not in game[/color]")
+		return
+	if player.get("is_dead") == true:
+		_print_line("  [color=yellow]Already respawning...[/color]")
+		return
+	if player.has_method("respawn"):
 		player.respawn()
 		_print_line("  [color=lime]Respawned[/color]")
 	else:
-		_print_line("  [color=red]Cannot respawn - not in game[/color]")
+		_print_line("  [color=red]Cannot respawn - respawn method not found[/color]")
 
 func _cmd_teleport(args: Array):
 	if args.size() < 3:
@@ -227,10 +281,68 @@ func _cmd_teleport(args: Array):
 	var z = float(args[2])
 	var player = _get_local_player()
 	if player:
+		if player.get("is_dead") == true:
+			_print_line("  [color=red]Cannot teleport while dead[/color]")
+			return
+		if player.get("in_cart") == true:
+			_print_line("  [color=red]Cannot teleport while in cart - exit first[/color]")
+			return
 		player.global_position = Vector3(x, y, z)
+		player.velocity = Vector3.ZERO
 		_print_line("  [color=lime]Teleported to " + str(x) + ", " + str(y) + ", " + str(z) + "[/color]")
 	else:
 		_print_line("  [color=red]Cannot teleport - not in game[/color]")
+
+func _cmd_teleport_to_player(args: Array):
+	if args.is_empty():
+		_print_line("  Usage: tpp <nickname>")
+		return
+	
+	var local_player = _get_local_player()
+	if not local_player:
+		_print_line("  [color=red]Cannot teleport - local player not found[/color]")
+		return
+	
+	if local_player.get("is_dead") == true:
+		_print_line("  [color=red]Cannot teleport while dead[/color]")
+		return
+	if local_player.get("in_cart") == true:
+		_print_line("  [color=red]Cannot teleport while in cart - exit first[/color]")
+		return
+	
+	var target_name = " ".join(args).to_lower()
+	var main = get_tree().current_scene
+	if not main or not main.has_method("get") or main.get("player_list") == null:
+		_print_line("  [color=red]Cannot teleport - not in game[/color]")
+		return
+	
+	var player_list = main.player_list
+	var target_id = -1
+	for id in player_list:
+		if player_list[id].to_lower() == target_name:
+			target_id = id
+			break
+	
+	if target_id == -1:
+		for id in player_list:
+			if player_list[id].to_lower().begins_with(target_name):
+				target_id = id
+				break
+	
+	if target_id == -1:
+		_print_line("  [color=red]Player '" + target_name + "' not found[/color]")
+		_print_line("  [color=gray]Online players: " + ", ".join(player_list.values()) + "[/color]")
+		return
+	
+	var target_player = main.get_node_or_null(str(target_id))
+	
+	if not target_player:
+		_print_line("  [color=red]Target player node not found[/color]")
+		return
+	
+	local_player.global_position = target_player.global_position + Vector3(1, 0, 1)
+	local_player.velocity = Vector3.ZERO
+	_print_line("  [color=lime]Teleported to " + player_list[target_id] + "[/color]")
 
 func _cmd_speed(args: Array):
 	if args.is_empty():
