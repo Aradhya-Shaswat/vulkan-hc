@@ -142,7 +142,7 @@ func _execute_command(cmd: String):
 		"speed":
 			_cmd_speed(args)
 		"version":
-			_print_line("  [color=gray]VULKAN-HC BETA 0.9[/color]")
+			_print_line("  [color=gray]VULKAN-HC BETA 1.0[/color]")
 		"quit", "exit":
 			get_tree().quit()
 		_:

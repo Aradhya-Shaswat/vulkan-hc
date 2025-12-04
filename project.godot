@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Vulkan Release Beta"
 config/description="Multiplayer Sandbox Simulator for Milkyway - Hack Club."
-config/version="0.9"
+config/version="1.0"
 run/main_scene="uid://dqc48gytnhsn6"
 config/features=PackedStringArray("4.5", "Forward Plus")
 boot_splash/bg_color=Color(1, 1, 1, 1)
@@ -34,9 +34,7 @@ SoundManager="*res://scripts/sound_manager.gd"
 [display]
 
 window/size/mode=2
-window/size/resizable=false
 window/size/borderless=true
-window/size/always_on_top=true
 window/stretch/mode="canvas_items"
 
 [dotnet]
@@ -109,6 +107,10 @@ crouch={
 , Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":67,"key_label":0,"unicode":99,"location":0,"echo":false,"script":null)
 ]
 }
+
+[physics]
+
+3d/physics_engine="Jolt Physics"
 
 [rendering]
 

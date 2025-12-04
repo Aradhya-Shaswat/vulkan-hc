@@ -82,6 +82,8 @@ var time_sync_timer: float = 0.0
 var last_countdown_second: int = -1
 
 func _process(delta):
+	_update_fps_display()
+	
 	if game_timer_active and not game_ended:
 		if multiplayer.is_server():
 			game_time_remaining -= delta
@@ -118,6 +120,14 @@ func _update_timer_display():
 
 func _on_settings_changed():
 	_apply_crosshair_color()
+
+func _update_fps_display():
+	if has_node("CanvasLayer/FPSLabel"):
+		if GameSettings.show_fps:
+			$CanvasLayer/FPSLabel.visible = true
+			$CanvasLayer/FPSLabel.text = "FPS: " + str(Engine.get_frames_per_second())
+		else:
+			$CanvasLayer/FPSLabel.visible = false
 
 func _apply_crosshair_color():
 	$CanvasLayer/CenterContainer/Crosshair.modulate = GameSettings.crosshair_color

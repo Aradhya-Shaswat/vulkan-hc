@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://box7rrf52x7y1"]
+[gd_scene load_steps=14 format=3 uid="uid://box7rrf52x7y1"]
 
 [ext_resource type="FontFile" uid="uid://gunvccib1svm" path="res://assets/fonts/Poppins-Regular.ttf" id="1_c2u1v"]
 [ext_resource type="Script" uid="uid://0qm1asb1plrn" path="res://scripts/options.gd" id="2_options"]
@@ -52,6 +52,10 @@ corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yjkok"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2iy26"]
+
 [node name="Options" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -96,9 +100,9 @@ anchor_top = 0.46300003
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -574.0
-offset_top = -173.02402
+offset_top = -298.02402
 offset_right = -294.0
-offset_bottom = -87.02402
+offset_bottom = -212.02402
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 1, 0.8235294, 1)
@@ -164,9 +168,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -530.0
-offset_top = -40.0
+offset_top = -219.0
 offset_right = -100.0
-offset_bottom = 141.0
+offset_bottom = -38.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 18
@@ -451,6 +455,143 @@ theme_override_fonts/font = ExtResource("1_c2u1v")
 theme_override_font_sizes/font_size = 14
 text = "` (Backtick) - Developer console"
 
+[node name="GraphicsContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -530.0
+offset_top = -12.0
+offset_right = -100.0
+offset_bottom = 205.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 12
+
+[node name="GraphicsTitle" type="Label" parent="GraphicsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0.8235294, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("1_c2u1v")
+theme_override_font_sizes/font_size = 32
+text = "GRAPHICS"
+
+[node name="WindowModeContainer" type="HBoxContainer" parent="GraphicsContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="WindowModeLabel" type="Label" parent="GraphicsContainer/WindowModeContainer"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0.8235294, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("1_c2u1v")
+theme_override_font_sizes/font_size = 16
+text = "Window Mode"
+
+[node name="WindowModeOption" type="OptionButton" parent="GraphicsContainer/WindowModeContainer"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_yjkok")
+
+[node name="ResolutionContainer" type="HBoxContainer" parent="GraphicsContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="ResolutionLabel" type="Label" parent="GraphicsContainer/ResolutionContainer"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0.8235294, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("1_c2u1v")
+theme_override_font_sizes/font_size = 16
+text = "Resolution"
+
+[node name="ResolutionOption" type="OptionButton" parent="GraphicsContainer/ResolutionContainer"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_yjkok")
+
+[node name="VSyncContainer" type="HBoxContainer" parent="GraphicsContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="VSyncLabel" type="Label" parent="GraphicsContainer/VSyncContainer"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0.8235294, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("1_c2u1v")
+theme_override_font_sizes/font_size = 16
+text = "V-Sync"
+
+[node name="VSyncCheck" type="CheckBox" parent="GraphicsContainer/VSyncContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0.8235294, 1)
+theme_override_fonts/font = ExtResource("1_c2u1v")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_2iy26")
+text = "Enabled"
+
+[node name="FPSContainer" type="HBoxContainer" parent="GraphicsContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="FPSLabel" type="Label" parent="GraphicsContainer/FPSContainer"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0.8235294, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("1_c2u1v")
+theme_override_font_sizes/font_size = 16
+text = "Show FPS"
+
+[node name="FPSCheck" type="CheckBox" parent="GraphicsContainer/FPSContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0.8235294, 1)
+theme_override_fonts/font = ExtResource("1_c2u1v")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_2iy26")
+text = "Enabled"
+
+[node name="RenderScaleContainer" type="HBoxContainer" parent="GraphicsContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="RenderScaleLabel" type="Label" parent="GraphicsContainer/RenderScaleContainer"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0.8235294, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("1_c2u1v")
+theme_override_font_sizes/font_size = 16
+text = "Render Scale"
+
+[node name="RenderScaleSlider" type="HSlider" parent="GraphicsContainer/RenderScaleContainer"]
+modulate = Color(0.98898584, 0.86889833, 0.7355447, 1)
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_vertical = 1
+min_value = 50.0
+value = 100.0
+
+[node name="RenderScaleValue" type="Label" parent="GraphicsContainer/RenderScaleContainer"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0.8235294, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("1_c2u1v")
+theme_override_font_sizes/font_size = 14
+text = "100%"
+horizontal_alignment = 2
+
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
 [connection signal="value_changed" from="SettingsContainer/SFXContainer/SFXSlider" to="." method="_on_sfx_slider_value_changed"]
 [connection signal="value_changed" from="SettingsContainer/MusicContainer/MusicSlider" to="." method="_on_music_slider_value_changed"]
@@ -458,3 +599,8 @@ text = "` (Backtick) - Developer console"
 [connection signal="pressed" from="SettingsContainer/CrosshairContainer/GreenButton" to="." method="_on_green_button_pressed"]
 [connection signal="pressed" from="SettingsContainer/CrosshairContainer/RedButton" to="." method="_on_red_button_pressed"]
 [connection signal="pressed" from="SettingsContainer/CrosshairContainer/WhiteButton" to="." method="_on_white_button_pressed"]
+[connection signal="item_selected" from="GraphicsContainer/WindowModeContainer/WindowModeOption" to="." method="_on_window_mode_option_item_selected"]
+[connection signal="item_selected" from="GraphicsContainer/ResolutionContainer/ResolutionOption" to="." method="_on_resolution_option_item_selected"]
+[connection signal="toggled" from="GraphicsContainer/VSyncContainer/VSyncCheck" to="." method="_on_vsync_check_toggled"]
+[connection signal="toggled" from="GraphicsContainer/FPSContainer/FPSCheck" to="." method="_on_fps_check_toggled"]
+[connection signal="value_changed" from="GraphicsContainer/RenderScaleContainer/RenderScaleSlider" to="." method="_on_render_scale_slider_value_changed"]

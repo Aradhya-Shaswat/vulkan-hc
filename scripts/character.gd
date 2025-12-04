@@ -32,7 +32,7 @@ var in_cart: bool = false
 var current_cart: Node = null
 var nearby_cart: Node = null
 var cart_look_timer: float = 0.0
-const CART_LOOK_TIMEOUT: float = 0.25
+const CART_LOOK_TIMEOUT: float = 0.75
 
 var noclip_enabled: bool = false
 const NOCLIP_SPEED_MULT = 2.0
@@ -293,14 +293,6 @@ func _physics_process(delta):
 			return
 		
 		var current_time = Time.get_ticks_msec() / 1000.0
-		if health < MAX_HEALTH and (current_time - last_damage_time) > HEALTH_REGEN_DELAY:
-			health_regen_timer += delta
-			if health_regen_timer >= 0.1:
-				health_regen_timer = 0.0
-				health = min(health + HEALTH_REGEN_RATE * 0.1, MAX_HEALTH)
-				sync_health = health
-				_update_health_ui()
-				_update_health_bar_3d()
 		
 		if global_position.y < FALL_THRESHOLD:
 			respawn()

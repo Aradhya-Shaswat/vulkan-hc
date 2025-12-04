@@ -14,7 +14,7 @@ var last_thrower_id: int = 0
 var throw_velocity_magnitude: float = 0.0
 var damage_cooldown: float = 0.0
 const DAMAGE_COOLDOWN_TIME = 0.5
-const MIN_DAMAGE_VELOCITY = 3.0
+const MIN_DAMAGE_VELOCITY = 1.5
 const BASE_DAMAGE = 15.0
 const VELOCITY_DAMAGE_BONUS = 1.5
 const MASS_DAMAGE_BONUS = 5.0
@@ -217,14 +217,15 @@ func _on_body_entered(body: Node):
 			return
 		
 		var current_velocity = linear_velocity.length()
-		var effective_velocity = max(current_velocity, throw_velocity_magnitude * 0.7)
-		if effective_velocity >= MIN_DAMAGE_VELOCITY:
-			var damage = BASE_DAMAGE + (effective_velocity * VELOCITY_DAMAGE_BONUS) + (mass * MASS_DAMAGE_BONUS)
-			damage = clamp(damage, 10.0, 60.0)
-			body.request_damage(damage, last_thrower_id)
-			damage_cooldown = DAMAGE_COOLDOWN_TIME
-			throw_velocity_magnitude = 0.0
-			_play_impact_sound.rpc()
+		var effective_velocity = max(current_velocity, throw_velocity_magnitude * 0.8)
+		
+		# Always deal at least minimum damage if thrown
+		var damage = BASE_DAMAGE + (effective_velocity * VELOCITY_DAMAGE_BONUS) + (mass * MASS_DAMAGE_BONUS)
+		damage = clamp(damage, 10.0, 60.0)
+		body.request_damage(damage, last_thrower_id)
+		damage_cooldown = DAMAGE_COOLDOWN_TIME
+		throw_velocity_magnitude = 0.0
+		_play_impact_sound.rpc()
 
 @rpc("authority", "reliable", "call_local")
 func _play_impact_sound():

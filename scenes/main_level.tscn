@@ -184,14 +184,34 @@ text = "•"
 
 [node name="version" type="Label" parent="CanvasLayer"]
 visible = false
-offset_left = 988.0
+z_index = 2
+offset_left = 998.0
 offset_top = 14.0
-offset_right = 1150.0
+offset_right = 1126.0
 offset_bottom = 37.0
-theme_override_colors/font_color = Color(0.6955032, 0.6955031, 0.6955031, 1)
+theme_override_colors/font_color = Color(0.35531342, 0.35531357, 0.35531372, 1)
 theme_override_fonts/font = ExtResource("1_iqu8w")
 theme_override_font_sizes/font_size = 11
-text = "VULKAN-HC RELEASE 0.9"
+text = "VULKAN-HC RELEASE 1.0"
+
+[node name="FPSLabel" type="Label" parent="CanvasLayer"]
+visible = false
+z_index = 2
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -116.0
+offset_top = 40.0
+offset_right = -26.0
+offset_bottom = 70.0
+grow_horizontal = 0
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 18
+text = "FPS: 60"
+horizontal_alignment = 2
 
 [node name="SelectionUI" type="Node2D" parent="CanvasLayer"]
 
@@ -315,6 +335,7 @@ max_length = 50
 emoji_menu_enabled = false
 
 [node name="PasswordPanel" type="Panel" parent="CanvasLayer"]
+visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -1235,10 +1256,10 @@ use_collision = true
 size = Vector3(19.77874, 1, 40.217285)
 
 [node name="ground15" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 3.5527137e-15, 0, -0.00047465682, 0, -3.5527137e-15, 0, 1, 1.4881334, -5.6105556, -83.19591)
+transform = Transform3D(1, 0, 3.5527137e-15, 0, -0.00047465682, 0, -3.5527137e-15, 0, 1, 1.4881334, -5.6105556, -83.040695)
 material_override = SubResource("StandardMaterial3D_mwgft")
 use_collision = true
-size = Vector3(19.77874, 1, 40.217285)
+size = Vector3(19.77874, 1, 40.52771)
 
 [node name="ground5" type="CSGBox3D" parent="."]
 transform = Transform3D(-0.60766697, 0, -0.79419196, 0, -0.00047465682, 0, 0.79419196, 0, -0.60766697, -62.70057, -5.6105556, 113.92256)
@@ -1350,6 +1371,12 @@ transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 49.3
 
 [node name="brick-wall21" parent="walls" instance=ExtResource("6_bq26l")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 49.345535, 1.0003803, -19.318268)
+
+[node name="brick-wall24" parent="walls" instance=ExtResource("6_bq26l")]
+transform = Transform3D(-3.5, -4.3711392e-08, 4.3711385e-08, 1.5298986e-07, 2.9802326e-08, 0.9999999, -1.5298986e-07, 1.0000001, -2.9802317e-08, 1.5345016, 12.0003805, -66.31827)
+
+[node name="brick-wall31" parent="walls" instance=ExtResource("6_bq26l")]
+transform = Transform3D(-3.5, -4.3711392e-08, 4.3711385e-08, 1.5298986e-07, 2.9802326e-08, 0.9999999, -1.5298986e-07, 1.0000001, -2.9802317e-08, 1.6698375, 12.0003805, 60.083237)
 
 [node name="brick-wall22" parent="walls" instance=ExtResource("6_bq26l")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 49.345535, 1.0003803, -13.318268)
@@ -1728,6 +1755,18 @@ transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 26.411592, 1.0002356, 21.6055
 
 [node name="border-pillar4" parent="walls" instance=ExtResource("13_mwgft")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -10.508776, 1.0002356, 30.026468)
+
+[node name="border-pillar8" parent="walls" instance=ExtResource("13_mwgft")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -7.32618, 1.0002356, 62.535545)
+
+[node name="border-pillar9" parent="walls" instance=ExtResource("13_mwgft")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 10.054991, 1.0002356, 62.535545)
+
+[node name="border-pillar10" parent="walls" instance=ExtResource("13_mwgft")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -7.32618, 1.0002356, -63.927498)
+
+[node name="border-pillar11" parent="walls" instance=ExtResource("13_mwgft")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 10.054991, 1.0002356, -63.927498)
 
 [node name="border-pillar5" parent="walls" instance=ExtResource("13_mwgft")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -10.508776, 1.0002356, -34.747322)
