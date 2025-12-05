@@ -33,8 +33,7 @@ func _ready():
 	
 	add_to_group("launch_pads")
 	add_to_group("physics_objects")
-	
-	# Find detection area
+
 	detection_area = get_node_or_null("DetectionArea")
 	if detection_area:
 		detection_area.body_entered.connect(_on_body_entered)
@@ -45,7 +44,6 @@ func _physics_process(delta):
 	if not multiplayer.multiplayer_peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED:
 		return
 	
-	# Update cooldowns
 	var to_remove = []
 	for player_id in cooldown_players:
 		cooldown_players[player_id] -= delta
@@ -61,7 +59,6 @@ func _physics_process(delta):
 			global_position = global_position.lerp(held_target_pos, delta * 14.0)
 			global_rotation = held_target_rot
 		
-		# Check if pad has settled on ground
 		if not is_placed and not freeze and linear_velocity.length() < 0.3 and is_on_ground():
 			_settle_on_ground()
 		

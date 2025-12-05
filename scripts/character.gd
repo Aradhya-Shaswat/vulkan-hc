@@ -36,7 +36,7 @@ var current_cart: Node = null
 var nearby_cart: Node = null
 var looking_behind: bool = false
 var cart_look_timer: float = 0.0
-const CART_LOOK_TIMEOUT: float = 1.5
+const CART_LOOK_TIMEOUT: float = 0.25
 const CART_LOOK_LIMIT: float = PI / 2.0
 
 var noclip_enabled: bool = false
@@ -61,9 +61,11 @@ const FOOTSTEP_INTERVAL = 0.4
 @onready var nametag = $Nametag
 @onready var health_bar_3d = $HealthBar3D
 @onready var health_bar_ui = $CanvasLayer/HealthBarUI
-@onready var health_label = $CanvasLayer/HealthBarUI/HealthLabel
+#@onready var health_label = $CanvasLayer/HealthBarUI/HealthLabel
 @onready var death_overlay = $CanvasLayer/DeathOverlay
+@onready var speed_lines = $CanvasLayer/SpeedLines
 var cam_default_pos: Vector3
+var speed_line_data: Array = []
 
 const PLAYER_COLORS = [
 	Color(0.83, 0.78, 1.0),
@@ -106,6 +108,7 @@ func _ready():
 	_set_player_color(player_color)
 	
 	call_deferred("_setup_nametag")
+	_ready_speed_lines()
 	
 	if _is_local_authority():
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -164,8 +167,8 @@ func _update_health_ui():
 	var health_bar = health_bar_ui.get_node_or_null("HealthBar")
 	if health_bar:
 		health_bar.value = health
-	if health_label:
-		health_label.text = str(int(health)) + "/" + str(int(MAX_HEALTH))
+	#if health_label:
+		#health_label.text = str(int(health)) + "/" + str(int(MAX_HEALTH))
 
 func _update_health_bar_3d():
 	if not health_bar_3d:
@@ -249,7 +252,8 @@ func _die():
 		if last_attacker_id != 0:
 			var main = get_parent()
 			if main and main.has_method("register_kill"):
-				main.register_kill(last_attacker_id)
+				var victim_id = int(str(name))
+				main.register_kill(last_attacker_id, victim_id)
 	
 	if _is_local_authority():
 		player_mesh.visible = false
@@ -281,6 +285,15 @@ func _respawn_after_death():
 	
 	if multiplayer.is_server():
 		_sync_death_state.rpc(false)
+	else:
+		_request_respawn_sync.rpc_id(1)
+
+@rpc("any_peer", "reliable")
+func _request_respawn_sync():
+	if not multiplayer.is_server():
+		return
+	is_dead = false
+	_sync_death_state.rpc(false)
 
 func _enable_collision_shape():
 	$CollisionShape3D.disabled = false
@@ -355,6 +368,7 @@ func _physics_process(delta):
 		
 		if in_cart and current_cart:
 			_handle_cart_driving(delta)
+			_update_speed_lines(delta)
 			global_position = current_cart.get_seat_global_position()
 			cart_look_timer += delta
 			
@@ -529,6 +543,9 @@ func _enter_cart(cart: Node):
 	SoundManager.start_cart_loop()
 	current_cart = cart
 	in_cart = true
+	cart_look_timer = 0.0
+	head.global_rotation.y = cart.global_rotation.y
+	camera.rotation.x = 0.0
 	
 	var peer_id = name.to_int()
 	if multiplayer.is_server():
@@ -548,6 +565,7 @@ func _exit_cart():
 	
 	SoundManager.play_cart_exit()
 	SoundManager.stop_cart_loop()
+	SoundManager.stop_drift_sound()
 	var exit_pos = _find_safe_exit_position()
 	
 	var peer_id = name.to_int()
@@ -559,6 +577,10 @@ func _exit_cart():
 	in_cart = false
 	current_cart = null
 	sync_in_cart = false
+	
+	if speed_lines:
+		speed_lines.visible = false
+		speed_line_data.clear()
 	
 	player_mesh.visible = true
 	$CollisionShape3D.disabled = false
@@ -596,7 +618,7 @@ func _find_safe_exit_position() -> Vector3:
 	
 	return cart_pos + Vector3(0, 2, 0)
 
-func _handle_cart_driving(delta):
+func _handle_cart_driving(_delta):
 	if not current_cart:
 		return
 	
@@ -606,6 +628,11 @@ func _handle_cart_driving(delta):
 	var brake = Input.is_action_pressed("sprint")
 	
 	current_cart.set_input(input_dir, brake)
+	
+	if current_cart.is_drifting:
+		SoundManager.start_drift_sound()
+	else:
+		SoundManager.stop_drift_sound()
 
 func _handle_noclip_movement(delta: float):
 	var fly_speed = WALK_SPEED * NOCLIP_SPEED_MULT
@@ -691,8 +718,68 @@ func _show_alive_body():
 	if player_mesh:
 		player_mesh.rotation.x = 0
 		player_mesh.rotation.z = 0
+		player_mesh.position.y = 0
 
 @rpc("any_peer", "reliable", "call_remote")
 func _sync_collision_state(in_cart_state: bool):
 	$CollisionShape3D.disabled = in_cart_state
 	player_mesh.visible = not in_cart_state
+
+func _update_speed_lines(delta: float):
+	if not speed_lines or not current_cart:
+		return
+	
+	var speed_ratio = 0.0
+	if current_cart.has_method("get_speed_ratio"):
+		speed_ratio = current_cart.get_speed_ratio()
+	
+	if speed_ratio < 0.3:
+		speed_lines.visible = false
+		speed_line_data.clear()
+		return
+	
+	speed_lines.visible = true
+	var intensity = (speed_ratio - 0.3) / 0.7
+	var num_lines = int(lerp(10, 30, intensity))
+	
+	while speed_line_data.size() < num_lines:
+		var angle = randf() * TAU
+		speed_line_data.append({
+			"angle": angle,
+			"dist": randf_range(0.85, 0.95),
+			"length": randf_range(0.08, 0.18),
+			"width": randf_range(2.0, 4.0),
+			"alpha": randf_range(0.4, 0.8)
+		})
+	
+	while speed_line_data.size() > num_lines:
+		speed_line_data.pop_back()
+	
+	for line in speed_line_data:
+		line.dist += delta * lerp(0.8, 1.8, intensity)
+		if line.dist > 1.1:
+			line.dist = randf_range(0.85, 0.92)
+			line.angle = randf() * TAU
+			line.length = randf_range(0.08, 0.18)
+	
+	speed_lines.queue_redraw()
+
+func _ready_speed_lines():
+	if speed_lines:
+		speed_lines.draw.connect(_draw_speed_lines)
+
+func _draw_speed_lines():
+	if not speed_lines or not speed_lines.visible:
+		return
+	
+	var viewport_size = get_viewport().get_visible_rect().size
+	var center = viewport_size / 2
+	var max_radius = min(viewport_size.x, viewport_size.y) * 0.6
+	
+	for line in speed_line_data:
+		var dir = Vector2(cos(line.angle), sin(line.angle))
+		var start_pos = center + dir * line.dist * max_radius
+		var end_pos = center + dir * (line.dist + line.length) * max_radius
+		var edge_alpha = clamp((line.dist - 0.85) / 0.15, 0.0, 1.0) * line.alpha
+		var color = Color(1, 1, 1, edge_alpha)
+		speed_lines.draw_line(start_pos, end_pos, color, line.width, true)

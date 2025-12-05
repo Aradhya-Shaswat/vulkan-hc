@@ -219,7 +219,6 @@ func _on_body_entered(body: Node):
 		var current_velocity = linear_velocity.length()
 		var effective_velocity = max(current_velocity, throw_velocity_magnitude * 0.8)
 		
-		# Always deal at least minimum damage if thrown
 		var damage = BASE_DAMAGE + (effective_velocity * VELOCITY_DAMAGE_BONUS) + (mass * MASS_DAMAGE_BONUS)
 		damage = clamp(damage, 10.0, 60.0)
 		body.request_damage(damage, last_thrower_id)

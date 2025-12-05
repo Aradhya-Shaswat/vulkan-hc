@@ -23,6 +23,8 @@ var menu_music: AudioStream
 var explosion_sound: AudioStream
 var launch_sound: AudioStream
 var bounce_sound: AudioStream
+var drift_sound: AudioStream
+var drift_player: AudioStreamPlayer
 
 var sfx_players: Array[AudioStreamPlayer] = []
 var cart_loop_player: AudioStreamPlayer
@@ -56,6 +58,7 @@ func _load_sounds():
 	explosion_sound = load("res://assets/sounds/Free Sounds Pack/Explosion Large 1-1.wav")
 	launch_sound = load("res://assets/sounds/Free Sounds Pack/Whoosh 4-1.wav")
 	bounce_sound = load("res://assets/sounds/Free Sounds Pack/Hit Generic 2-1.wav")
+	drift_sound = load("res://assets/sounds/Free Sounds Pack/Ambient Wind Loop 1.wav")
 	
 	footstep_sounds.append(load("res://assets/sounds/Free Footsteps Pack/Grass 1.wav"))
 	footstep_sounds.append(load("res://assets/sounds/Free Footsteps Pack/Concrete 1.wav"))
@@ -72,6 +75,12 @@ func _create_audio_players():
 	cart_loop_player.bus = "SFX"
 	cart_loop_player.volume_db = -10.0
 	add_child(cart_loop_player)
+	
+	drift_player = AudioStreamPlayer.new()
+	drift_player.bus = "SFX"
+	drift_player.volume_db = -8.0
+	drift_player.pitch_scale = 1.5
+	add_child(drift_player)
 	
 	music_player = AudioStreamPlayer.new()
 	music_player.bus = "Music"
@@ -175,3 +184,12 @@ func play_launch():
 
 func play_bounce():
 	play_sound(bounce_sound, -5.0, randf_range(0.8, 1.2))
+
+func start_drift_sound():
+	if drift_sound and drift_player and not drift_player.playing:
+		drift_player.stream = drift_sound
+		drift_player.play()
+
+func stop_drift_sound():
+	if drift_player:
+		drift_player.stop()

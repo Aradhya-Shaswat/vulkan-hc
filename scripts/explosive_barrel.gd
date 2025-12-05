@@ -20,6 +20,12 @@ const EXPLOSION_DAMAGE: float = 40.0
 const EXPLOSION_UPWARD_BIAS: float = 0.4
 const MIN_IMPACT_VELOCITY: float = 5.0
 
+func _get_scale_factor() -> float:
+	var mesh = _find_mesh(self)
+	if mesh:
+		return mesh.scale.x
+	return 1.0
+
 func _ready():
 	if sync_position != Vector3.ZERO:
 		global_position = sync_position
@@ -168,24 +174,28 @@ func _explode():
 	has_exploded = true
 	
 	var explosion_pos = global_position
+	var scale_factor = _get_scale_factor()
+	var scaled_radius = EXPLOSION_RADIUS * scale_factor
+	var scaled_force = EXPLOSION_FORCE * scale_factor * scale_factor
+	var scaled_damage = EXPLOSION_DAMAGE * scale_factor
 	
-	var space_state = get_world_3d().direct_space_state
+	var _space_state = get_world_3d().direct_space_state
 	
 	for body in get_tree().get_nodes_in_group("players"):
 		if body is CharacterBody3D:
 			var dir = body.global_position - explosion_pos
 			var dist = dir.length()
-			if dist < EXPLOSION_RADIUS and dist > 0.1:
-				var force_mult = 1.0 - (dist / EXPLOSION_RADIUS)
+			if dist < scaled_radius and dist > 0.1:
+				var force_mult = 1.0 - (dist / scaled_radius)
 				var push_dir = dir.normalized()
 				push_dir.y += EXPLOSION_UPWARD_BIAS
 				push_dir = push_dir.normalized()
 				
-				var damage = EXPLOSION_DAMAGE * force_mult
+				var damage = scaled_damage * force_mult
 				if body.has_method("request_damage"):
 					body.request_damage(damage, last_thrower_id)
 				if body.has_method("apply_explosion_force"):
-					body.apply_explosion_force(push_dir * EXPLOSION_FORCE * force_mult)
+					body.apply_explosion_force(push_dir * scaled_force * force_mult)
 	
 	for obj in get_tree().get_nodes_in_group("physics_objects"):
 		if obj == self:
@@ -193,14 +203,14 @@ func _explode():
 		if obj is RigidBody3D:
 			var dir = obj.global_position - explosion_pos
 			var dist = dir.length()
-			if dist < EXPLOSION_RADIUS and dist > 0.1:
-				var force_mult = 1.0 - (dist / EXPLOSION_RADIUS)
+			if dist < scaled_radius and dist > 0.1:
+				var force_mult = 1.0 - (dist / scaled_radius)
 				var push_dir = dir.normalized()
 				push_dir.y += EXPLOSION_UPWARD_BIAS
 				push_dir = push_dir.normalized()
 				
 				if obj.has_method("apply_push"):
-					obj.apply_push.rpc(push_dir * EXPLOSION_FORCE * force_mult * 2.0)
+					obj.apply_push.rpc(push_dir * scaled_force * force_mult * 2.0)
 	
 	_sync_explode.rpc(explosion_pos)
 
@@ -210,7 +220,6 @@ func _sync_explode(pos: Vector3):
 	_create_explosion_effect(pos)
 	SoundManager.play_explosion()
 	
-	# Hide the barrel immediately
 	visible = false
 	for child in get_children():
 		if child is CollisionShape3D:

@@ -56,12 +56,13 @@ properties/6/spawn = true
 properties/6/replication_mode = 1
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_healthfill"]
-bg_color = Color(0.07040397, 0.3238471, 0.06693058, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
+bg_color = Color(0.17318243, 0.7062017, 0.16820097, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
 border_color = Color(0, 0, 0, 1)
+border_blend = true
 corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
@@ -146,6 +147,7 @@ replication_config = SubResource("SceneReplicationConfig_ac1ej")
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="PowerIndicator" type="Control" parent="CanvasLayer"]
+visible = false
 layout_mode = 3
 anchors_preset = 8
 anchor_left = 0.5
@@ -159,7 +161,7 @@ offset_bottom = 19.125
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("3_dq4aw")
-radius = 5.0
+radius = 10.0
 
 [node name="CartHint" type="Label" parent="CanvasLayer"]
 visible = false
@@ -183,13 +185,12 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="HealthBarUI" type="Control" parent="CanvasLayer"]
-visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_left = 20.0
-offset_top = 20.0
+offset_top = 601.0
 offset_right = 220.0
-offset_bottom = 70.0
+offset_bottom = 626.0
 
 [node name="HealthBar" type="ProgressBar" parent="CanvasLayer/HealthBarUI"]
 layout_mode = 0
@@ -200,17 +201,6 @@ theme_override_constants/outline_size = 9
 theme_override_styles/fill = SubResource("StyleBoxFlat_healthfill")
 value = 100.0
 show_percentage = false
-
-[node name="HealthLabel" type="Label" parent="CanvasLayer/HealthBarUI"]
-layout_mode = 0
-offset_top = 28.0
-offset_right = 200.0
-offset_bottom = 48.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 2
-theme_override_font_sizes/font_size = 14
-text = "100/100"
 
 [node name="DeathOverlay" type="ColorRect" parent="CanvasLayer"]
 visible = false
@@ -241,6 +231,16 @@ theme_override_font_sizes/font_size = 32
 text = "Respawning"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="SpeedLines" type="Control" parent="CanvasLayer"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 
 [node name="HealthBar3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, 0)

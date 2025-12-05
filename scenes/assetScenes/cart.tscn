@@ -26,8 +26,9 @@ properties/2/replication_mode = 1
 
 [node name="Cart" type="RigidBody3D"]
 collision_layer = 2
-collision_mask = 5
+collision_mask = 7
 mass = 500.0
+continuous_cd = true
 script = ExtResource("1_cart")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]

@@ -23,12 +23,18 @@ var selected_hotbar_slot = 0
 var next_object_id = 1000
 var spawn_counts = {}
 var spawned_objects = {}
+var last_spawn_time: float = 0.0
 const MAX_SPAWNS_PER_TYPE = 10
+const SPAWN_COOLDOWN: float = 0.5
 
 var game_time_limit: float = 300.0
 var game_time_remaining: float = 300.0
 var game_timer_active: bool = false
 var kill_counts: Dictionary = {}
+var kill_feed_entries: Array = []
+const KILL_FEED_DURATION: float = 5.0
+const MINIMAP_SCALE: float = 3.0
+const MINIMAP_SIZE: float = 150.0
 var game_ended: bool = false
 var return_to_menu_timer: float = 10.0
 var hotbar_tween: Tween = null
@@ -41,7 +47,7 @@ const COLOR_GREEN = Color(0.2, 0.92, 0, 1)
 const COLOR_RED = Color(1, 0.2, 0.2, 1)
 const COLOR_WHITE = Color(1, 1, 1, 1)
 
-const HOTBAR_ITEMS = ["cube", "sphere", "cylinder", "capsule", "bouncy", "barrel", "launchpad"]
+const HOTBAR_ITEMS = ["cube", "sphere", "cylinder", "bouncy", "barrel", "launchpad"]
 
 func _ready():
 	$MultiplayerSpawner.spawn_function = custom_spawn
@@ -58,6 +64,11 @@ func _ready():
 	$CanvasLayer/GameEndOverlay.hide()
 	if has_node("CanvasLayer/Hotbar"):
 		$CanvasLayer/Hotbar.hide()
+	if has_node("CanvasLayer/Minimap"):
+		$CanvasLayer/Minimap.draw.connect(_on_minimap_draw)
+		$CanvasLayer/Minimap.hide()
+	if has_node("CanvasLayer/KillFeed"):
+		$CanvasLayer/KillFeed.hide()
 	_apply_crosshair_color()
 	GameSettings.settings_changed.connect(_on_settings_changed)
 	GameSettings.is_paused = false
@@ -89,6 +100,8 @@ var last_countdown_second: int = -1
 func _process(delta):
 	_update_fps_display()
 	_update_hotbar_auto_hide(delta)
+	_update_kill_feed(delta)
+	_update_minimap()
 	
 	if game_timer_active and not game_ended:
 		if multiplayer.is_server():
@@ -134,6 +147,43 @@ func _update_fps_display():
 			$CanvasLayer/FPSLabel.text = "FPS: " + str(Engine.get_frames_per_second())
 		else:
 			$CanvasLayer/FPSLabel.visible = false
+
+func _update_kill_feed(delta: float):
+	var i = kill_feed_entries.size() - 1
+	while i >= 0:
+		kill_feed_entries[i].time -= delta
+		if kill_feed_entries[i].time <= 0:
+			if is_instance_valid(kill_feed_entries[i].label):
+				kill_feed_entries[i].label.queue_free()
+			kill_feed_entries.remove_at(i)
+		elif kill_feed_entries[i].time < 1.0:
+			if is_instance_valid(kill_feed_entries[i].label):
+				kill_feed_entries[i].label.modulate.a = kill_feed_entries[i].time
+		i -= 1
+
+func _update_minimap():
+	if not is_in_game:
+		return
+	if has_node("CanvasLayer/Minimap"):
+		$CanvasLayer/Minimap.queue_redraw()
+
+func _on_minimap_draw():
+	var minimap = $CanvasLayer/Minimap
+	var center = Vector2(MINIMAP_SIZE / 2, MINIMAP_SIZE / 2)
+	var radius = MINIMAP_SIZE / 2
+	minimap.draw_circle(center, radius, Color(0, 0, 0, 0.6))
+	minimap.draw_arc(center, radius - 1, 0, TAU, 64, Color(1, 1, 1, 0.4), 2.0)
+	var local_player = get_node_or_null(str(multiplayer.get_unique_id()))
+	if not local_player:
+		return
+	var local_pos = local_player.global_position
+	for child in get_children():
+		if child is CharacterBody3D and child.has_method("_is_local_authority"):
+			var offset = (Vector2(child.global_position.x, child.global_position.z) - Vector2(local_pos.x, local_pos.z)) / MINIMAP_SCALE
+			var dot_pos = center + offset
+			if dot_pos.distance_to(center) < radius - 5:
+				var color = Color(0, 1, 0) if child == local_player else Color(1, 0.3, 0.3)
+				minimap.draw_circle(dot_pos, 4.0, color)
 
 func _apply_crosshair_color():
 	$CanvasLayer/CenterContainer/Crosshair.modulate = GameSettings.crosshair_color
@@ -206,7 +256,7 @@ func _update_hotbar_counts():
 	var num_slots = min(HOTBAR_ITEMS.size(), $CanvasLayer/Hotbar/HBoxContainer.get_child_count())
 	for i in range(num_slots):
 		var slot_node = $CanvasLayer/Hotbar/HBoxContainer.get_child(i)
-		if slot_node and slot_node.has_node("Count"):
+		if slot_node and slot_node.has_node("Count") and i != 4:
 			var shape = HOTBAR_ITEMS[i]
 			var count = _get_spawn_count(my_id, shape)
 			slot_node.get_node("Count").text = str(count) + "/" + str(MAX_SPAWNS_PER_TYPE)
@@ -511,6 +561,10 @@ func _start_hosting(password: String) -> void:
 	is_in_game = true
 	game_timer_active = true
 	$CanvasLayer/GameTimerLabel.show()
+	if has_node("CanvasLayer/Minimap"):
+		$CanvasLayer/Minimap.show()
+	if has_node("CanvasLayer/KillFeed"):
+		$CanvasLayer/KillFeed.show()
 	SoundManager.stop_menu_music()
 	SoundManager.play_game_start()
 	var host_player = get_node_or_null("1")
@@ -610,6 +664,8 @@ func _on_cancel_connection_pressed():
 	SoundManager.play_ui_back()
 	is_connecting = false
 	$CanvasLayer/LoadingPanel.hide()
+	$CanvasLayer/title.show()
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	if multiplayer and multiplayer.multiplayer_peer:
 		multiplayer.multiplayer_peer.close()
 
@@ -679,7 +735,7 @@ func _username_exists(username: String) -> bool:
 	return false
 
 @rpc("authority", "reliable")
-func _password_accepted(final_username: String = ""):
+func _password_accepted(_final_username: String = ""):
 	pending_action = ""
 	$CanvasLayer/LoadingPanel.hide()
 	$CanvasLayer/PasswordPanel.hide()
@@ -688,6 +744,10 @@ func _password_accepted(final_username: String = ""):
 	game_ended = false
 	SoundManager.stop_menu_music()
 	$CanvasLayer/GameTimerLabel.show()
+	if has_node("CanvasLayer/Minimap"):
+		$CanvasLayer/Minimap.show()
+	if has_node("CanvasLayer/KillFeed"):
+		$CanvasLayer/KillFeed.show()
 	if has_node("CanvasLayer/Hotbar"):
 		$CanvasLayer/Hotbar.show()
 		_update_hotbar_selection()
@@ -824,6 +884,8 @@ func _on_back_pressed() -> void:
 	SceneTransition.change_scene('res://scenes/main_menu.tscn')
 
 func _get_spawn_count(player_id: int, shape: String) -> int:
+	if shape == "barrel":
+		return 0
 	var key = str(player_id) + "_" + shape
 	return spawn_counts.get(key, 0)
 
@@ -835,14 +897,22 @@ func _spawn_object(shape: String):
 	if not multiplayer or not multiplayer.multiplayer_peer:
 		return
 	
+	var current_time = Time.get_ticks_msec() / 1000.0
+	if current_time - last_spawn_time < SPAWN_COOLDOWN:
+		return
+	
 	var my_id = multiplayer.get_unique_id()
+	var player_node = get_node_or_null(str(my_id))
+	if not player_node:
+		return
+	
+	if player_node.get("is_dead"):
+		return
 	
 	if _get_spawn_count(my_id, shape) >= MAX_SPAWNS_PER_TYPE:
 		return
 	
-	var player_node = get_node_or_null(str(my_id))
-	if not player_node:
-		return
+	last_spawn_time = current_time
 	
 	var cam = player_node.get_node_or_null("Head/Camera3D")
 	if not cam:
@@ -888,8 +958,7 @@ func _request_spawn_object(shape: String, pos: Vector3, color: Color):
 func _create_spawned_object(shape: String, pos: Vector3, color: Color, obj_name: String):
 	if has_node("Objects/" + obj_name):
 		return
-	
-	# Handle launchpad separately since it's an Area3D not a RigidBody3D
+
 	if shape == "launchpad":
 		_create_launchpad(pos, obj_name)
 		return
@@ -961,8 +1030,6 @@ func _create_spawned_object(shape: String, pos: Vector3, color: Color, obj_name:
 	else:
 		script = load("res://scripts/synced_rigid_body.gd")
 	obj.set_script(script)
-	
-	# Add all physics objects to group for explosion interactions
 	obj.add_to_group("physics_objects")
 	
 	obj.sync_position = pos
@@ -976,9 +1043,9 @@ func _create_launchpad(pos: Vector3, obj_name: String):
 	launchpad.name = obj_name
 	launchpad.collision_layer = 2
 	launchpad.collision_mask = 3
+	launchpad.continuous_cd = true
 	launchpad.mass = 2.0
 	
-	# Create the platform mesh (flat disc)
 	var mesh = MeshInstance3D.new()
 	mesh.name = "MeshInstance3D"
 	var cylinder_mesh = CylinderMesh.new()
@@ -988,40 +1055,37 @@ func _create_launchpad(pos: Vector3, obj_name: String):
 	mesh.mesh = cylinder_mesh
 	
 	var material = StandardMaterial3D.new()
-	material.albedo_color = Color(0.2, 0.8, 1.0)  # Cyan/blue color
+	material.albedo_color = Color(0.2, 0.8, 1.0) 
 	material.emission_enabled = true
 	material.emission = Color(0.2, 0.6, 1.0)
 	material.emission_energy_multiplier = 0.5
 	mesh.mesh.material = material
 	
-	# Create collision shape for physics
 	var collision = CollisionShape3D.new()
 	var phys_shape = CylinderShape3D.new()
 	phys_shape.radius = 0.8
 	phys_shape.height = 0.15
 	collision.shape = phys_shape
 	
-	# Create detection Area3D for launching
 	var detection_area = Area3D.new()
 	detection_area.name = "DetectionArea"
 	detection_area.collision_layer = 0
-	detection_area.collision_mask = 1 + 2  # Detect players and physics objects
+	detection_area.collision_mask = 1 + 2   
 	detection_area.monitoring = true
 	detection_area.monitorable = false
 	
 	var area_collision = CollisionShape3D.new()
 	var area_shape = CylinderShape3D.new()
 	area_shape.radius = 0.75
-	area_shape.height = 0.4  # Taller for better detection when stepped on
+	area_shape.height = 0.4 
 	area_collision.shape = area_shape
-	area_collision.position.y = 0.15  # Position above the pad surface
+	area_collision.position.y = 0.15 
 	detection_area.add_child(area_collision)
 	
 	launchpad.add_child(mesh)
 	launchpad.add_child(collision)
 	launchpad.add_child(detection_area)
 	
-	# Attach the launch pad script
 	var script = load("res://scripts/launch_pad.gd")
 	launchpad.set_script(script)
 	launchpad.sync_position = pos
@@ -1036,7 +1100,7 @@ func _sync_spawn_object(obj_name: String, shape: String, pos: Vector3, color: Co
 	_increment_spawn_count(spawner_id, shape)
 	_update_hotbar_counts()
 
-func register_kill(killer_id: int):
+func register_kill(killer_id: int, victim_id: int = 0):
 	if not multiplayer.is_server():
 		return
 	if killer_id == 0:
@@ -1044,6 +1108,9 @@ func register_kill(killer_id: int):
 	kill_counts[killer_id] = kill_counts.get(killer_id, 0) + 1
 	_sync_kill_counts.rpc(kill_counts)
 	_play_kill_sound.rpc_id(killer_id)
+	var killer_name = player_list.get(killer_id, "Unknown")
+	var victim_name = player_list.get(victim_id, "Unknown")
+	_add_kill_feed_entry.rpc(killer_name, victim_name)
 
 @rpc("authority", "reliable")
 func _play_kill_sound():
@@ -1052,6 +1119,22 @@ func _play_kill_sound():
 @rpc("authority", "reliable", "call_local")
 func _sync_kill_counts(counts: Dictionary):
 	kill_counts = counts
+
+@rpc("authority", "reliable", "call_local")
+func _add_kill_feed_entry(killer_name: String, victim_name: String):
+	if not has_node("CanvasLayer/KillFeed"):
+		return
+	var container = $CanvasLayer/KillFeed
+	var label = Label.new()
+	label.text = killer_name + " killed " + victim_name
+	label.add_theme_color_override("font_color", Color(1, 1, 0.8, 1))
+	label.add_theme_color_override("font_outline_color", Color(0, 0, 0, 1))
+	label.add_theme_constant_override("outline_size", 4)
+	label.add_theme_font_size_override("font_size", 18)
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	container.add_child(label)
+	var entry = {"label": label, "time": KILL_FEED_DURATION}
+	kill_feed_entries.append(entry)
 
 @rpc("authority", "reliable", "call_local")
 func _sync_game_time(time_remaining: float):
