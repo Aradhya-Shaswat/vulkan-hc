@@ -35,6 +35,9 @@ var in_cart: bool = false
 var current_cart: Node = null
 var nearby_cart: Node = null
 var looking_behind: bool = false
+var cart_look_timer: float = 0.0
+const CART_LOOK_TIMEOUT: float = 1.5
+const CART_LOOK_LIMIT: float = PI / 2.0
 
 var noclip_enabled: bool = false
 const NOCLIP_SPEED_MULT = 2.0
@@ -88,6 +91,7 @@ func _is_local_authority() -> bool:
 	return is_multiplayer_authority()
 
 func _ready():
+	add_to_group("players")
 	cam_default_pos = camera.transform.origin
 	spawn_position = global_position
 	
@@ -238,15 +242,17 @@ func _sync_health_update(new_health: float):
 func _die():
 	is_dead = true
 	respawn_timer = RESPAWN_DELAY
-	player_mesh.visible = false
 	call_deferred("_disable_collision_shape")
 	
-	if multiplayer.is_server() and last_attacker_id != 0:
-		var main = get_parent()
-		if main and main.has_method("register_kill"):
-			main.register_kill(last_attacker_id)
+	if multiplayer.is_server():
+		_sync_death_state.rpc(true)
+		if last_attacker_id != 0:
+			var main = get_parent()
+			if main and main.has_method("register_kill"):
+				main.register_kill(last_attacker_id)
 	
 	if _is_local_authority():
+		player_mesh.visible = false
 		SoundManager.play_death()
 		velocity = Vector3.ZERO
 		if noclip_enabled:
@@ -272,6 +278,9 @@ func _respawn_after_death():
 	_update_health_ui()
 	_update_health_bar_3d()
 	_sync_health_update.rpc(health)
+	
+	if multiplayer.is_server():
+		_sync_death_state.rpc(false)
 
 func _enable_collision_shape():
 	$CollisionShape3D.disabled = false
@@ -291,10 +300,27 @@ func _unhandled_input(event):
 			looking_behind = event.pressed
 	
 	if event is InputEventMouseMotion:
-		if in_cart and not looking_behind:
-			return
 		var sens = GameSettings.sensitivity
-		head.rotate_y(-event.relative.x * sens)
+		var rotation_amount = -event.relative.x * sens
+		
+		if in_cart and current_cart and not looking_behind:
+			cart_look_timer = 0.0
+			var cart_forward_y = current_cart.global_rotation.y
+			var current_head_y = head.global_rotation.y
+			var current_diff = angle_difference(current_head_y, cart_forward_y)
+			var new_head_y = current_head_y + rotation_amount
+			var new_diff = angle_difference(new_head_y, cart_forward_y)
+			
+			if abs(new_diff) > CART_LOOK_LIMIT:
+				if abs(current_diff) >= CART_LOOK_LIMIT - 0.01:
+					rotation_amount = 0.0
+				else:
+					var max_rotation = CART_LOOK_LIMIT - abs(current_diff)
+					rotation_amount = sign(rotation_amount) * min(abs(rotation_amount), max_rotation)
+					if sign(new_diff) != sign(current_diff) and abs(current_diff) > 0.1:
+						rotation_amount = 0.0
+		
+		head.rotate_y(rotation_amount)
 		var new_x = camera.rotation.x - event.relative.y * sens
 		new_x = clamp(new_x, deg_to_rad(-80), deg_to_rad(90))
 		camera.rotation.x = new_x
@@ -330,13 +356,16 @@ func _physics_process(delta):
 		if in_cart and current_cart:
 			_handle_cart_driving(delta)
 			global_position = current_cart.get_seat_global_position()
+			cart_look_timer += delta
 			
-			var target_head_y = current_cart.global_rotation.y
 			if looking_behind:
-				target_head_y = current_cart.global_rotation.y + PI
-			
-			head.global_rotation.y = lerp_angle(head.global_rotation.y, target_head_y, delta * 10.0)
-			camera.rotation.x = lerp(camera.rotation.x, 0.0, delta * 5.0)
+				var behind_y = current_cart.global_rotation.y + PI
+				head.global_rotation.y = lerp_angle(head.global_rotation.y, behind_y, delta * 10.0)
+				cart_look_timer = 0.0
+			elif cart_look_timer >= CART_LOOK_TIMEOUT:
+				var target_head_y = current_cart.global_rotation.y
+				head.global_rotation.y = lerp_angle(head.global_rotation.y, target_head_y, delta * 5.0)
+				camera.rotation.x = lerp(camera.rotation.x, 0.0, delta * 5.0)
 			
 			sync_position = global_position
 			sync_rotation = rotation
@@ -358,7 +387,6 @@ func _physics_process(delta):
 			$'../'.exit_game(name.to_int())
 			get_tree().quit()
 		
-		# Handle crouching
 		var wants_crouch = Input.is_action_pressed("crouch")
 		if wants_crouch and not is_crouching:
 			is_crouching = true
@@ -630,6 +658,39 @@ func respawn():
 	is_dead = false
 	_update_health_ui()
 	_update_health_bar_3d()
+
+func apply_explosion_force(force: Vector3):
+	velocity += force
+	if is_on_floor():
+		velocity.y = max(velocity.y, force.y * 0.8)
+
+func apply_launch_force(force: Vector3):
+	velocity = force
+	SoundManager.play_launch()
+
+@rpc("authority", "reliable", "call_remote")
+func _sync_death_state(dead: bool):
+	is_dead = dead
+	if dead:
+		_show_dead_body()
+	else:
+		_show_alive_body()
+
+func _show_dead_body():
+	if _is_local_authority():
+		return
+	player_mesh.visible = true
+	if player_mesh:
+		player_mesh.rotation.x = -PI / 2
+		player_mesh.rotation.z = randf_range(-0.3, 0.3)
+		player_mesh.position.y = 0.3
+		player_mesh.scale.y = STAND_HEIGHT
+
+func _show_alive_body():
+	player_mesh.visible = true
+	if player_mesh:
+		player_mesh.rotation.x = 0
+		player_mesh.rotation.z = 0
 
 @rpc("any_peer", "reliable", "call_remote")
 func _sync_collision_state(in_cart_state: bool):

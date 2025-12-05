@@ -439,7 +439,7 @@ layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("1_c2u1v")
 theme_override_font_sizes/font_size = 14
-text = "1-4 - Select hotbar slot"
+text = "1-7 - Select hotbar slot"
 
 [node name="Control13" type="Label" parent="ControlsPanel/ControlsList"]
 layout_mode = 2

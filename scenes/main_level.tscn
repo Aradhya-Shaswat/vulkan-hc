@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://cnew6x2hwvjyh"]
+[gd_scene load_steps=50 format=3 uid="uid://cnew6x2hwvjyh"]
 
 [ext_resource type="FontFile" uid="uid://gunvccib1svm" path="res://assets/fonts/Poppins-Regular.ttf" id="1_iqu8w"]
 [ext_resource type="Script" uid="uid://b27u1ptmiviqb" path="res://scripts/main.gd" id="1_mwgft"]
@@ -78,6 +78,26 @@ corner_radius_bottom_left = 8
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pausemenu"]
 bg_color = Color(0.05, 0.05, 0.05, 0.95)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ondrs"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0e4v7"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6nivd"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_al56o"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1bmon"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_siio1"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ndwfr"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_nc5r2"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_sjhni"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7sk5s"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_playerlist"]
 bg_color = Color(0.18717614, 0.18717614, 0.18717614, 0.8509804)
@@ -335,7 +355,6 @@ max_length = 50
 emoji_menu_enabled = false
 
 [node name="PasswordPanel" type="Panel" parent="CanvasLayer"]
-visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -443,6 +462,7 @@ offset_right = 120.0
 offset_bottom = 119.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/separation = 14
 
 [node name="TimerLabel" type="Label" parent="CanvasLayer/PasswordPanel/TimerContainer"]
 layout_mode = 2
@@ -456,6 +476,22 @@ vertical_alignment = 1
 [node name="TimerInput" type="SpinBox" parent="CanvasLayer/PasswordPanel/TimerContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_colors/up_icon_modulate = Color(0.8745098, 0.8745098, 0.8745098, 1)
+theme_override_colors/up_hover_icon_modulate = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/up_pressed_icon_modulate = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/down_icon_modulate = Color(0.8745098, 0.8745098, 0.8745098, 1)
+theme_override_colors/down_hover_icon_modulate = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/down_pressed_icon_modulate = Color(0.95, 0.95, 0.95, 1)
+theme_override_styles/up_background = SubResource("StyleBoxEmpty_ondrs")
+theme_override_styles/up_background_hovered = SubResource("StyleBoxEmpty_0e4v7")
+theme_override_styles/up_background_pressed = SubResource("StyleBoxEmpty_6nivd")
+theme_override_styles/up_background_disabled = SubResource("StyleBoxEmpty_al56o")
+theme_override_styles/down_background = SubResource("StyleBoxEmpty_1bmon")
+theme_override_styles/down_background_hovered = SubResource("StyleBoxEmpty_siio1")
+theme_override_styles/down_background_pressed = SubResource("StyleBoxEmpty_ndwfr")
+theme_override_styles/down_background_disabled = SubResource("StyleBoxEmpty_nc5r2")
+theme_override_styles/field_and_buttons_separator = SubResource("StyleBoxEmpty_sjhni")
+theme_override_styles/up_down_buttons_separator = SubResource("StyleBoxEmpty_7sk5s")
 min_value = 1.0
 max_value = 60.0
 value = 5.0
@@ -790,6 +826,114 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Count" type="Label" parent="CanvasLayer/Hotbar/HBoxContainer/Slot4"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -14.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.3, 0.3, 0.3, 1)
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 8
+text = "0/10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Slot5" type="Panel" parent="CanvasLayer/Hotbar/HBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_5fr2l")
+
+[node name="Label" type="Label" parent="CanvasLayer/Hotbar/HBoxContainer/Slot5"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -12.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 10
+text = "Bouncy"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Count" type="Label" parent="CanvasLayer/Hotbar/HBoxContainer/Slot5"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -14.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.3, 0.3, 0.3, 1)
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 8
+text = "0/10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Slot6" type="Panel" parent="CanvasLayer/Hotbar/HBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_5fr2l")
+
+[node name="Label" type="Label" parent="CanvasLayer/Hotbar/HBoxContainer/Slot6"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -12.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 10
+text = "Barrel"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Count" type="Label" parent="CanvasLayer/Hotbar/HBoxContainer/Slot6"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -14.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.3, 0.3, 0.3, 1)
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 8
+text = "0/10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Slot7" type="Panel" parent="CanvasLayer/Hotbar/HBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_5fr2l")
+
+[node name="Label" type="Label" parent="CanvasLayer/Hotbar/HBoxContainer/Slot7"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -12.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 10
+text = "Pad"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Count" type="Label" parent="CanvasLayer/Hotbar/HBoxContainer/Slot7"]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0

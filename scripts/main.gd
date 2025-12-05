@@ -41,7 +41,7 @@ const COLOR_GREEN = Color(0.2, 0.92, 0, 1)
 const COLOR_RED = Color(1, 0.2, 0.2, 1)
 const COLOR_WHITE = Color(1, 1, 1, 1)
 
-const HOTBAR_ITEMS = ["cube", "sphere", "cylinder", "capsule"]
+const HOTBAR_ITEMS = ["cube", "sphere", "cylinder", "capsule", "bouncy", "barrel", "launchpad"]
 
 func _ready():
 	$MultiplayerSpawner.spawn_function = custom_spawn
@@ -146,10 +146,11 @@ func _unhandled_input(event):
 	
 	if event is InputEventMouseButton and event.pressed:
 		if is_in_game and not is_paused and not Console.is_open:
+			var num_items = HOTBAR_ITEMS.size()
 			if event.button_index == MOUSE_BUTTON_WHEEL_UP:
-				_select_hotbar_slot((selected_hotbar_slot - 1 + 4) % 4)
+				_select_hotbar_slot((selected_hotbar_slot - 1 + num_items) % num_items)
 			elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-				_select_hotbar_slot((selected_hotbar_slot + 1) % 4)
+				_select_hotbar_slot((selected_hotbar_slot + 1) % num_items)
 	
 	if event is InputEventKey and event.pressed:
 		if event.keycode == KEY_ESCAPE:
@@ -169,6 +170,12 @@ func _unhandled_input(event):
 				_select_hotbar_slot(2)
 			elif event.keycode == KEY_4:
 				_select_hotbar_slot(3)
+			elif event.keycode == KEY_5:
+				_select_hotbar_slot(4)
+			elif event.keycode == KEY_6:
+				_select_hotbar_slot(5)
+			elif event.keycode == KEY_7:
+				_select_hotbar_slot(6)
 			elif event.keycode == KEY_G:
 				_spawn_selected_object()
 
@@ -181,7 +188,8 @@ func _select_hotbar_slot(slot: int):
 func _update_hotbar_selection():
 	if not has_node("CanvasLayer/Hotbar"):
 		return
-	for i in range(4):
+	var num_slots = min(HOTBAR_ITEMS.size(), $CanvasLayer/Hotbar/HBoxContainer.get_child_count())
+	for i in range(num_slots):
 		var slot_node = $CanvasLayer/Hotbar/HBoxContainer.get_child(i)
 		if slot_node:
 			if i == selected_hotbar_slot:
@@ -195,7 +203,8 @@ func _update_hotbar_counts():
 	if not multiplayer or not multiplayer.multiplayer_peer:
 		return
 	var my_id = multiplayer.get_unique_id()
-	for i in range(4):
+	var num_slots = min(HOTBAR_ITEMS.size(), $CanvasLayer/Hotbar/HBoxContainer.get_child_count())
+	for i in range(num_slots):
 		var slot_node = $CanvasLayer/Hotbar/HBoxContainer.get_child(i)
 		if slot_node and slot_node.has_node("Count"):
 			var shape = HOTBAR_ITEMS[i]
@@ -880,6 +889,11 @@ func _create_spawned_object(shape: String, pos: Vector3, color: Color, obj_name:
 	if has_node("Objects/" + obj_name):
 		return
 	
+	# Handle launchpad separately since it's an Area3D not a RigidBody3D
+	if shape == "launchpad":
+		_create_launchpad(pos, obj_name)
+		return
+	
 	var obj = RigidBody3D.new()
 	obj.name = obj_name
 	obj.collision_layer = 2
@@ -890,6 +904,9 @@ func _create_spawned_object(shape: String, pos: Vector3, color: Color, obj_name:
 	
 	var material = StandardMaterial3D.new()
 	material.albedo_color = color
+	
+	var use_special_script = false
+	var special_script_path = ""
 	
 	match shape:
 		"cube":
@@ -908,18 +925,110 @@ func _create_spawned_object(shape: String, pos: Vector3, color: Color, obj_name:
 			mesh.mesh = CapsuleMesh.new()
 			mesh.mesh.material = material
 			collision.shape = CapsuleShape3D.new()
+		"bouncy":
+			mesh.mesh = SphereMesh.new()
+			material.albedo_color = Color(1.0, 0.4, 0.7)
+			material.emission_enabled = true
+			material.emission = Color(1.0, 0.3, 0.6)
+			material.emission_energy_multiplier = 0.3
+			mesh.mesh.material = material
+			collision.shape = SphereShape3D.new()
+			obj.physics_material_override = PhysicsMaterial.new()
+			obj.physics_material_override.bounce = 0.9
+			obj.physics_material_override.friction = 0.3
+			obj.mass = 0.5
+		"barrel":
+			mesh.mesh = CylinderMesh.new()
+			mesh.mesh.top_radius = 0.4
+			mesh.mesh.bottom_radius = 0.4
+			mesh.mesh.height = 0.8
+			material.albedo_color = Color(0.8, 0.2, 0.1)
+			mesh.mesh.material = material
+			var barrel_shape = CylinderShape3D.new()
+			barrel_shape.radius = 0.4
+			barrel_shape.height = 0.8
+			collision.shape = barrel_shape
+			obj.mass = 3.0
+			use_special_script = true
+			special_script_path = "res://scripts/explosive_barrel.gd"
 	
 	obj.add_child(mesh)
 	obj.add_child(collision)
 	
-	var script = load("res://scripts/synced_rigid_body.gd")
+	var script
+	if use_special_script:
+		script = load(special_script_path)
+	else:
+		script = load("res://scripts/synced_rigid_body.gd")
 	obj.set_script(script)
+	
+	# Add all physics objects to group for explosion interactions
+	obj.add_to_group("physics_objects")
 	
 	obj.sync_position = pos
 	obj.sync_rotation = Vector3.ZERO
 	
 	$Objects.add_child(obj, true)
 	obj.global_position = pos
+
+func _create_launchpad(pos: Vector3, obj_name: String):
+	var launchpad = RigidBody3D.new()
+	launchpad.name = obj_name
+	launchpad.collision_layer = 2
+	launchpad.collision_mask = 3
+	launchpad.mass = 2.0
+	
+	# Create the platform mesh (flat disc)
+	var mesh = MeshInstance3D.new()
+	mesh.name = "MeshInstance3D"
+	var cylinder_mesh = CylinderMesh.new()
+	cylinder_mesh.top_radius = 0.8
+	cylinder_mesh.bottom_radius = 0.8
+	cylinder_mesh.height = 0.15
+	mesh.mesh = cylinder_mesh
+	
+	var material = StandardMaterial3D.new()
+	material.albedo_color = Color(0.2, 0.8, 1.0)  # Cyan/blue color
+	material.emission_enabled = true
+	material.emission = Color(0.2, 0.6, 1.0)
+	material.emission_energy_multiplier = 0.5
+	mesh.mesh.material = material
+	
+	# Create collision shape for physics
+	var collision = CollisionShape3D.new()
+	var phys_shape = CylinderShape3D.new()
+	phys_shape.radius = 0.8
+	phys_shape.height = 0.15
+	collision.shape = phys_shape
+	
+	# Create detection Area3D for launching
+	var detection_area = Area3D.new()
+	detection_area.name = "DetectionArea"
+	detection_area.collision_layer = 0
+	detection_area.collision_mask = 1 + 2  # Detect players and physics objects
+	detection_area.monitoring = true
+	detection_area.monitorable = false
+	
+	var area_collision = CollisionShape3D.new()
+	var area_shape = CylinderShape3D.new()
+	area_shape.radius = 0.75
+	area_shape.height = 0.4  # Taller for better detection when stepped on
+	area_collision.shape = area_shape
+	area_collision.position.y = 0.15  # Position above the pad surface
+	detection_area.add_child(area_collision)
+	
+	launchpad.add_child(mesh)
+	launchpad.add_child(collision)
+	launchpad.add_child(detection_area)
+	
+	# Attach the launch pad script
+	var script = load("res://scripts/launch_pad.gd")
+	launchpad.set_script(script)
+	launchpad.sync_position = pos
+	launchpad.sync_rotation = Vector3.ZERO
+	
+	$Objects.add_child(launchpad, true)
+	launchpad.global_position = pos
 
 @rpc("authority", "reliable", "call_local")
 func _sync_spawn_object(obj_name: String, shape: String, pos: Vector3, color: Color, spawner_id: int = 1):

@@ -20,6 +20,9 @@ var game_start_sound: AudioStream
 var game_end_sound: AudioStream
 var countdown_tick: AudioStream
 var menu_music: AudioStream
+var explosion_sound: AudioStream
+var launch_sound: AudioStream
+var bounce_sound: AudioStream
 
 var sfx_players: Array[AudioStreamPlayer] = []
 var cart_loop_player: AudioStreamPlayer
@@ -50,6 +53,9 @@ func _load_sounds():
 	game_end_sound = load("res://assets/sounds/Free Sounds Pack/Magical Interface 5-1.wav")
 	countdown_tick = load("res://assets/sounds/UI Soundpack/WAV/Minimalist6.wav")
 	menu_music = load("res://assets/sounds/Elevation.mp3")
+	explosion_sound = load("res://assets/sounds/Free Sounds Pack/Explosion Large 1-1.wav")
+	launch_sound = load("res://assets/sounds/Free Sounds Pack/Whoosh 4-1.wav")
+	bounce_sound = load("res://assets/sounds/Free Sounds Pack/Hit Generic 2-1.wav")
 	
 	footstep_sounds.append(load("res://assets/sounds/Free Footsteps Pack/Grass 1.wav"))
 	footstep_sounds.append(load("res://assets/sounds/Free Footsteps Pack/Concrete 1.wav"))
@@ -160,3 +166,12 @@ func stop_menu_music():
 
 func is_menu_music_playing() -> bool:
 	return music_player and music_player.playing
+
+func play_explosion():
+	play_sound(explosion_sound, 0.0, randf_range(0.9, 1.1))
+
+func play_launch():
+	play_sound(launch_sound, -3.0, randf_range(0.9, 1.1))
+
+func play_bounce():
+	play_sound(bounce_sound, -5.0, randf_range(0.8, 1.2))
