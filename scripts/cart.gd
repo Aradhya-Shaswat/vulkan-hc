@@ -23,6 +23,7 @@ var sync_lerp_factor: float = 0.0
 var was_server_last_check: bool = false
 var spawn_position: Vector3 = Vector3.ZERO
 var spawn_rotation: Vector3 = Vector3.ZERO
+var has_received_sync: bool = false
 const FALL_THRESHOLD: float = -50.0
 
 @onready var seat_position: Node3D = $SeatPosition
@@ -52,6 +53,7 @@ func _update_freeze_state():
 		freeze = false
 	else:
 		freeze = true
+		freeze_mode = RigidBody3D.FREEZE_MODE_KINEMATIC
 
 func _physics_process(delta):
 	if multiplayer.multiplayer_peer == null:
@@ -75,14 +77,29 @@ func _physics_process(delta):
 		sync_position = global_position
 		sync_rotation = rotation
 	else:
+		if not has_received_sync:
+			if sync_position != Vector3.ZERO or sync_rotation != Vector3.ZERO:
+				has_received_sync = true
+				global_transform.origin = sync_position
+				global_rotation = sync_rotation
+				prev_sync_position = sync_position
+				prev_sync_rotation = sync_rotation
+			return
+		
 		if prev_sync_position != sync_position or prev_sync_rotation != sync_rotation:
 			prev_sync_position = sync_position
 			prev_sync_rotation = sync_rotation
 			sync_lerp_factor = 0.0
 		
-		sync_lerp_factor = min(sync_lerp_factor + delta * 10.0, 1.0)
-		global_position = global_position.lerp(sync_position, sync_lerp_factor)
-		global_rotation = global_rotation.lerp(sync_rotation, sync_lerp_factor)
+		sync_lerp_factor = min(sync_lerp_factor + delta * 15.0, 1.0)
+		var new_pos = global_position.lerp(sync_position, sync_lerp_factor)
+		var new_rot = Vector3(
+			lerp_angle(global_rotation.x, sync_rotation.x, sync_lerp_factor),
+			lerp_angle(global_rotation.y, sync_rotation.y, sync_lerp_factor),
+			lerp_angle(global_rotation.z, sync_rotation.z, sync_lerp_factor)
+		)
+		global_transform.origin = new_pos
+		global_rotation = new_rot
 
 func _apply_movement(delta):
 	var forward = -global_transform.basis.z

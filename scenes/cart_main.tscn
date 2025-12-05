@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://lnkystooe34y"]
+
+[ext_resource type="PackedScene" uid="uid://b4krp1hytgp8n" path="res://assets/something/modular_go-kart/scene.gltf" id="1_5rqlq"]
+
+[node name="Sketchfab_Scene" instance=ExtResource("1_5rqlq")]
+
+[node name="Sketchfab_model" parent="." index="0"]
+transform = Transform3D(2, 0, 0, 0, -8.742278e-08, 2, 0, -2, -8.742278e-08, 0, 0, 0)

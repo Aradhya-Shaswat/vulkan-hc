@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://cva3jmdk0sqdm"]
+[gd_scene load_steps=18 format=3 uid="uid://cva3jmdk0sqdm"]
 
 [ext_resource type="Script" uid="uid://dgjnqo7dn7jol" path="res://scripts/character.gd" id="1_ac1ej"]
 [ext_resource type="Script" uid="uid://cckf6x335dlsg" path="res://scripts/scaleObject.gd" id="2_dq4aw"]
@@ -6,6 +6,8 @@
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ac1ej"]
 albedo_color = Color(0.83448726, 0.78031343, 1, 1)
+metallic = 0.1
+roughness = 0.7
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_ufxs0"]
 material = SubResource("StandardMaterial3D_ac1ej")
@@ -30,11 +32,6 @@ albedo_color = Color(0, 0, 0, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_dq4aw"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_keqbv"]
-albedo_color = Color(1, 0, 0, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_57kla"]
-
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_ac1ej"]
 properties/0/path = NodePath(".:position")
 properties/0/spawn = true
@@ -51,6 +48,12 @@ properties/3/replication_mode = 1
 properties/4/path = NodePath(".:sync_health")
 properties/4/spawn = true
 properties/4/replication_mode = 1
+properties/5/path = NodePath(".:sync_crouch")
+properties/5/spawn = true
+properties/5/replication_mode = 1
+properties/6/path = NodePath(".:sync_in_cart")
+properties/6/spawn = true
+properties/6/replication_mode = 1
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_healthfill"]
 bg_color = Color(0.07040397, 0.3238471, 0.06693058, 1)
@@ -134,18 +137,6 @@ mesh = SubResource("PrismMesh_57kla")
 [node name="MeshInstance3D3" type="MeshInstance3D" parent="Head/Camera3D"]
 transform = Transform3D(0.5, 0, 0, 0, 0.026699785, 0, 0, 0, 0.06471497, -0.008913994, -0.95586884, -0.47904867)
 material_override = SubResource("StandardMaterial3D_tgck5")
-cast_shadow = 0
-mesh = SubResource("BoxMesh_dq4aw")
-
-[node name="MeshInstance3D5" type="MeshInstance3D" parent="Head/Camera3D"]
-transform = Transform3D(-5.7563248e-09, -0.11595219, 0, 0.13168934, -5.0684306e-09, 0, 0, 0, 0.06471497, -0.008913994, -1.036026, -0.47904867)
-material_override = SubResource("StandardMaterial3D_keqbv")
-cast_shadow = 0
-mesh = SubResource("BoxMesh_dq4aw")
-
-[node name="MeshInstance3D4" type="MeshInstance3D" parent="Head/Camera3D"]
-transform = Transform3D(-1.1381217e-09, -0.040221646, 0, 0.026037188, -1.7581437e-09, 0, 0, 0, 0.02077231, -0.008913994, -0.7576355, -0.5016387)
-material_override = SubResource("StandardMaterial3D_57kla")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_dq4aw")
 

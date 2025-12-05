@@ -1,5 +1,8 @@
 extends CharacterBody3D
 
+signal cart_entered()
+signal cart_exited()
+
 var speed
 var WALK_SPEED = 8.5
 var SPRINT_SPEED = 10.0
@@ -31,11 +34,18 @@ var last_attacker_id: int = 0
 var in_cart: bool = false
 var current_cart: Node = null
 var nearby_cart: Node = null
-var cart_look_timer: float = 0.0
-const CART_LOOK_TIMEOUT: float = 0.75
+var looking_behind: bool = false
 
 var noclip_enabled: bool = false
 const NOCLIP_SPEED_MULT = 2.0
+
+var is_crouching: bool = false
+const CROUCH_SPEED = 4.0
+const STAND_HEIGHT = 1.0
+const CROUCH_HEIGHT = 0.5
+const CROUCH_TRANSITION_SPEED = 10.0
+@export var sync_crouch: bool = false
+@export var sync_in_cart: bool = false
 
 var footstep_timer: float = 0.0
 const FOOTSTEP_INTERVAL = 0.4
@@ -275,14 +285,19 @@ func _unhandled_input(event):
 		return
 	if is_dead:
 		return
+	
+	if event is InputEventKey:
+		if event.keycode == KEY_ALT:
+			looking_behind = event.pressed
+	
 	if event is InputEventMouseMotion:
+		if in_cart and not looking_behind:
+			return
 		var sens = GameSettings.sensitivity
 		head.rotate_y(-event.relative.x * sens)
 		var new_x = camera.rotation.x - event.relative.y * sens
 		new_x = clamp(new_x, deg_to_rad(-80), deg_to_rad(90))
 		camera.rotation.x = new_x
-		if in_cart:
-			cart_look_timer = 0.0
 
 func _physics_process(delta):
 	if _is_local_authority():
@@ -301,6 +316,8 @@ func _physics_process(delta):
 		if GameSettings.is_paused or Console.is_open:
 			velocity.x = 0
 			velocity.z = 0
+			if not is_on_floor() and not in_cart:
+				velocity.y -= gravity * delta
 			if not in_cart:
 				move_and_slide()
 			return
@@ -313,14 +330,18 @@ func _physics_process(delta):
 		if in_cart and current_cart:
 			_handle_cart_driving(delta)
 			global_position = current_cart.get_seat_global_position()
-			cart_look_timer += delta
-			if cart_look_timer >= CART_LOOK_TIMEOUT:
-				var target_head_y = current_cart.global_rotation.y
-				head.global_rotation.y = lerp_angle(head.global_rotation.y, target_head_y, delta * 5.0)
-				camera.rotation.x = lerp(camera.rotation.x, 0.0, delta * 5.0)
+			
+			var target_head_y = current_cart.global_rotation.y
+			if looking_behind:
+				target_head_y = current_cart.global_rotation.y + PI
+			
+			head.global_rotation.y = lerp_angle(head.global_rotation.y, target_head_y, delta * 10.0)
+			camera.rotation.x = lerp(camera.rotation.x, 0.0, delta * 5.0)
+			
 			sync_position = global_position
 			sync_rotation = rotation
 			sync_head_rotation = head.rotation.y
+			sync_crouch = is_crouching
 			return
 		
 		if noclip_enabled:
@@ -336,9 +357,22 @@ func _physics_process(delta):
 		if Input.is_action_just_pressed('quit'):
 			$'../'.exit_game(name.to_int())
 			get_tree().quit()
+		
+		# Handle crouching
+		var wants_crouch = Input.is_action_pressed("crouch")
+		if wants_crouch and not is_crouching:
+			is_crouching = true
+			sync_crouch = true
+		elif not wants_crouch and is_crouching:
+			is_crouching = false
+			sync_crouch = false
+		
+		_update_crouch_visual(delta)
 			
-		if Input.is_action_pressed("sprint"):
+		if Input.is_action_pressed("sprint") and not is_crouching:
 			speed = SPRINT_SPEED
+		elif is_crouching:
+			speed = CROUCH_SPEED
 		else:
 			speed = WALK_SPEED
 
@@ -391,6 +425,7 @@ func _physics_process(delta):
 		sync_position = global_position
 		sync_rotation = rotation
 		sync_head_rotation = head.rotation.y
+		sync_crouch = is_crouching
 		
 		for i in range(get_slide_collision_count()):
 			var collision = get_slide_collision(i)
@@ -411,6 +446,13 @@ func _physics_process(delta):
 		rotation = rotation.lerp(sync_rotation, delta * 15.0)
 		head.rotation.y = lerp_angle(head.rotation.y, sync_head_rotation, delta * 15.0)
 		
+		is_crouching = sync_crouch
+		_update_crouch_visual(delta)
+		
+		if $CollisionShape3D.disabled != sync_in_cart:
+			$CollisionShape3D.disabled = sync_in_cart
+			player_mesh.visible = not sync_in_cart
+		
 		if health != sync_health:
 			health = sync_health
 			_update_health_bar_3d()
@@ -420,6 +462,17 @@ func _headbob(time) -> Vector3:
 	pos.y = sin(time * BOB_FREQ) * BOB_AMP
 	pos.x = cos(time * (BOB_FREQ / 2.0)) * (BOB_AMP * 0.3)
 	return pos
+
+func _update_crouch_visual(delta: float):
+	var target_scale_y = CROUCH_HEIGHT if is_crouching else STAND_HEIGHT
+	var current_scale = player_mesh.scale.y
+	player_mesh.scale.y = lerp(current_scale, target_scale_y, delta * CROUCH_TRANSITION_SPEED)
+	
+	var target_y = -0.35 if is_crouching else 0.0
+	player_mesh.position.y = lerp(player_mesh.position.y, target_y, delta * CROUCH_TRANSITION_SPEED)
+	
+	var target_head_y = 0.0 if is_crouching else 0.4069364
+	head.position.y = lerp(head.position.y, target_head_y, delta * CROUCH_TRANSITION_SPEED)
 
 func _check_nearby_cart():
 	nearby_cart = null
@@ -455,8 +508,11 @@ func _enter_cart(cart: Node):
 	else:
 		cart.request_enter.rpc_id(1, peer_id)
 	
+	sync_in_cart = true
 	player_mesh.visible = false
 	$CollisionShape3D.disabled = true
+	_sync_collision_state.rpc(true)
+	cart_entered.emit()
 
 func _exit_cart():
 	if not current_cart:
@@ -474,10 +530,13 @@ func _exit_cart():
 	
 	in_cart = false
 	current_cart = null
+	sync_in_cart = false
 	
 	player_mesh.visible = true
 	$CollisionShape3D.disabled = false
+	_sync_collision_state.rpc(false)
 	global_position = exit_pos
+	cart_exited.emit()
 
 func _find_safe_exit_position() -> Vector3:
 	var cart_pos = current_cart.global_position
@@ -543,6 +602,7 @@ func _handle_noclip_movement(delta: float):
 	sync_position = global_position
 	sync_rotation = rotation
 	sync_head_rotation = head.rotation.y
+	sync_crouch = is_crouching
 
 func set_noclip(enabled: bool):
 	noclip_enabled = enabled
@@ -570,3 +630,8 @@ func respawn():
 	is_dead = false
 	_update_health_ui()
 	_update_health_bar_3d()
+
+@rpc("any_peer", "reliable", "call_remote")
+func _sync_collision_state(in_cart_state: bool):
+	$CollisionShape3D.disabled = in_cart_state
+	player_mesh.visible = not in_cart_state

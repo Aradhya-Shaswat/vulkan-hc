@@ -31,6 +31,11 @@ var game_timer_active: bool = false
 var kill_counts: Dictionary = {}
 var game_ended: bool = false
 var return_to_menu_timer: float = 10.0
+var hotbar_tween: Tween = null
+var hotbar_hide_timer: float = 0.0
+var hotbar_visible_in_cart: bool = false
+const HOTBAR_FADE_DURATION: float = 0.3
+const HOTBAR_AUTO_HIDE_DELAY: float = 2.0
 
 const COLOR_GREEN = Color(0.2, 0.92, 0, 1)
 const COLOR_RED = Color(1, 0.2, 0.2, 1)
@@ -83,6 +88,7 @@ var last_countdown_second: int = -1
 
 func _process(delta):
 	_update_fps_display()
+	_update_hotbar_auto_hide(delta)
 	
 	if game_timer_active and not game_ended:
 		if multiplayer.is_server():
@@ -169,6 +175,8 @@ func _unhandled_input(event):
 func _select_hotbar_slot(slot: int):
 	selected_hotbar_slot = slot
 	_update_hotbar_selection()
+	if _is_local_player_in_cart():
+		_show_hotbar_temporarily()
 
 func _update_hotbar_selection():
 	if not has_node("CanvasLayer/Hotbar"):
@@ -197,6 +205,64 @@ func _update_hotbar_counts():
 				slot_node.get_node("Count").modulate = Color(1, 0.3, 0.3, 1)
 			else:
 				slot_node.get_node("Count").modulate = Color(1, 1, 1, 1)
+
+func _on_local_player_cart_entered():
+	_fade_hotbar(false)
+
+func _on_local_player_cart_exited():
+	hotbar_visible_in_cart = false
+	hotbar_hide_timer = 0.0
+	_fade_hotbar(true)
+
+func _fade_hotbar(show: bool):
+	if not has_node("CanvasLayer/Hotbar"):
+		return
+	
+	if hotbar_tween:
+		hotbar_tween.kill()
+	
+	hotbar_tween = create_tween()
+	hotbar_tween.set_ease(Tween.EASE_OUT)
+	hotbar_tween.set_trans(Tween.TRANS_QUAD)
+	
+	var hotbar = $CanvasLayer/Hotbar
+	if show:
+		hotbar_tween.tween_property(hotbar, "modulate:a", 1.0, HOTBAR_FADE_DURATION)
+	else:
+		hotbar_tween.tween_property(hotbar, "modulate:a", 0.0, HOTBAR_FADE_DURATION)
+
+func _show_hotbar_temporarily():
+	if not has_node("CanvasLayer/Hotbar"):
+		return
+	
+	hotbar_visible_in_cart = true
+	hotbar_hide_timer = HOTBAR_AUTO_HIDE_DELAY
+	
+	if hotbar_tween:
+		hotbar_tween.kill()
+	
+	hotbar_tween = create_tween()
+	hotbar_tween.set_ease(Tween.EASE_OUT)
+	hotbar_tween.set_trans(Tween.TRANS_QUAD)
+	hotbar_tween.tween_property($CanvasLayer/Hotbar, "modulate:a", 1.0, HOTBAR_FADE_DURATION)
+
+func _update_hotbar_auto_hide(delta):
+	if not hotbar_visible_in_cart:
+		return
+	
+	hotbar_hide_timer -= delta
+	if hotbar_hide_timer <= 0:
+		hotbar_visible_in_cart = false
+		_fade_hotbar(false)
+
+func _is_local_player_in_cart() -> bool:
+	if not multiplayer or not multiplayer.multiplayer_peer:
+		return false
+	var my_id = multiplayer.get_unique_id()
+	var player = get_node_or_null(str(my_id))
+	if player and player.has_method("_is_local_authority"):
+		return player.in_cart
+	return false
 
 func _spawn_selected_object():
 	if selected_hotbar_slot >= 0 and selected_hotbar_slot < HOTBAR_ITEMS.size():
@@ -724,6 +790,11 @@ func custom_spawn(data):
 	player.name = str(data.id)
 	player.position = data.pos
 	player.sync_position = data.pos
+	
+	if multiplayer and data.id == multiplayer.get_unique_id():
+		player.cart_entered.connect(_on_local_player_cart_entered)
+		player.cart_exited.connect(_on_local_player_cart_exited)
+	
 	return player
 
 func add_player(id):
