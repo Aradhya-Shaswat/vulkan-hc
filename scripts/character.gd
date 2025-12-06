@@ -545,6 +545,7 @@ func _enter_cart(cart: Node):
 	
 	SoundManager.play_cart_enter()
 	SoundManager.start_cart_loop()
+	SoundManager.start_engine_sound()
 	current_cart = cart
 	in_cart = true
 	cart_look_timer = 0.0
@@ -570,6 +571,7 @@ func _exit_cart():
 	SoundManager.play_cart_exit()
 	SoundManager.stop_cart_loop()
 	SoundManager.stop_drift_sound()
+	SoundManager.stop_engine_sound()
 	var exit_pos = _find_safe_exit_position()
 	
 	var peer_id = name.to_int()
@@ -643,6 +645,13 @@ func _handle_cart_driving(delta):
 	var cart_euler = current_cart.global_transform.basis.get_euler()
 	head.rotation.z = lerp(head.rotation.z, cart_euler.z, delta * 15.0)
 	head.rotation.x = lerp(head.rotation.x, cart_euler.x, delta * 15.0)
+	
+	# Update engine sound pitch based on speed
+	if current_cart.has_method("get_speed_ratio"):
+		var speed_ratio = current_cart.get_speed_ratio()
+		# Add throttle input to make engine rev when accelerating
+		var throttle_boost = abs(input_dir.y) * 0.3
+		SoundManager.set_engine_pitch(speed_ratio + throttle_boost)
 	
 	if current_cart.is_drifting:
 		SoundManager.start_drift_sound()

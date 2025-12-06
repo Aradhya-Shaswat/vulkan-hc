@@ -1,4 +1,4 @@
-[gd_scene load_steps=53 format=3 uid="uid://cnew6x2hwvjyh"]
+[gd_scene load_steps=56 format=3 uid="uid://cnew6x2hwvjyh"]
 
 [ext_resource type="FontFile" uid="uid://gunvccib1svm" path="res://assets/fonts/Poppins-Regular.ttf" id="1_iqu8w"]
 [ext_resource type="Script" uid="uid://b27u1ptmiviqb" path="res://scripts/main.gd" id="1_mwgft"]
@@ -14,6 +14,7 @@
 [ext_resource type="FontFile" uid="uid://cciugckxvrpfw" path="res://assets/fonts/PressStart2P-Regular.ttf" id="15_ff0s2"]
 [ext_resource type="PackedScene" uid="uid://dj2q7ckihe14y" path="res://scenes/assetScenes/stone_wall.tscn" id="15_siio1"]
 [ext_resource type="PackedScene" uid="uid://dhe2vdggcxcmo" path="res://scenes/assetScenes/stone_wall_curve.tscn" id="16_ndwfr"]
+[ext_resource type="PackedScene" uid="uid://1tvv2gs2om6v" path="res://scenes/soccerrrr.tscn" id="16_uk2yf"]
 [ext_resource type="PackedScene" uid="uid://dny03htroscuh" path="res://scenes/assetScenes/stone_wall_column.tscn" id="17_nc5r2"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mwgft"]
@@ -157,17 +158,28 @@ uv1_triplanar = true
 [sub_resource type="Curve3D" id="Curve3D_adxub"]
 closed = true
 _data = {
-"points": PackedVector3Array(-0.099746704, -2.6508045, -17.120552, 0.099746704, 2.6508045, 17.120552, 97.12308, -2.903057, -10.543321, 7.3313065, -1.4788468, -8.678608, -7.3313065, 1.4788468, 8.678608, 80.276405, -1.9020202, 13.234206, 1.3774185, 0, -3.317546, -1.3774185, 0, 3.317546, 61.38025, 0.80620116, 56.93393, 10.724094, 0.93970346, 0.08315277, -10.724094, -0.93970346, -0.08315277, 41.85936, -2.6609967, 77.39986, 26.888786, 2.3221512, -0.9664917, -26.888786, -2.3221512, 0.9664917, -0.21871185, -8.10733, 71.930435, 10.23922, 1.0598068, 15.163658, -10.23922, -1.0598068, -15.163658, -75.35891, 0, 51.90355, 3.6058273, 2.4795532e-05, 14.119226, -3.6058273, -2.4795532e-05, -14.119226, -82.80255, 2.521574, 13.72727, -4.5347214, -0.0038986206, 17.548315, 4.5347214, 0.0038986206, -17.548315, -81.43066, 0, -28.66995, -12.770142, -0.0055007935, 7.6616325, 12.770142, 0.0055007935, -7.6616325, -62.51287, -3.1975098, -65.02242, -52.966045, -1.1371231, 2.0421143, 52.966045, 1.1371231, -2.0421143, -0.13425827, -8.181686, -78.08073, -38.213898, -1.1112893, 3.511528, 38.213898, 1.1112893, -3.511528, 64.87949, -9.381868, -83.8857, -3.06176, 0.005878985, -10.015743, 3.06176, -0.005878985, 10.015743, 108.71705, -0.13511986, -57.078297),
+"points": PackedVector3Array(-0.099746704, -2.6508045, -17.120552, 0.099746704, 2.6508045, 17.120552, 97.12308, -2.903057, -10.543321, 7.3313065, -1.4788468, -8.678608, -7.3313065, 1.4788468, 8.678608, 80.276405, -1.9020202, 13.234206, 1.3774185, 0, -3.317546, -1.3774185, 0, 3.317546, 61.38025, 0.80620116, 56.93393, 20.468765, 0.8023596, -4.6729813, -20.468765, -0.8023596, 4.6729813, 41.85936, -10.179458, 77.39986, 29.643505, -0.30079556, -7.610306, -29.643505, 0.30079556, 7.610306, -0.21871185, -15.966863, 79.25459, 10.23922, 1.0598068, 15.163658, -10.23922, -1.0598068, -15.163658, -75.35891, 0, 51.90355, 3.6058273, 2.4795532e-05, 14.119226, -3.6058273, -2.4795532e-05, -14.119226, -82.80255, 2.521574, 13.72727, -4.5347214, -0.0038986206, 17.548315, 4.5347214, 0.0038986206, -17.548315, -118.22102, 0, -28.66995, -12.770142, -0.0055007935, 7.6616325, 12.770142, 0.0055007935, -7.6616325, -62.51287, -3.1975098, -65.02242, -52.966045, -1.1371231, 2.0421143, 52.966045, 1.1371231, -2.0421143, -0.13425827, -8.181686, -78.08073, -38.213898, -1.1112893, 3.511528, 38.213898, 1.1112893, -3.511528, 64.87949, -9.381868, -83.8857, -3.06176, 0.005878985, -10.015743, 3.06176, -0.005878985, 10.015743, 108.71705, -0.13511986, -57.078297),
 "tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 }
 point_count = 12
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_adxub"]
-albedo_color = Color(0, 0.13787085, 0.093943544, 1)
+[sub_resource type="Curve3D" id="Curve3D_ff0s2"]
+closed = true
+_data = {
+"points": PackedVector3Array(4.9653015, 0.8778763, -22.08017, -4.9653015, -0.8778763, 22.08017, 97.12308, -2.903057, -40.947968, 5.1940613, 0.06758571, -27.22345, -5.1940613, -0.06758571, 27.22345, 136.8644, -1.9020202, 13.234192, 4.9159927, 0.07612437, -5.9112854, -4.9159927, -0.07612437, 5.9112854, 91.975746, 0.80620116, 56.93393, 10.724094, 0.93970346, 0.08315277, -10.724094, -0.93970346, -0.08315277, 41.85936, -10.179458, 77.39986, 26.888786, 2.3221512, -0.9664917, -26.888786, -2.3221512, 0.9664917, -0.21871185, -7.656269, 71.93042, 10.23922, 1.0598068, 15.163658, -10.23922, -1.0598068, -15.163658, -75.35891, 0, 84.63928, 9.004875, -1.496357, 22.024963, -9.004875, 1.496357, -22.024963, -82.80255, 2.521574, 51.663788, -4.5347214, -0.0038986206, 17.548315, 4.5347214, 0.0038986206, -17.548315, -220.8841, 0, -28.669952, -12.770142, -0.0055007935, 7.6616325, 12.770142, 0.0055007935, -7.6616325, -143.67044, -3.1975098, -95.139465, -52.966045, -1.1371231, 2.0421143, 52.966045, 1.1371231, -2.0421143, -0.13425827, -8.181686, -60.196198, -38.213898, -1.1112893, 3.511528, 38.213898, 1.1112893, -3.511528, 64.87949, -9.381868, -83.8857, -3.06176, 0.005878985, -10.015743, 3.06176, -0.005878985, 10.015743, 120.02086, -0.13511986, -81.228516),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+}
+point_count = 12
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uk2yf"]
+albedo_color = Color(0.23908564, 0, 0.029992647, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ff0s2"]
 albedo_color = Color(0, 0, 0, 1)
 metallic = 0.6
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_adxub"]
+albedo_color = Color(0, 0.13787085, 0.093943544, 1)
 
 [node name="MainLevel" type="Node3D"]
 script = ExtResource("1_mwgft")
@@ -1836,6 +1848,59 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -26.
 [node name="Path3D" type="Path3D" parent="."]
 curve = SubResource("Curve3D_adxub")
 
+[node name="Path3D2" type="Path3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 350)
+curve = SubResource("Curve3D_ff0s2")
+
+[node name="Track2" type="CSGPolygon3D" parent="."]
+material_override = SubResource("StandardMaterial3D_uk2yf")
+use_collision = true
+polygon = PackedVector2Array(-9.580336, -0.06792745, -9.590064, 0.41428703, 5.6165876, 0.2667601, 5.62081, 0.043509007)
+mode = 2
+path_node = NodePath("../Path3D2")
+path_interval_type = 0
+path_interval = 0.1
+path_simplify_angle = 0.0
+path_rotation = 2
+path_rotation_accurate = false
+path_local = false
+path_continuous_u = true
+path_u_distance = 1.0
+path_joined = true
+metadata/_edit_group_ = true
+
+[node name="Outer Edge2" type="CSGPolygon3D" parent="."]
+material_override = SubResource("StandardMaterial3D_ff0s2")
+use_collision = true
+polygon = PackedVector2Array(-10.177332, -0.015610635, -10.233889, 1.3119156, -9.519004, 1.2851326, -9.528092, -0.019746661)
+mode = 2
+path_node = NodePath("../Path3D2")
+path_interval_type = 0
+path_interval = 0.5
+path_simplify_angle = 0.0
+path_rotation = 2
+path_rotation_accurate = false
+path_local = false
+path_continuous_u = true
+path_u_distance = 1.0
+path_joined = false
+
+[node name="Inner Edge2" type="CSGPolygon3D" parent="."]
+material_override = SubResource("StandardMaterial3D_ff0s2")
+use_collision = true
+polygon = PackedVector2Array(5.8733683, -0.001703687, 5.893044, 0.8840673, 5.551889, 0.88657534, 5.5762973, -0.0051956773)
+mode = 2
+path_node = NodePath("../Path3D2")
+path_interval_type = 0
+path_interval = 0.5
+path_simplify_angle = 0.0
+path_rotation = 2
+path_rotation_accurate = false
+path_local = false
+path_continuous_u = true
+path_u_distance = 1.0
+path_joined = false
+
 [node name="Track" type="CSGPolygon3D" parent="."]
 transform = Transform3D(1.0026164, 0, 0, 0, 1.0026164, 0, 0, 0, 1.0026164, 0, 0, 0)
 material_override = SubResource("StandardMaterial3D_adxub")
@@ -1851,7 +1916,7 @@ path_rotation_accurate = false
 path_local = false
 path_continuous_u = true
 path_u_distance = 1.0
-path_joined = true
+path_joined = false
 metadata/_edit_group_ = true
 
 [node name="Outer Edge" type="CSGPolygon3D" parent="."]
@@ -1892,6 +1957,18 @@ material_override = SubResource("StandardMaterial3D_ff0s2")
 use_collision = true
 size = Vector3(1, 1, 6.687332)
 
+[node name="track_ramp2" type="CSGBox3D" parent="."]
+transform = Transform3D(5.9199986, 0, 0, 0, -0.09998918, -0.014730055, 0, -0.0014730063, 0.9998915, 1.4937303, -7.5187297, 170.75354)
+material_override = SubResource("StandardMaterial3D_ff0s2")
+use_collision = true
+size = Vector3(2.470459, 1, 218.77437)
+
+[node name="track_ramp3" type="CSGBox3D" parent="."]
+transform = Transform3D(1.1920929e-07, 0.0014730059, -0.99989134, 6.848132e-09, -0.09998915, -0.014730052, 5.9199977, 1.1641532e-10, 0, 114.49373, -7.5187297, 170.75354)
+material_override = SubResource("StandardMaterial3D_ff0s2")
+use_collision = true
+size = Vector3(2.470459, 1, 218.77437)
+
 [node name="track_screen" type="CSGBox3D" parent="."]
 transform = Transform3D(60.383984, 0, 0, 0, -0.006427352, -3.3907125, 0, -0.113399185, 0.19218223, 0, 0.6959822, -100.04063)
 material_override = SubResource("StandardMaterial3D_ff0s2")
@@ -1919,6 +1996,65 @@ text = "hack club."
 font = ExtResource("1_iqu8w")
 font_size = 16
 outline_size = 0
+
+[node name="track_screen3" type="CSGBox3D" parent="."]
+transform = Transform3D(60.383984, 0, 0, 0, -0.006427352, -3.3907125, 0, -0.113399185, 0.19218223, 0, 0.6959822, 394.95938)
+material_override = SubResource("StandardMaterial3D_ff0s2")
+cast_shadow = 0
+use_collision = true
+size = Vector3(1, 1, 7)
+
+[node name="Label3D" type="Label3D" parent="track_screen3"]
+transform = Transform3D(0.5, 1.3044809e-06, -3.36203e-05, 0, -14.641191, -131.38118, 7.54979e-08, -8.639186, 222.6572, 0, -5.7922363, 0.010979295)
+text = "F1 Inspired Tracks"
+font = ExtResource("1_iqu8w")
+font_size = 16
+outline_size = 0
+
+[node name="Label3D3" type="Label3D" parent="track_screen3"]
+transform = Transform3D(0.5, 1.3044809e-06, -3.36203e-05, 0, -14.641192, -131.38113, 7.54979e-08, -8.639187, 222.65721, 0, -4.2976074, 0.8929158)
+text = "VULKAN?"
+font = ExtResource("15_ff0s2")
+font_size = 10
+outline_size = 0
+
+[node name="Label3D2" type="Label3D" parent="track_screen3"]
+transform = Transform3D(0.5, 1.3044809e-06, -3.36203e-05, 0, -14.641196, -131.38107, 7.54979e-08, -8.639188, 222.65723, 0.38406432, -1.3082886, 2.656789)
+text = "hack club."
+font = ExtResource("1_iqu8w")
+font_size = 16
+outline_size = 0
+
+[node name="track_screen2" type="CSGBox3D" parent="."]
+transform = Transform3D(-60.383984, 9.913672e-09, -1.6801105e-08, 0, -0.006427352, -3.3907125, 5.278936e-06, 0.1133992, -0.19218227, 0, 0.6959822, 310.95938)
+material_override = SubResource("StandardMaterial3D_ff0s2")
+cast_shadow = 0
+use_collision = true
+size = Vector3(1, 1, 7)
+
+[node name="Label3D" type="Label3D" parent="track_screen2"]
+transform = Transform3D(0.5, 1.3044809e-06, -3.36203e-05, 0, -14.641191, -131.38118, 7.54979e-08, -8.639186, 222.6572, 0, -5.7922363, 0.010979295)
+text = "F1 Inspired Tracks"
+font = ExtResource("1_iqu8w")
+font_size = 16
+outline_size = 0
+
+[node name="Label3D3" type="Label3D" parent="track_screen2"]
+transform = Transform3D(0.5, 1.3044809e-06, -3.36203e-05, 0, -14.641192, -131.38113, 7.54979e-08, -8.639187, 222.65721, 0, -4.2976074, 0.8929158)
+text = "VULKAN?"
+font = ExtResource("15_ff0s2")
+font_size = 10
+outline_size = 0
+
+[node name="Label3D2" type="Label3D" parent="track_screen2"]
+transform = Transform3D(0.5, 1.3044809e-06, -3.36203e-05, 0, -14.641196, -131.38107, 7.54979e-08, -8.639188, 222.65723, 0.38406432, -1.3082886, 2.656789)
+text = "hack club."
+font = ExtResource("1_iqu8w")
+font_size = 16
+outline_size = 0
+
+[node name="Sketchfab_Scene" parent="." instance=ExtResource("16_uk2yf")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 299.2519, -84.623604, 173)
 
 [connection signal="pressed" from="CanvasLayer/Host" to="." method="_on_host_pressed"]
 [connection signal="pressed" from="CanvasLayer/Back" to="." method="_on_back_pressed"]

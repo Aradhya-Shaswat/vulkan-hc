@@ -1,0 +1,11 @@
+Model Information:
+* title:	Free Soccer Pitch
+* source:	https://sketchfab.com/3d-models/free-soccer-pitch-aec62086bbb54aabade1cb4c83bb4042
+* author:	alplaleli (https://sketchfab.com/alplaleli)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Free Soccer Pitch" (https://sketchfab.com/3d-models/free-soccer-pitch-aec62086bbb54aabade1cb4c83bb4042) by alplaleli (https://sketchfab.com/alplaleli) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

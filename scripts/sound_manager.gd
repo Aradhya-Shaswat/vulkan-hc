@@ -31,9 +31,28 @@ var cart_loop_player: AudioStreamPlayer
 var music_player: AudioStreamPlayer
 const MAX_SFX_PLAYERS = 8
 
+var engine_player: AudioStreamPlayer
+var engine_stream: AudioStreamGenerator
+var engine_playback: AudioStreamGeneratorPlayback
+var engine_phase: float = 0.0
+var engine_target_pitch: float = 1.0
+var engine_current_pitch: float = 1.0
+var engine_running: bool = false
+var engine_last_sample: float = 0.0  # low-pass filter state
+
+const ENGINE_SAMPLE_RATE = 22050.0
+const ENGINE_BASE_FREQ = 80.0  # Base engine frequency in Hz
+const ENGINE_VOLUME = -12.0
+
 func _ready():
 	_load_sounds()
 	_create_audio_players()
+
+func _process(delta):
+	if engine_running:
+		_fill_engine_buffer()
+		# Smoothly interpolate pitch
+		engine_current_pitch = lerp(engine_current_pitch, engine_target_pitch, delta * 8.0)
 
 func _load_sounds():
 	ui_click = load("res://assets/sounds/UI Soundpack/WAV/Minimalist1.wav")
@@ -81,6 +100,16 @@ func _create_audio_players():
 	drift_player.volume_db = -8.0
 	drift_player.pitch_scale = 1.5
 	add_child(drift_player)
+	
+	engine_stream = AudioStreamGenerator.new()
+	engine_stream.mix_rate = ENGINE_SAMPLE_RATE
+	engine_stream.buffer_length = 0.1
+	
+	engine_player = AudioStreamPlayer.new()
+	engine_player.bus = "SFX"
+	engine_player.volume_db = ENGINE_VOLUME
+	engine_player.stream = engine_stream
+	add_child(engine_player)
 	
 	music_player = AudioStreamPlayer.new()
 	music_player.bus = "Music"
@@ -193,3 +222,87 @@ func start_drift_sound():
 func stop_drift_sound():
 	if drift_player:
 		drift_player.stop()
+
+# ====================
+# Engine sound functions (smoothed) (ai generated btw lmao)
+# ====================
+
+func start_engine_sound():
+	if engine_player and not engine_running:
+		engine_running = true
+		engine_phase = 0.0
+		engine_last_sample = 0.0
+		engine_current_pitch = 0.8
+		engine_target_pitch = 0.8
+		engine_player.play()
+		engine_playback = engine_player.get_stream_playback()
+
+func stop_engine_sound():
+	if engine_player:
+		engine_running = false
+		engine_player.stop()
+
+func set_engine_pitch(speed_ratio: float):
+	# speed_ratio is 0.0 to 1.0
+	# Narrower pitch range so high revs don't scream
+	# Idle ~0.8, max ~1.7
+	engine_target_pitch = 0.8 + speed_ratio * 0.9
+
+func _fill_engine_buffer():
+	if not engine_playback:
+		return
+	
+	var frames_available = engine_playback.get_frames_available()
+	if frames_available <= 0:
+		return
+	
+	var freq = ENGINE_BASE_FREQ * engine_current_pitch
+	var increment = freq / ENGINE_SAMPLE_RATE
+	
+	# One-pole low-pass filter to smooth harsh highs
+	var lp_amount = 0.15  # smaller = more smoothing / more muffled
+	var last_sample = engine_last_sample
+	
+	for i in range(frames_available):
+		var phase = engine_phase
+		
+		var sample = 0.0
+		
+		# Fundamental
+		sample += sin(phase * TAU) * 0.45
+		
+		# Light body
+		sample += sin(phase * TAU * 2.0) * 0.25
+		
+		# Gentle growl
+		sample += sin(phase * TAU * 3.0) * 0.12
+		
+		# Very soft brightness
+		sample += sin(phase * TAU * 4.0) * 0.06
+		
+		# Softer “chug” with slower modulation
+		var chug_freq = freq * 0.4
+		var chug_phase = phase * (chug_freq / freq)
+		var chug_mod = 0.3 + 0.2 * sin(phase * TAU * 0.15)
+		sample += sin(chug_phase * TAU) * 0.18 * chug_mod
+		
+		# Much less noise
+		sample += (randf() - 0.5) * 0.02
+		
+		# Low-pass filter
+		last_sample = last_sample + lp_amount * (sample - last_sample)
+		sample = last_sample
+		
+		# Softer clip, less drive
+		sample = tanh(sample * 0.7)
+		
+		# Global gain trim
+		sample *= 0.75
+		
+		engine_playback.push_frame(Vector2(sample, sample))
+		
+		engine_phase += increment
+		if engine_phase >= 1.0:
+			engine_phase -= 1.0
+	
+	engine_last_sample = last_sample

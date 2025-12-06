@@ -35,7 +35,7 @@ func _ready():
 func _process(_delta):
 	#if GameSettings.show_fps and fps_label:
 		#fps_label.visible = true
-		#fps_label.text = "FPS: " + str(Engine.get_frames_per_second())
+		#fps_label.text = "FPS: " + int(Engine.get_frames_per_second())
 	#elif fps_label:
 		#fps_label.visible = false
 	pass

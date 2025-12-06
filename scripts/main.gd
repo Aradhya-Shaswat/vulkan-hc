@@ -144,7 +144,7 @@ func _update_fps_display():
 	if has_node("CanvasLayer/FPSLabel"):
 		if GameSettings.show_fps:
 			$CanvasLayer/FPSLabel.visible = true
-			$CanvasLayer/FPSLabel.text = "FPS: " + str(Engine.get_frames_per_second())
+			$CanvasLayer/FPSLabel.text = "FPS: " + str(int(Engine.get_frames_per_second()))
 		else:
 			$CanvasLayer/FPSLabel.visible = false
 
