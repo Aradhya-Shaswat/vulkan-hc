@@ -25,8 +25,8 @@ properties/2/spawn = true
 properties/2/replication_mode = 1
 
 [node name="Cart" type="RigidBody3D"]
-collision_layer = 2
-collision_mask = 7
+collision_layer = 4
+collision_mask = 1
 mass = 500.0
 continuous_cd = true
 script = ExtResource("1_cart")

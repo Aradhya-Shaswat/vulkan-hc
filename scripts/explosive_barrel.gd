@@ -266,3 +266,40 @@ func _create_explosion_effect(pos: Vector3):
 	
 	await get_tree().create_timer(1.0).timeout
 	particles.queue_free()
+
+@rpc("any_peer", "reliable")
+func request_scale(mesh_scale: Vector3, shape_scale: Vector3, new_mass: float):
+	if multiplayer.is_server():
+		_apply_scale(mesh_scale, shape_scale, new_mass)
+		_sync_scale.rpc(mesh_scale, shape_scale, new_mass)
+
+@rpc("authority", "reliable", "call_local")
+func _sync_scale(mesh_scale: Vector3, shape_scale: Vector3, new_mass: float):
+	_apply_scale(mesh_scale, shape_scale, new_mass)
+
+func _apply_scale(mesh_scale: Vector3, shape_scale: Vector3, new_mass: float):
+	var mesh = _find_mesh(self)
+	var shape = _find_collision_shape(self)
+	if mesh:
+		mesh.scale = mesh_scale
+	if shape:
+		shape.scale = shape_scale
+	mass = new_mass
+
+func _find_mesh(obj: Node) -> MeshInstance3D:
+	if obj is MeshInstance3D:
+		return obj
+	for c in obj.get_children():
+		var m = _find_mesh(c)
+		if m:
+			return m
+	return null
+
+func _find_collision_shape(obj: Node) -> CollisionShape3D:
+	if obj is CollisionShape3D:
+		return obj
+	for c in obj.get_children():
+		var s = _find_collision_shape(c)
+		if s:
+			return s
+	return null
