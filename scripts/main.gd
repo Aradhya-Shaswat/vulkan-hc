@@ -267,11 +267,13 @@ func _update_hotbar_counts():
 
 func _on_local_player_cart_entered():
 	_fade_hotbar(false)
+	$CanvasLayer/CenterContainer/Crosshair.hide()
 
 func _on_local_player_cart_exited():
 	hotbar_visible_in_cart = false
 	hotbar_hide_timer = 0.0
 	_fade_hotbar(true)
+	$CanvasLayer/CenterContainer/Crosshair.show()
 
 func _fade_hotbar(show: bool):
 	if not has_node("CanvasLayer/Hotbar"):

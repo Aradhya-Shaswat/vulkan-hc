@@ -463,25 +463,30 @@ func _physics_process(delta):
 
 		move_and_slide()
 		
+		var standing_on_physics_object = false
+		for i in range(get_slide_collision_count()):
+			var collision = get_slide_collision(i)
+			var body = collision.get_collider()
+			var normal = collision.get_normal()
+
+			if body is RigidBody3D and normal.y > 0.7:
+				standing_on_physics_object = true
+				if body.has_method("apply_central_impulse"):
+					body.apply_central_impulse(Vector3(0, 0.5, 0))
+				velocity.y = max(velocity.y, 1.0)
+			elif body is RigidBody3D and body.has_method("apply_push"):
+				if normal.y <= 0.7:
+					var push_dir = -normal
+					push_dir.y = 0
+					if push_dir.length() > 0.01:
+						push_dir = push_dir.normalized()
+						var strength = PUSH_FORCE / max(body.mass, 0.1)
+						body.apply_push.rpc(push_dir * strength)
+		
 		sync_position = global_position
 		sync_rotation = rotation
 		sync_head_rotation = head.rotation.y
 		sync_crouch = is_crouching
-		
-		for i in range(get_slide_collision_count()):
-			var collision = get_slide_collision(i)
-			var body = collision.get_collider()
-			
-			if body is RigidBody3D and body.has_method("apply_push"):
-				var normal = collision.get_normal()
-				if normal.y > 0.7:
-					continue
-				var push_dir = -normal
-				push_dir.y = 0
-				if push_dir.length() > 0.01:
-					push_dir = push_dir.normalized()
-					var strength = PUSH_FORCE / max(body.mass, 0.1)
-					body.apply_push.rpc(push_dir * strength)
 	else:
 		global_position = global_position.lerp(sync_position, delta * 15.0)
 		rotation = rotation.lerp(sync_rotation, delta * 15.0)

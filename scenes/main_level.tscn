@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=3 uid="uid://cnew6x2hwvjyh"]
+[gd_scene load_steps=53 format=3 uid="uid://cnew6x2hwvjyh"]
 
 [ext_resource type="FontFile" uid="uid://gunvccib1svm" path="res://assets/fonts/Poppins-Regular.ttf" id="1_iqu8w"]
 [ext_resource type="Script" uid="uid://b27u1ptmiviqb" path="res://scripts/main.gd" id="1_mwgft"]
@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://c73mkdvaw1m4p" path="res://scenes/assetScenes/brick_wall_end.tscn" id="13_adxub"]
 [ext_resource type="PackedScene" uid="uid://idvvck1xoxwe" path="res://scenes/assetScenes/border_pillar.tscn" id="13_mwgft"]
 [ext_resource type="PackedScene" uid="uid://b72y5ihcd300g" path="res://scenes/assetScenes/cart.tscn" id="14_cart"]
+[ext_resource type="FontFile" uid="uid://cciugckxvrpfw" path="res://assets/fonts/PressStart2P-Regular.ttf" id="15_ff0s2"]
 [ext_resource type="PackedScene" uid="uid://dj2q7ckihe14y" path="res://scenes/assetScenes/stone_wall.tscn" id="15_siio1"]
 [ext_resource type="PackedScene" uid="uid://dhe2vdggcxcmo" path="res://scenes/assetScenes/stone_wall_curve.tscn" id="16_ndwfr"]
 [ext_resource type="PackedScene" uid="uid://dny03htroscuh" path="res://scenes/assetScenes/stone_wall_column.tscn" id="17_nc5r2"]
@@ -1705,11 +1706,34 @@ transform = Transform3D(1.3113416e-07, 0, -1, 0, 1, 0, 1, 0, 1.3113416e-07, 59.6
 [node name="border-pillar2" parent="walls" instance=ExtResource("13_mwgft")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -19.904032, 1.0002356, 7.0744286)
 
+[node name="CSGTorus3D" type="CSGTorus3D" parent="walls/border-pillar2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2828407, 4.235342, 0)
+inner_radius = 0.805
+sides = 64
+
 [node name="border-pillar3" parent="walls" instance=ExtResource("13_mwgft")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 26.411592, 1.0002356, 21.605593)
+transform = Transform3D(-2, 0, 1.7484555e-07, 0, 2, 0, -1.7484555e-07, 0, -2, 38.7817, 1.0002356, 24.60435)
+
+[node name="CSGTorus3D" type="CSGTorus3D" parent="walls/border-pillar3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2828407, 4.235342, 0)
+inner_radius = 0.805
+sides = 64
 
 [node name="border-pillar4" parent="walls" instance=ExtResource("13_mwgft")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -10.508776, 1.0002356, 30.026468)
+transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 38.7817, 1.0002356, -26.60447)
+
+[node name="CSGTorus3D" type="CSGTorus3D" parent="walls/border-pillar4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2828407, 4.235342, 0)
+inner_radius = 0.805
+sides = 64
+
+[node name="border-pillar5" parent="walls" instance=ExtResource("13_mwgft")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -31.2183, 1.0002356, -26.60447)
+
+[node name="CSGTorus3D" type="CSGTorus3D" parent="walls/border-pillar5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2828407, 4.235342, 0)
+inner_radius = 0.805
+sides = 64
 
 [node name="border-pillar8" parent="walls" instance=ExtResource("13_mwgft")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -7.32618, 1.0002356, 62.535545)
@@ -1723,44 +1747,53 @@ transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -7.32618, 1.0002356, -63.9274
 [node name="border-pillar11" parent="walls" instance=ExtResource("13_mwgft")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 10.054991, 1.0002356, -63.927498)
 
-[node name="border-pillar5" parent="walls" instance=ExtResource("13_mwgft")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -10.508776, 1.0002356, -34.747322)
-
-[node name="border-pillar6" parent="walls" instance=ExtResource("13_mwgft")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -43.7623, 1.0002356, -16.012459)
-
-[node name="border-pillar7" parent="walls" instance=ExtResource("13_mwgft")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 41.94597, 1.0002356, -10.064644)
-
 [node name="Cart4" parent="walls" instance=ExtResource("14_cart")]
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -5, 1.1105556, 23.527494)
 collision_layer = 2
 collision_mask = 7
+mass = 500.0
+center_of_mass_mode = 0
+center_of_mass = Vector3(0, 0, 0)
 
 [node name="Cart2" parent="walls" instance=ExtResource("14_cart")]
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 9.192693, 1.1105556, 23.400364)
 collision_layer = 2
 collision_mask = 7
+mass = 500.0
+center_of_mass_mode = 0
+center_of_mass = Vector3(0, 0, 0)
 
 [node name="Cart5" parent="walls" instance=ExtResource("14_cart")]
 transform = Transform3D(1, 0, -1.7484555e-07, 0, 1, 0, 1.7484555e-07, 0, 1, 9.192693, 1.1105556, -25.599638)
 collision_layer = 2
 collision_mask = 7
+mass = 500.0
+center_of_mass_mode = 0
+center_of_mass = Vector3(0, 0, 0)
 
 [node name="Cart3" parent="walls" instance=ExtResource("14_cart")]
 transform = Transform3D(1, 0, -1.7484555e-07, 0, 1, 0, 1.7484555e-07, 0, 1, -5, 1.1105556, -25.472507)
 collision_layer = 2
 collision_mask = 7
+mass = 500.0
+center_of_mass_mode = 0
+center_of_mass = Vector3(0, 0, 0)
 
 [node name="Cart6" parent="walls" instance=ExtResource("14_cart")]
 transform = Transform3D(1.3113416e-07, 0, 1, 0, 1, 0, -1, 0, 1.3113416e-07, -28, 1.1105556, 2.5274925)
 collision_layer = 2
 collision_mask = 7
+mass = 500.0
+center_of_mass_mode = 0
+center_of_mass = Vector3(0, 0, 0)
 
 [node name="Cart7" parent="walls" instance=ExtResource("14_cart")]
 transform = Transform3D(-4.371138e-08, 0, -1, 0, 1, 0, 1, 0, -4.371138e-08, 25, 1.1105556, 2.5274925)
 collision_layer = 2
 collision_mask = 7
+mass = 500.0
+center_of_mass_mode = 0
+center_of_mass = Vector3(0, 0, 0)
 
 [node name="brick-wall-end2" parent="walls" instance=ExtResource("13_adxub")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.689765, 0.9987221, 50.671577)
@@ -1801,7 +1834,6 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -26.
 [node name="Objects" type="Node3D" parent="."]
 
 [node name="Path3D" type="Path3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.013748169, 7.6293945e-06, 0.22014618)
 curve = SubResource("Curve3D_adxub")
 
 [node name="Track" type="CSGPolygon3D" parent="."]
@@ -1829,7 +1861,7 @@ polygon = PackedVector2Array(-9.931122, -0.022338688, -9.945695, 0.94961125, -9.
 mode = 2
 path_node = NodePath("../Path3D")
 path_interval_type = 0
-path_interval = 1.0
+path_interval = 0.5
 path_simplify_angle = 0.0
 path_rotation = 2
 path_rotation_accurate = false
@@ -1845,7 +1877,7 @@ polygon = PackedVector2Array(5.8733683, -0.001703687, 5.893044, 0.8840673, 5.450
 mode = 2
 path_node = NodePath("../Path3D")
 path_interval_type = 0
-path_interval = 1.0
+path_interval = 0.5
 path_simplify_angle = 0.0
 path_rotation = 2
 path_rotation_accurate = false
@@ -1854,11 +1886,39 @@ path_continuous_u = true
 path_u_distance = 1.0
 path_joined = false
 
-[node name="CSGBox3D" type="CSGBox3D" parent="."]
+[node name="track_ramp" type="CSGBox3D" parent="."]
 transform = Transform3D(5.919999, 0, 0, 0, -0.099839784, 0.05658823, 0, 0.005658823, 0.9983976, 0, -5.834101, -69.01058)
 material_override = SubResource("StandardMaterial3D_ff0s2")
 use_collision = true
 size = Vector3(1, 1, 6.687332)
+
+[node name="track_screen" type="CSGBox3D" parent="."]
+transform = Transform3D(60.383984, 0, 0, 0, -0.006427352, -3.3907125, 0, -0.113399185, 0.19218223, 0, 0.6959822, -100.04063)
+material_override = SubResource("StandardMaterial3D_ff0s2")
+cast_shadow = 0
+use_collision = true
+size = Vector3(1, 1, 7)
+
+[node name="Label3D" type="Label3D" parent="track_screen"]
+transform = Transform3D(0.5, 1.3044809e-06, -3.36203e-05, 0, -14.641191, -131.38118, 7.54979e-08, -8.639186, 222.6572, 0, -5.7922363, 0.010979295)
+text = "F1 Inspired Tracks"
+font = ExtResource("1_iqu8w")
+font_size = 16
+outline_size = 0
+
+[node name="Label3D3" type="Label3D" parent="track_screen"]
+transform = Transform3D(0.5, 1.3044809e-06, -3.36203e-05, 0, -14.641192, -131.38113, 7.54979e-08, -8.639187, 222.65721, 0, -4.2976074, 0.8929158)
+text = "VULKAN?"
+font = ExtResource("15_ff0s2")
+font_size = 10
+outline_size = 0
+
+[node name="Label3D2" type="Label3D" parent="track_screen"]
+transform = Transform3D(0.5, 1.3044809e-06, -3.36203e-05, 0, -14.641196, -131.38107, 7.54979e-08, -8.639188, 222.65723, 0.38406432, -1.3082886, 2.656789)
+text = "hack club."
+font = ExtResource("1_iqu8w")
+font_size = 16
+outline_size = 0
 
 [connection signal="pressed" from="CanvasLayer/Host" to="." method="_on_host_pressed"]
 [connection signal="pressed" from="CanvasLayer/Back" to="." method="_on_back_pressed"]
