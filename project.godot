@@ -10,9 +10,9 @@ config_version=5
 
 [application]
 
-config/name="Vulkan Release Beta"
+config/name="Vulkan Release "
 config/description="Multiplayer Sandbox Simulator for Milkyway - Hack Club."
-config/version="1.0"
+config/version="1.1"
 run/main_scene="uid://dqc48gytnhsn6"
 config/features=PackedStringArray("4.5", "Forward Plus")
 boot_splash/bg_color=Color(1, 1, 1, 1)

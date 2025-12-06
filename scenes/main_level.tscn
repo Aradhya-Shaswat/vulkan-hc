@@ -230,16 +230,15 @@ theme_override_font_sizes/font_size = 16
 text = "•"
 
 [node name="version" type="Label" parent="CanvasLayer"]
-visible = false
 z_index = 2
-offset_left = 998.0
-offset_top = 14.0
-offset_right = 1126.0
-offset_bottom = 37.0
+offset_left = 1022.0
+offset_top = 16.0
+offset_right = 1150.0
+offset_bottom = 39.0
 theme_override_colors/font_color = Color(0.35531342, 0.35531357, 0.35531372, 1)
 theme_override_fonts/font = ExtResource("1_iqu8w")
 theme_override_font_sizes/font_size = 11
-text = "VULKAN BETA (DEBUG)w"
+text = "VULKAN 1.1  (RELEASE)"
 
 [node name="FPSLabel" type="Label" parent="CanvasLayer"]
 visible = false
@@ -1361,9 +1360,9 @@ anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -260.0
-offset_top = 10.0
+offset_top = 440.0
 offset_right = -10.0
-offset_bottom = 200.0
+offset_bottom = 630.0
 grow_horizontal = 0
 
 [node name="Minimap" type="Control" parent="CanvasLayer"]

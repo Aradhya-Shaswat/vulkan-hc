@@ -66,7 +66,7 @@ func _create_loading_panel():
 	loading_label.offset_bottom = 50
 	loading_label.add_theme_color_override("font_color", Color(1, 1, 0.8235294, 1))
 	loading_label.add_theme_font_size_override("font_size", 20)
-	loading_label.text = "Loading game..."
+	loading_label.text = "Loading assets..."
 	loading_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	loading_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	loading_panel.add_child(loading_label)
@@ -118,7 +118,7 @@ func _on_update_button_pressed():
 func _on_play_button_pressed() -> void:
 	SoundManager.play_ui_click()
 	loading_panel.show()
-	loading_label.text = "Loading game..."
+	loading_label.text = "Loading assets..."
 	is_loading = true
 	ResourceLoader.load_threaded_request("res://scenes/main_level.tscn")
 

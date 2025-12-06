@@ -1,5 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://1tvv2gs2om6v"]
-
-[ext_resource type="PackedScene" uid="uid://bmsupoqys6d7t" path="res://assets/free_soccer_pitch/scene.gltf" id="1_mhi75"]
-
-[node name="Sketchfab_Scene" instance=ExtResource("1_mhi75")]

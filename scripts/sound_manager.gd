@@ -62,7 +62,7 @@ func _load_sounds():
 	ui_error = load("res://assets/sounds/UI Soundpack/WAV/Modern4.wav")
 	
 	hit_sound = load("res://assets/sounds/Free Sounds Pack/Hit Generic 2-1.wav")
-	death_sound = load("res://assets/sounds/Free Sounds Pack/Creature 1-21.wav")
+	death_sound = load("res://assets/sounds/UI Soundpack/MP3/Wood Block3.mp3")
 	kill_sound = load("res://assets/sounds/Free Sounds Pack/Special Collectible 26-1.wav")
 	throw_sound = load("res://assets/sounds/Free Sounds Pack/Whoosh 1-1.wav")
 	impact_sound = load("res://assets/sounds/Free Sounds Pack/Rock Impact 11.wav")
