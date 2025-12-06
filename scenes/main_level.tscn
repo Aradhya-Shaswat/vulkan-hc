@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=3 uid="uid://cnew6x2hwvjyh"]
+[gd_scene load_steps=52 format=3 uid="uid://cnew6x2hwvjyh"]
 
 [ext_resource type="FontFile" uid="uid://gunvccib1svm" path="res://assets/fonts/Poppins-Regular.ttf" id="1_iqu8w"]
 [ext_resource type="Script" uid="uid://b27u1ptmiviqb" path="res://scripts/main.gd" id="1_mwgft"]
@@ -153,15 +153,10 @@ glow_enabled = true
 albedo_color = Color(0, 0, 0, 1)
 uv1_triplanar = true
 
-[sub_resource type="PrismMesh" id="PrismMesh_adxub"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uk2yf"]
-albedo_color = Color(0, 0, 0, 1)
-
 [sub_resource type="Curve3D" id="Curve3D_adxub"]
 closed = true
 _data = {
-"points": PackedVector3Array(0.9427719, -1.3417854, -2.5290928, -0.9427719, 1.3417854, 2.5290928, 97.12308, -0.28798294, -10.543321, 7.3313065, -1.4788468, -8.678608, -7.3313065, 1.4788468, 8.678608, 80.276405, -1.9020202, 13.234206, 1.3774185, 0, -3.317546, -1.3774185, 0, 3.317546, 61.38025, 0.80620116, 56.93393, 10.724094, 0.93970346, 0.08315277, -10.724094, -0.93970346, -0.08315277, 30.702751, -2.6609967, 77.39986, 26.888786, 2.3221512, -0.9664917, -26.888786, -2.3221512, 0.9664917, -0.21871185, -8.10733, 68.386086, 3.7466583, 0, 7.2541504, -3.7466583, 0, -7.2541504, -75.35891, 0, 51.90355, 2.8725052, 2.4795532e-05, 7.21554, -2.8725052, -2.4795532e-05, -7.21554, -82.80255, 2.521574, 13.72727, -8.839546, -0.0039138794, 9.396179, 8.839546, 0.0039138794, -9.396179, -101.341385, 0, -41.980762, -12.770142, -0.0055007935, 7.6616325, 12.770142, 0.0055007935, -7.6616325, -62.51287, -3.1975098, -65.02242, -21.73687, -1.1371031, 0.526947, 21.73687, 1.1371031, -0.526947, -0.13425827, -8.181686, -69.504524, -38.213898, -1.1112893, 3.511528, 38.213898, 1.1112893, -3.511528, 52.11138, -9.381868, -83.8857, -3.06176, 0.005878985, -10.015743, 3.06176, -0.005878985, 10.015743, 99.54384, -0.13511986, -64.39207),
+"points": PackedVector3Array(-0.099746704, -2.6508045, -17.120552, 0.099746704, 2.6508045, 17.120552, 97.12308, -2.903057, -10.543321, 7.3313065, -1.4788468, -8.678608, -7.3313065, 1.4788468, 8.678608, 80.276405, -1.9020202, 13.234206, 1.3774185, 0, -3.317546, -1.3774185, 0, 3.317546, 61.38025, 0.80620116, 56.93393, 10.724094, 0.93970346, 0.08315277, -10.724094, -0.93970346, -0.08315277, 41.85936, -2.6609967, 77.39986, 26.888786, 2.3221512, -0.9664917, -26.888786, -2.3221512, 0.9664917, -0.21871185, -8.10733, 71.930435, 10.23922, 1.0598068, 15.163658, -10.23922, -1.0598068, -15.163658, -75.35891, 0, 51.90355, 3.6058273, 2.4795532e-05, 14.119226, -3.6058273, -2.4795532e-05, -14.119226, -82.80255, 2.521574, 13.72727, -4.5347214, -0.0038986206, 17.548315, 4.5347214, 0.0038986206, -17.548315, -81.43066, 0, -28.66995, -12.770142, -0.0055007935, 7.6616325, 12.770142, 0.0055007935, -7.6616325, -62.51287, -3.1975098, -65.02242, -52.966045, -1.1371231, 2.0421143, 52.966045, 1.1371231, -2.0421143, -0.13425827, -8.181686, -78.08073, -38.213898, -1.1112893, 3.511528, 38.213898, 1.1112893, -3.511528, 64.87949, -9.381868, -83.8857, -3.06176, 0.005878985, -10.015743, 3.06176, -0.005878985, 10.015743, 108.71705, -0.13511986, -57.078297),
 "tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 }
 point_count = 12
@@ -1365,14 +1360,14 @@ offset_right = 160.0
 offset_bottom = 159.0
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.8660254, -0.43301275, 0.25000003, 0.27299982, 0.009393036, 0.9619683, -0.41889283, 0.90133893, 0.1100778, 32.54878, 1.767848, -25.824705)
+transform = Transform3D(-0.8660254, -0.43301278, 0.25000003, 0.37606362, -0.23458658, 0.8964067, -0.32950908, 0.87032706, 0.36599827, 32.54878, 1.767848, -25.824705)
 shadow_enabled = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_6we3w")
 
 [node name="ground" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -0.00047465682, 0, 0, 0, 1, -2.2853394, -5.6105556, -0.81466675)
+transform = Transform3D(1, 0, 0, 0, -3.5158228e-05, 0, 0, 0, 1, -2.2853394, -5.6105556, -0.81466675)
 material_override = SubResource("StandardMaterial3D_8ra5a")
 use_collision = true
 size = Vector3(130.74866, 1, 129.83151)
@@ -1805,17 +1800,12 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -26.
 
 [node name="Objects" type="Node3D" parent="."]
 
-[node name="ramp" type="CSGMesh3D" parent="."]
-transform = Transform3D(-3.2889364e-08, 0, -14.6650095, 0.6516156, -2.2704935, -5.5514647e-07, -0.37621057, -3.9326098, 3.2051395e-07, 1.334161, -7.0470095, -67.47716)
-use_collision = true
-mesh = SubResource("PrismMesh_adxub")
-material = SubResource("StandardMaterial3D_uk2yf")
-
 [node name="Path3D" type="Path3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.013748169, 7.6293945e-06, 0.22014618)
 curve = SubResource("Curve3D_adxub")
 
 [node name="Track" type="CSGPolygon3D" parent="."]
+transform = Transform3D(1.0026164, 0, 0, 0, 1.0026164, 0, 0, 0, 1.0026164, 0, 0, 0)
 material_override = SubResource("StandardMaterial3D_adxub")
 use_collision = true
 polygon = PackedVector2Array(-9.580336, -0.06792745, -9.590064, 0.41428703, 5.6165876, 0.2667601, 5.62081, 0.043509007)
@@ -1863,6 +1853,12 @@ path_local = false
 path_continuous_u = true
 path_u_distance = 1.0
 path_joined = false
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(5.919999, 0, 0, 0, -0.099839784, 0.05658823, 0, 0.005658823, 0.9983976, 0, -5.834101, -69.01058)
+material_override = SubResource("StandardMaterial3D_ff0s2")
+use_collision = true
+size = Vector3(1, 1, 6.687332)
 
 [connection signal="pressed" from="CanvasLayer/Host" to="." method="_on_host_pressed"]
 [connection signal="pressed" from="CanvasLayer/Back" to="." method="_on_back_pressed"]

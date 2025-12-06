@@ -13,6 +13,9 @@ extends RigidBody3D
 @export var air_resistance: float = 0.01
 @export var coast_decel: float = 3.0
 @export var handbrake_grip: float = 1.0
+@export var downforce: float = 60.0
+@export var anti_roll: float = 15.0
+@export var jump_force: float = 12.0
 
 var current_speed: float = 0.0
 var current_steering: float = 0.0
@@ -126,10 +129,22 @@ func _physics_process(delta):
 func _apply_movement(delta):
 	var forward = -global_transform.basis.z
 	var right = global_transform.basis.x
+	var up = global_transform.basis.y
 	
 	var forward_speed = linear_velocity.dot(forward)
 	var lateral_speed = linear_velocity.dot(right)
 	current_speed = forward_speed
+	
+	var speed_factor = clamp(abs(forward_speed) / max_speed, 0.0, 1.0)
+	var downforce_amount = downforce * (1.0 + speed_factor * 2.0)
+	apply_central_force(-Vector3.UP * downforce_amount)
+	
+	angular_velocity.x *= (1.0 - anti_roll * delta)
+	angular_velocity.z *= (1.0 - anti_roll * delta)
+	
+	var current_roll = global_transform.basis.get_euler().z
+	var current_pitch = global_transform.basis.get_euler().x
+	apply_torque(Vector3(-current_pitch * anti_roll * 5.0, 0, -current_roll * anti_roll * 5.0))
 	
 	throttle_input = input_direction.y
 	steering_input = input_direction.x
@@ -138,7 +153,6 @@ func _apply_movement(delta):
 	
 	is_drifting = is_braking and abs(forward_speed) > 5.0
 	
-	# Engine force - direct velocity manipulation for reliability
 	if throttle_input > 0:
 		if forward_speed < max_speed:
 			var accel = engine_power * delta
@@ -148,22 +162,18 @@ func _apply_movement(delta):
 			var accel = reverse_power * delta
 			linear_velocity += forward * accel * throttle_input
 	
-	# Braking
 	if is_braking and abs(forward_speed) > 0.5:
 		var brake_amount = brake_strength * delta
 		var brake_force = min(brake_amount, abs(forward_speed))
 		linear_velocity -= forward * sign(forward_speed) * brake_force
 	
-	# Natural deceleration when coasting (gentle)
 	if throttle_input == 0 and not is_braking:
 		var decel = coast_decel * delta
 		if abs(forward_speed) > decel:
 			linear_velocity -= forward * sign(forward_speed) * decel
 		elif abs(forward_speed) > 0.1:
-			# Very slow - reduce more gently
 			linear_velocity -= forward * forward_speed * 0.5 * delta
 	
-	# Lateral grip - prevent sliding sideways
 	var grip = wheel_grip
 	if is_drifting:
 		grip = drift_grip
@@ -175,10 +185,9 @@ func _apply_movement(delta):
 		lateral_reduction = lateral_speed
 	linear_velocity -= right * lateral_reduction
 	
-	# Steering
 	if abs(forward_speed) > 0.5:
-		var speed_factor = clamp(abs(forward_speed) / 15.0, 0.2, 1.0)
-		var turn_amount = current_steering * turn_speed * speed_factor * delta
+		var turn_speed_factor = clamp(abs(forward_speed) / 15.0, 0.2, 1.0)
+		var turn_amount = current_steering * turn_speed * turn_speed_factor * delta
 		if forward_speed < 0:
 			turn_amount = -turn_amount
 		if is_drifting:
@@ -192,17 +201,26 @@ func _apply_friction(delta):
 	var forward = -global_transform.basis.z
 	var forward_speed = linear_velocity.dot(forward)
 	
-	# Gentle coast when unoccupied
 	if abs(forward_speed) > 0.5:
 		var decel = coast_decel * 0.3 * delta
 		linear_velocity -= forward * sign(forward_speed) * decel
 	
-	# Lateral grip
 	var right = global_transform.basis.x
 	var lateral_speed = linear_velocity.dot(right)
 	linear_velocity -= right * lateral_speed * wheel_grip * 0.5 * delta
 	
 	angular_velocity.y *= 0.95
+
+func jump():
+	if multiplayer.is_server():
+		linear_velocity.y = jump_force
+	else:
+		_request_jump.rpc_id(1)
+
+@rpc("any_peer", "reliable")
+func _request_jump():
+	if multiplayer.is_server() and is_occupied:
+		linear_velocity.y = jump_force
 
 @rpc("any_peer", "reliable")
 func request_enter(peer_id: int):

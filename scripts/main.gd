@@ -1112,7 +1112,7 @@ func register_kill(killer_id: int, victim_id: int = 0):
 	var victim_name = player_list.get(victim_id, "Unknown")
 	_add_kill_feed_entry.rpc(killer_name, victim_name)
 
-@rpc("authority", "reliable")
+@rpc("authority", "reliable", "call_local")
 func _play_kill_sound():
 	SoundManager.play_kill()
 

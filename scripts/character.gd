@@ -379,7 +379,6 @@ func _physics_process(delta):
 			elif cart_look_timer >= CART_LOOK_TIMEOUT:
 				var target_head_y = current_cart.global_rotation.y
 				head.global_rotation.y = lerp_angle(head.global_rotation.y, target_head_y, delta * 5.0)
-				camera.rotation.x = lerp(camera.rotation.x, 0.0, delta * 5.0)
 			
 			sync_position = global_position
 			sync_rotation = rotation
@@ -578,6 +577,10 @@ func _exit_cart():
 	current_cart = null
 	sync_in_cart = false
 	
+	camera.rotation.z = 0.0
+	head.rotation.z = 0.0
+	head.rotation.x = 0.0
+	
 	if speed_lines:
 		speed_lines.visible = false
 		speed_line_data.clear()
@@ -618,7 +621,7 @@ func _find_safe_exit_position() -> Vector3:
 	
 	return cart_pos + Vector3(0, 2, 0)
 
-func _handle_cart_driving(_delta):
+func _handle_cart_driving(delta):
 	if not current_cart:
 		return
 	
@@ -628,6 +631,13 @@ func _handle_cart_driving(_delta):
 	var brake = Input.is_action_pressed("sprint")
 	
 	current_cart.set_input(input_dir, brake)
+	
+	if Input.is_action_just_pressed("jump"):
+		current_cart.jump()
+	
+	var cart_euler = current_cart.global_transform.basis.get_euler()
+	head.rotation.z = lerp(head.rotation.z, cart_euler.z, delta * 15.0)
+	head.rotation.x = lerp(head.rotation.x, cart_euler.x, delta * 15.0)
 	
 	if current_cart.is_drifting:
 		SoundManager.start_drift_sound()
