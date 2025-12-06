@@ -7,14 +7,13 @@
 [ext_resource type="PackedScene" uid="uid://dubjdyiae8baa" path="res://scenes/assetScenes/brick_wall.tscn" id="6_bq26l"]
 [ext_resource type="PackedScene" uid="uid://c75miugiquori" path="res://scenes/assetScenes/brick_wall_curve.tscn" id="7_u2c82"]
 [ext_resource type="PackedScene" uid="uid://b52nsqkuh5mqk" path="res://scenes/assetScenes/cross.tscn" id="10_5fr2l"]
-[ext_resource type="PackedScene" uid="uid://dkdhu84jhqjn5" path="res://scenes/assetScenes/crypt.tscn" id="11_fkrx8"]
 [ext_resource type="PackedScene" uid="uid://c73mkdvaw1m4p" path="res://scenes/assetScenes/brick_wall_end.tscn" id="13_adxub"]
 [ext_resource type="PackedScene" uid="uid://idvvck1xoxwe" path="res://scenes/assetScenes/border_pillar.tscn" id="13_mwgft"]
 [ext_resource type="PackedScene" uid="uid://b72y5ihcd300g" path="res://scenes/assetScenes/cart.tscn" id="14_cart"]
 [ext_resource type="FontFile" uid="uid://cciugckxvrpfw" path="res://assets/fonts/PressStart2P-Regular.ttf" id="15_ff0s2"]
 [ext_resource type="PackedScene" uid="uid://dj2q7ckihe14y" path="res://scenes/assetScenes/stone_wall.tscn" id="15_siio1"]
 [ext_resource type="PackedScene" uid="uid://dhe2vdggcxcmo" path="res://scenes/assetScenes/stone_wall_curve.tscn" id="16_ndwfr"]
-[ext_resource type="PackedScene" uid="uid://1tvv2gs2om6v" path="res://scenes/soccerrrr.tscn" id="16_uk2yf"]
+[ext_resource type="Texture2D" uid="uid://cvoq6l3sybo5u" path="res://assets/free_soccer_pitch/textures/Material.098_diffuse.png" id="16_uk2yf"]
 [ext_resource type="PackedScene" uid="uid://dny03htroscuh" path="res://scenes/assetScenes/stone_wall_column.tscn" id="17_nc5r2"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mwgft"]
@@ -139,7 +138,8 @@ shadow_offset = Vector2(0, 3)
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ff0s2"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_v3uhd"]
-sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+sky_top_color = Color(0.63930094, 0.7580117, 1, 1)
+sky_horizon_color = Color(0.6843325, 0.62863654, 0.40863404, 1)
 ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
 
 [sub_resource type="Sky" id="Sky_ufxs0"]
@@ -158,7 +158,7 @@ uv1_triplanar = true
 [sub_resource type="Curve3D" id="Curve3D_adxub"]
 closed = true
 _data = {
-"points": PackedVector3Array(-0.099746704, -2.6508045, -17.120552, 0.099746704, 2.6508045, 17.120552, 97.12308, -2.903057, -10.543321, 7.3313065, -1.4788468, -8.678608, -7.3313065, 1.4788468, 8.678608, 80.276405, -1.9020202, 13.234206, 1.3774185, 0, -3.317546, -1.3774185, 0, 3.317546, 61.38025, 0.80620116, 56.93393, 20.468765, 0.8023596, -4.6729813, -20.468765, -0.8023596, 4.6729813, 41.85936, -10.179458, 77.39986, 29.643505, -0.30079556, -7.610306, -29.643505, 0.30079556, 7.610306, -0.21871185, -15.966863, 79.25459, 10.23922, 1.0598068, 15.163658, -10.23922, -1.0598068, -15.163658, -75.35891, 0, 51.90355, 3.6058273, 2.4795532e-05, 14.119226, -3.6058273, -2.4795532e-05, -14.119226, -82.80255, 2.521574, 13.72727, -4.5347214, -0.0038986206, 17.548315, 4.5347214, 0.0038986206, -17.548315, -118.22102, 0, -28.66995, -12.770142, -0.0055007935, 7.6616325, 12.770142, 0.0055007935, -7.6616325, -62.51287, -3.1975098, -65.02242, -52.966045, -1.1371231, 2.0421143, 52.966045, 1.1371231, -2.0421143, -0.13425827, -8.181686, -78.08073, -38.213898, -1.1112893, 3.511528, 38.213898, 1.1112893, -3.511528, 64.87949, -9.381868, -83.8857, -3.06176, 0.005878985, -10.015743, 3.06176, -0.005878985, 10.015743, 108.71705, -0.13511986, -57.078297),
+"points": PackedVector3Array(-0.099746704, -2.6508045, -17.120552, 0.099746704, 2.6508045, 17.120552, 97.12308, -2.903057, -10.543321, 7.3313065, -1.4788468, -8.678608, -7.3313065, 1.4788468, 8.678608, 80.276405, -1.9020202, 13.234206, 1.3774185, 0, -3.317546, -1.3774185, 0, 3.317546, 61.38025, 0.80620116, 56.93393, 20.468765, 0.8023596, -4.6729813, -20.468765, -0.8023596, 4.6729813, 41.85936, 2.5787945, 77.39986, 29.643505, -0.30079556, -7.610306, -29.643505, 0.30079556, 7.610306, -0.21871185, 7.9203463, 105.08621, 10.23922, 1.0598068, 15.163658, -10.23922, -1.0598068, -15.163658, -75.35891, 0, 51.90355, 3.6058273, 2.4795532e-05, 14.119226, -3.6058273, -2.4795532e-05, -14.119226, -82.80255, 2.521574, 13.72727, -4.5347214, -0.0038986206, 17.548315, 4.5347214, 0.0038986206, -17.548315, -118.22102, 0, -28.66995, -12.770142, -0.0055007935, 7.6616325, 12.770142, 0.0055007935, -7.6616325, -62.51287, -3.1975098, -65.02242, -52.966045, -1.1371231, 2.0421143, 52.966045, 1.1371231, -2.0421143, -0.13425827, -8.181686, -78.08073, -38.213898, -1.1112893, 3.511528, 38.213898, 1.1112893, -3.511528, 64.87949, -9.381868, -83.8857, -3.06176, 0.005878985, -10.015743, 3.06176, -0.005878985, 10.015743, 108.71705, -0.13511986, -57.078297),
 "tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 }
 point_count = 12
@@ -180,6 +180,9 @@ metallic = 0.6
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_adxub"]
 albedo_color = Color(0, 0.13787085, 0.093943544, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ondrs"]
+albedo_texture = ExtResource("16_uk2yf")
 
 [node name="MainLevel" type="Node3D"]
 script = ExtResource("1_mwgft")
@@ -1703,9 +1706,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.033255, 1.0002375, 57.846
 [node name="cross3" parent="walls" instance=ExtResource("10_5fr2l")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.313469, 1.0002375, -59.54147)
 
-[node name="crypt" parent="walls" instance=ExtResource("11_fkrx8")]
-transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 2.5797806, 1.0002375, -0.44093704)
-
 [node name="cross5" parent="walls" instance=ExtResource("10_5fr2l")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.748499, 1.0002375, -59.54147)
 
@@ -1714,14 +1714,6 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -59.
 
 [node name="cross7" parent="walls" instance=ExtResource("10_5fr2l")]
 transform = Transform3D(1.3113416e-07, 0, -1, 0, 1, 0, 1, 0, 1.3113416e-07, 59.669937, 1.0002375, 4.0280795)
-
-[node name="border-pillar2" parent="walls" instance=ExtResource("13_mwgft")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -19.904032, 1.0002356, 7.0744286)
-
-[node name="CSGTorus3D" type="CSGTorus3D" parent="walls/border-pillar2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2828407, 4.235342, 0)
-inner_radius = 0.805
-sides = 64
 
 [node name="border-pillar3" parent="walls" instance=ExtResource("13_mwgft")]
 transform = Transform3D(-2, 0, 1.7484555e-07, 0, 2, 0, -1.7484555e-07, 0, -2, 38.7817, 1.0002356, 24.60435)
@@ -1758,22 +1750,6 @@ transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -7.32618, 1.0002356, -63.9274
 
 [node name="border-pillar11" parent="walls" instance=ExtResource("13_mwgft")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 10.054991, 1.0002356, -63.927498)
-
-[node name="Cart4" parent="walls" instance=ExtResource("14_cart")]
-transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -5, 1.1105556, 23.527494)
-collision_layer = 2
-collision_mask = 7
-mass = 500.0
-center_of_mass_mode = 0
-center_of_mass = Vector3(0, 0, 0)
-
-[node name="Cart2" parent="walls" instance=ExtResource("14_cart")]
-transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 9.192693, 1.1105556, 23.400364)
-collision_layer = 2
-collision_mask = 7
-mass = 500.0
-center_of_mass_mode = 0
-center_of_mass = Vector3(0, 0, 0)
 
 [node name="Cart5" parent="walls" instance=ExtResource("14_cart")]
 transform = Transform3D(1, 0, -1.7484555e-07, 0, 1, 0, 1.7484555e-07, 0, 1, 9.192693, 1.1105556, -25.599638)
@@ -1958,16 +1934,16 @@ use_collision = true
 size = Vector3(1, 1, 6.687332)
 
 [node name="track_ramp2" type="CSGBox3D" parent="."]
-transform = Transform3D(5.9199986, 0, 0, 0, -0.09998918, -0.014730055, 0, -0.0014730063, 0.9998915, 1.4937303, -7.5187297, 170.75354)
+transform = Transform3D(5.9199986, 1.287743e-10, -8.741329e-08, 0, -0.09998918, -0.014730059, 5.1754273e-07, -0.0014730063, 0.9998915, 1.4937303, -7.5187297, 170.75354)
 material_override = SubResource("StandardMaterial3D_ff0s2")
 use_collision = true
 size = Vector3(2.470459, 1, 218.77437)
 
 [node name="track_ramp3" type="CSGBox3D" parent="."]
-transform = Transform3D(1.1920929e-07, 0.0014730059, -0.99989134, 6.848132e-09, -0.09998915, -0.014730052, 5.9199977, 1.1641532e-10, 0, 114.49373, -7.5187297, 170.75354)
+transform = Transform3D(2.587713e-07, 0, -0.9999998, 0, -0.1, 0, 5.9199977, 0, 4.371138e-08, 117.4997, -7.519, 170.754)
 material_override = SubResource("StandardMaterial3D_ff0s2")
 use_collision = true
-size = Vector3(2.470459, 1, 218.77437)
+size = Vector3(2.470459, 1, 218.10855)
 
 [node name="track_screen" type="CSGBox3D" parent="."]
 transform = Transform3D(60.383984, 0, 0, 0, -0.006427352, -3.3907125, 0, -0.113399185, 0.19218223, 0, 0.6959822, -100.04063)
@@ -1998,7 +1974,7 @@ font_size = 16
 outline_size = 0
 
 [node name="track_screen3" type="CSGBox3D" parent="."]
-transform = Transform3D(60.383984, 0, 0, 0, -0.006427352, -3.3907125, 0, -0.113399185, 0.19218223, 0, 0.6959822, 394.95938)
+transform = Transform3D(60.383984, 0, 0, 0, -0.006427352, -3.3907125, 0, -0.113399185, 0.19218223, 0, 9.695982, 394.95938)
 material_override = SubResource("StandardMaterial3D_ff0s2")
 cast_shadow = 0
 use_collision = true
@@ -2006,7 +1982,7 @@ size = Vector3(1, 1, 7)
 
 [node name="Label3D" type="Label3D" parent="track_screen3"]
 transform = Transform3D(0.5, 1.3044809e-06, -3.36203e-05, 0, -14.641191, -131.38118, 7.54979e-08, -8.639186, 222.6572, 0, -5.7922363, 0.010979295)
-text = "F1 Inspired Tracks"
+text = "F1 Inspired Tracks (v2)"
 font = ExtResource("1_iqu8w")
 font_size = 16
 outline_size = 0
@@ -2026,7 +2002,7 @@ font_size = 16
 outline_size = 0
 
 [node name="track_screen2" type="CSGBox3D" parent="."]
-transform = Transform3D(-60.383984, 9.913672e-09, -1.6801105e-08, 0, -0.006427352, -3.3907125, 5.278936e-06, 0.1133992, -0.19218227, 0, 0.6959822, 310.95938)
+transform = Transform3D(-60.383984, 9.913672e-09, -1.6801105e-08, 0, -0.006427352, -3.3907125, 5.278936e-06, 0.1133992, -0.19218227, 0, 9.695982, 310.95938)
 material_override = SubResource("StandardMaterial3D_ff0s2")
 cast_shadow = 0
 use_collision = true
@@ -2034,7 +2010,7 @@ size = Vector3(1, 1, 7)
 
 [node name="Label3D" type="Label3D" parent="track_screen2"]
 transform = Transform3D(0.5, 1.3044809e-06, -3.36203e-05, 0, -14.641191, -131.38118, 7.54979e-08, -8.639186, 222.6572, 0, -5.7922363, 0.010979295)
-text = "F1 Inspired Tracks"
+text = "F1 Inspired Tracks (v2)"
 font = ExtResource("1_iqu8w")
 font_size = 16
 outline_size = 0
@@ -2053,8 +2029,160 @@ font = ExtResource("1_iqu8w")
 font_size = 16
 outline_size = 0
 
-[node name="Sketchfab_Scene" parent="." instance=ExtResource("16_uk2yf")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 299.2519, -84.623604, 173)
+[node name="track_screen4" type="CSGBox3D" parent="."]
+transform = Transform3D(1.7484558e-06, 0.076000035, 9.835064e-08, 0, 3.3220673e-09, -2.2500002, 40.000008, -3.322067e-09, -2.0286256e-14, 286.35748, 7.4844475, 171.22523)
+material_override = SubResource("StandardMaterial3D_ff0s2")
+cast_shadow = 0
+use_collision = true
+size = Vector3(1, 1, 7)
+
+[node name="Label3D3" type="Label3D" parent="track_screen4"]
+transform = Transform3D(0.5, 1.3044807e-06, -3.36203e-05, 0, -14.641192, -131.38116, 7.5497894e-08, -8.639187, 222.65721, -0.37500024, -4.2978516, 2.6706934)
+text = "VULKAN?"
+font = ExtResource("15_ff0s2")
+font_size = 10
+outline_size = 0
+
+[node name="Label3D2" type="Label3D" parent="track_screen4"]
+transform = Transform3D(0.5, 1.3044809e-06, -3.36203e-05, 0, -14.641196, -131.38107, 7.54979e-08, -8.639188, 222.65723, 0.38406432, -1.3082886, 2.656789)
+text = "hack club."
+font = ExtResource("1_iqu8w")
+font_size = 16
+outline_size = 0
+
+[node name="track_screen5" type="CSGBox3D" parent="."]
+transform = Transform3D(1.6888782e-06, 0.07341039, 0.58234304, 4.525337e-07, 0.01967026, -2.1733334, 40.000008, -3.3220673e-09, -2.0286254e-14, 284.35748, 22.484447, 171.22523)
+material_override = SubResource("StandardMaterial3D_ff0s2")
+cast_shadow = 0
+use_collision = true
+size = Vector3(1, 1, 7)
+
+[node name="Label3D" type="Label3D" parent="track_screen5"]
+transform = Transform3D(0.5, 1.3044807e-06, -3.36203e-05, 0, -14.641186, -131.3811, 7.54979e-08, -8.639186, 222.65717, 0, -23.233154, 2.2095947)
+text = "Press 4 and G to spawn ball."
+font = ExtResource("1_iqu8w")
+font_size = 16
+outline_size = 0
+
+[node name="Label3D3" type="Label3D" parent="track_screen5"]
+transform = Transform3D(0.5, 1.3044807e-06, -3.36203e-05, 0, -14.641186, -131.3811, 7.54979e-08, -8.639186, 222.65717, 0, -26.353027, 3.6732464)
+text = "ROCKET LEAGUE ARENA!"
+font = ExtResource("15_ff0s2")
+font_size = 10
+outline_size = 0
+
+[node name="football" type="CSGBox3D" parent="."]
+transform = Transform3D(50, 0, 0, 0, 0.457, 0, 0, 0, 76.938, 253.93, -11.069287, 169.853)
+material_override = SubResource("StandardMaterial3D_ondrs")
+use_collision = true
+size = Vector3(1.096, 15.8984375, 1)
+
+[node name="football_border" type="CSGBox3D" parent="."]
+transform = Transform3D(50, 0, 0, 0, -1.9976104e-08, -76.938, 0, 0.457, -3.363067e-06, 254.40314, 3.311449, 131.63603)
+visible = false
+use_collision = true
+size = Vector3(1.1010742, 1, 1)
+
+[node name="football_border2" type="CSGBox3D" parent="."]
+transform = Transform3D(50, 0, 0, 0, -1.9976104e-08, -76.938, 0, 0.457, -3.363067e-06, 256.31146, 3.311449, 208.09877)
+visible = false
+use_collision = true
+size = Vector3(1.2056885, 1, 1)
+
+[node name="football_border3" type="CSGBox3D" parent="."]
+transform = Transform3D(-2.1855697e-06, -0.457, 3.3630663e-06, 50, -1.9976104e-08, 3.3630668e-06, -2.185569e-06, 1.9976103e-08, 76.938, 280.89795, 16.855047, 169.853)
+visible = false
+use_collision = true
+
+[node name="football_border4" type="CSGBox3D" parent="."]
+transform = Transform3D(-2.1855697e-06, -0.457, 3.3630663e-06, 50, -1.9976104e-08, 3.3630668e-06, -2.185569e-06, 1.9976103e-08, 76.938, 226.66345, 13.663923, 145.50163)
+visible = false
+use_collision = true
+size = Vector3(1, 1, 0.46392822)
+
+[node name="football_border5" type="CSGBox3D" parent="."]
+transform = Transform3D(-2.1855697e-06, -0.457, 3.3630663e-06, 50, -1.9976104e-08, 3.3630668e-06, -2.185569e-06, 1.9976103e-08, 76.938, 226.74463, 13.20895, 195.99748)
+visible = false
+use_collision = true
+size = Vector3(1, 1, 0.46627808)
+
+[node name="goal_post" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.14599419, 0)
+
+[node name="border-pillar2" parent="goal_post" instance=ExtResource("13_mwgft")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 242.75513, -7.519001, 144.44383)
+
+[node name="border-pillar3" parent="goal_post" instance=ExtResource("13_mwgft")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 265.19363, -7.519001, 144.44383)
+
+[node name="border-pillar4" parent="goal_post" instance=ExtResource("13_mwgft")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 242.75513, -3.519001, 144.44383)
+
+[node name="border-pillar5" parent="goal_post" instance=ExtResource("13_mwgft")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 265.19363, -3.519001, 144.44383)
+
+[node name="border-pillar10" parent="goal_post" instance=ExtResource("13_mwgft")]
+transform = Transform3D(1, 0, 0, 0, 0.6099939, -1.3171008, 0, 2.2765286, 0.352916, 242.75513, -0.519001, 134.44383)
+
+[node name="border-pillar12" parent="goal_post" instance=ExtResource("13_mwgft")]
+transform = Transform3D(-1.2787078e-07, -5.18731, 2.9802319e-08, 1.6630795e-08, -3.9356306e-07, -1.3635627, 1.0000002, 4.450269e-15, -4.4703476e-08, 265.86957, -0.519001, 134.44383)
+
+[node name="border-pillar13" parent="goal_post" instance=ExtResource("13_mwgft")]
+transform = Transform3D(-1.2787078e-07, -5.18731, 2.9802319e-08, 1.6630795e-08, -3.9356306e-07, -1.3635627, 1.0000002, 4.450269e-15, -4.4703476e-08, 265.86957, 2.480999, 144.44383)
+
+[node name="border-pillar11" parent="goal_post" instance=ExtResource("13_mwgft")]
+transform = Transform3D(1, 0, 0, 0, 0.6099939, -1.3171008, 0, 2.2765286, 0.352916, 265.19363, -0.519001, 134.44383)
+
+[node name="border-pillar6" parent="goal_post" instance=ExtResource("13_mwgft")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 242.75513, -9.519001, 135.44383)
+
+[node name="border-pillar7" parent="goal_post" instance=ExtResource("13_mwgft")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 265.19363, -9.519001, 135.44383)
+
+[node name="border-pillar8" parent="goal_post" instance=ExtResource("13_mwgft")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 242.75513, -5.519001, 135.44383)
+
+[node name="border-pillar9" parent="goal_post" instance=ExtResource("13_mwgft")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 265.19363, -5.519001, 135.44383)
+
+[node name="goal_post2" type="Node3D" parent="."]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 508.2453, -0.14599419, 339.70856)
+
+[node name="border-pillar2" parent="goal_post2" instance=ExtResource("13_mwgft")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 242.75513, -7.519001, 144.44383)
+
+[node name="border-pillar3" parent="goal_post2" instance=ExtResource("13_mwgft")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 265.19363, -7.519001, 144.44383)
+
+[node name="border-pillar4" parent="goal_post2" instance=ExtResource("13_mwgft")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 242.75513, -3.519001, 144.44383)
+
+[node name="border-pillar5" parent="goal_post2" instance=ExtResource("13_mwgft")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 265.19363, -3.519001, 144.44383)
+
+[node name="border-pillar10" parent="goal_post2" instance=ExtResource("13_mwgft")]
+transform = Transform3D(1, 0, 0, 0, 0.6099939, -1.3171008, 0, 2.2765286, 0.352916, 242.75513, -0.519001, 134.44383)
+
+[node name="border-pillar12" parent="goal_post2" instance=ExtResource("13_mwgft")]
+transform = Transform3D(-1.2787078e-07, -5.18731, 2.9802319e-08, 1.6630795e-08, -3.9356306e-07, -1.3635627, 1.0000002, 4.450269e-15, -4.4703476e-08, 265.86957, -0.519001, 134.44383)
+
+[node name="border-pillar13" parent="goal_post2" instance=ExtResource("13_mwgft")]
+transform = Transform3D(-1.2787078e-07, -5.18731, 2.9802319e-08, 1.6630795e-08, -3.9356306e-07, -1.3635627, 1.0000002, 4.450269e-15, -4.4703476e-08, 265.86957, 2.480999, 144.44383)
+
+[node name="border-pillar11" parent="goal_post2" instance=ExtResource("13_mwgft")]
+transform = Transform3D(1, 0, 0, 0, 0.6099939, -1.3171008, 0, 2.2765286, 0.352916, 265.19363, -0.519001, 134.44383)
+
+[node name="border-pillar6" parent="goal_post2" instance=ExtResource("13_mwgft")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 242.75513, -9.519001, 135.44383)
+
+[node name="border-pillar7" parent="goal_post2" instance=ExtResource("13_mwgft")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 265.19363, -9.519001, 135.44383)
+
+[node name="border-pillar8" parent="goal_post2" instance=ExtResource("13_mwgft")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 242.75513, -5.519001, 135.44383)
+
+[node name="border-pillar9" parent="goal_post2" instance=ExtResource("13_mwgft")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 265.19363, -5.519001, 135.44383)
 
 [connection signal="pressed" from="CanvasLayer/Host" to="." method="_on_host_pressed"]
 [connection signal="pressed" from="CanvasLayer/Back" to="." method="_on_back_pressed"]

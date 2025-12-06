@@ -998,9 +998,9 @@ func _create_spawned_object(shape: String, pos: Vector3, color: Color, obj_name:
 			collision.shape = CapsuleShape3D.new()
 		"bouncy":
 			mesh.mesh = SphereMesh.new()
-			material.albedo_color = Color(1.0, 0.4, 0.7)
+			material.albedo_color = Color("ff66b3ff")
 			material.emission_enabled = true
-			material.emission = Color(1.0, 0.3, 0.6)
+			material.emission = Color("ff4d99ff")
 			material.emission_energy_multiplier = 0.3
 			mesh.mesh.material = material
 			collision.shape = SphereShape3D.new()

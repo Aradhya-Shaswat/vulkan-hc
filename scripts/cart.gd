@@ -45,7 +45,6 @@ const FLIP_THRESHOLD: float = 0.5
 var flip_timer: float = 0.0
 const FLIP_RESPAWN_TIME: float = 2.0
 
-# Wheel animation
 var wheel_rotation: float = 0.0
 var steering_visual_angle: float = 0.0
 @export var wheel_radius: float = 0.35
@@ -55,7 +54,6 @@ var steering_visual_angle: float = 0.0
 @onready var exit_position: Node3D = $ExitPosition
 @onready var cart_model: Node3D = $"Sketchfab_Scene2/Sketchfab_model"
 
-# Wheel nodes (will be found in _ready)
 var front_left_wheel: Node3D = null
 var front_right_wheel: Node3D = null
 var rear_left_wheel: Node3D = null
@@ -72,7 +70,6 @@ func _ready():
 	prev_sync_position = sync_position
 	prev_sync_rotation = sync_rotation
 	
-	# Find wheel nodes in the model
 	call_deferred("_find_wheel_nodes")
 	_update_freeze_state()
 
@@ -80,11 +77,8 @@ func _find_wheel_nodes():
 	if not cart_model:
 		return
 	
-	# Find nodes recursively in the model hierarchy
-	# Based on the GLTF structure, wheels are named root.4_gameasset, root.5_gameasset, etc.
 	var root_node = cart_model.get_node_or_null("RootNode")
 	if root_node:
-		# Try to find wheel nodes by name pattern
 		for child in root_node.get_children():
 			var node_name = child.name
 			if "root_4" in node_name or "root.4" in node_name:
@@ -102,17 +96,14 @@ func _animate_wheels(delta: float):
 	if not is_occupied:
 		return
 	
-	# Calculate wheel rotation based on speed
 	var forward = -global_transform.basis.z
 	var forward_speed = linear_velocity.dot(forward)
 	var rotation_speed = forward_speed / wheel_radius if wheel_radius > 0 else 0.0
 	wheel_rotation += rotation_speed * delta
-	
-	# Animate steering visual
+
 	var target_steering = current_steering * deg_to_rad(max_steering_visual_angle)
 	steering_visual_angle = lerp(steering_visual_angle, target_steering, 10.0 * delta)
 	
-	# Apply rotation to wheels
 	if front_left_wheel:
 		front_left_wheel.rotation.x = wheel_rotation
 	if front_right_wheel:
@@ -122,7 +113,6 @@ func _animate_wheels(delta: float):
 	if rear_right_wheel:
 		rear_right_wheel.rotation.x = wheel_rotation
 	
-	# Apply steering to steering wheel (rotate around z-axis)
 	if steering_wheel:
 		steering_wheel.rotation.z = steering_visual_angle * 2.0  # Exaggerate for visual effect
 
@@ -153,7 +143,6 @@ func _physics_process(delta):
 		_update_freeze_state()
 	
 	if multiplayer.is_server():
-		# Update coyote timer for jump
 		var grounded = _is_grounded()
 		if grounded:
 			coyote_timer = coyote_time
@@ -205,7 +194,6 @@ func _physics_process(delta):
 		global_transform.origin = new_pos
 		global_rotation = new_rot
 	
-	# Animate wheels on all clients for visual effect
 	_animate_wheels(delta)
 
 func _apply_movement(delta):
@@ -295,13 +283,12 @@ func _apply_friction(delta):
 
 func _is_grounded() -> bool:
 	var space_state = get_world_3d().direct_space_state
-	# Check multiple points like wheels - any wheel touching ground counts
 	var check_points = [
-		Vector3(0.5, 0, -0.6),  # Front right
-		Vector3(-0.5, 0, -0.6), # Front left
-		Vector3(0.5, 0, 0.6),   # Rear right
-		Vector3(-0.5, 0, 0.6),  # Rear left
-		Vector3.ZERO            # Center
+		Vector3(0.5, 0, -0.6), 
+		Vector3(-0.5, 0, -0.6), 
+		Vector3(0.5, 0, 0.6),  
+		Vector3(-0.5, 0, 0.6),  
+		Vector3.ZERO          
 	]
 	for offset in check_points:
 		var start = global_position + global_transform.basis * offset

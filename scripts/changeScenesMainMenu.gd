@@ -7,7 +7,6 @@ var http_request: HTTPRequest
 var update_available: bool = false
 var update_info: Dictionary = {}
 
-# Loading overlay
 var loading_panel: Panel = null
 var loading_label: Label = null
 var spinner: Label = null
@@ -23,7 +22,6 @@ func _ready() -> void:
 	_create_loading_panel()
 
 func _create_loading_panel():
-	# Create loading panel similar to main_level's LoadingPanel
 	loading_panel = Panel.new()
 	loading_panel.name = "LoadingPanel"
 	loading_panel.visible = false
@@ -36,7 +34,6 @@ func _create_loading_panel():
 	loading_panel.add_theme_stylebox_override("panel", style)
 	add_child(loading_panel)
 	
-	# Spinner label
 	spinner = Label.new()
 	spinner.name = "Spinner"
 	spinner.anchors_preset = Control.PRESET_CENTER
@@ -55,8 +52,7 @@ func _create_loading_panel():
 	spinner.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	spinner.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	loading_panel.add_child(spinner)
-	
-	# Loading label
+
 	loading_label = Label.new()
 	loading_label.name = "LoadingLabel"
 	loading_label.anchors_preset = Control.PRESET_CENTER
@@ -124,7 +120,6 @@ func _on_play_button_pressed() -> void:
 	loading_panel.show()
 	loading_label.text = "Loading game..."
 	is_loading = true
-	# Load scene asynchronously
 	ResourceLoader.load_threaded_request("res://scenes/main_level.tscn")
 
 func _check_scene_load_status():
