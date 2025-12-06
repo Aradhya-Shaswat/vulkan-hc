@@ -161,16 +161,16 @@ albedo_color = Color(0, 0, 0, 1)
 [sub_resource type="Curve3D" id="Curve3D_adxub"]
 closed = true
 _data = {
-"points": PackedVector3Array(-2.358467, -0.0007324219, 0.8820362, 2.358467, 0.0007324219, -0.8820362, 0.60945874, -0.28798294, -8.269449, -3.2049026, 0.0009765625, 0.16798115, 3.2049026, -0.0009765625, -0.16798115, 15.344513, -1.9020202, -10.551133, 3.7581863, 0.005493164, -6.2679796, -3.7581863, -0.005493164, 6.2679796, 16.099892, -1.3978271, 1.9998226, 1.3774185, 0, -3.317546, -1.3774185, 0, 3.317546, 8.526123, 0.80620116, 18.514374, 5.255821, 0, 0.27662086, -5.255821, 0, -0.27662086, -3.5530472, -0.91134036, 23.677992, 4.937561, 0, -2.036066, -4.937561, 0, 2.036066, -9.412682, 0, 30.23222, 3.7466583, 0, 7.2541504, -3.7466583, 0, -7.2541504, -22.581627, 0, 23.647753, -1.7718658, 0, 5.5954614, 1.7718658, 0, -5.5954614, -15.792114, 2.521574, -2.1737306, -5.1036873, -0.00390625, 4.78496, 5.1036873, 0.00390625, -4.78496, -24.776443, 0, -15.566426, -0.6579437, -0.005493164, 6.789673, 0.6579437, 0.005493164, -6.789673, -18.452988, -3.1975098, -36.903805, -2.5671997, 0.005126953, -6.806141, 2.5671997, -0.005126953, 6.806141, -1.2186737, -3.9320922, -49.277485, -1.4140854, 0.0048828125, -5.993538, 1.4140854, -0.0048828125, 5.993538, 10.926018, 3.4406006, -37.0757, -7.058159, 0.005859375, -6.4726315, 7.058159, -0.005859375, 6.4726315, -12.245346, -0.13511986, -16.243324),
-"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+"points": PackedVector3Array(0.9427719, -1.3417854, -2.5290928, -0.9427719, 1.3417854, 2.5290928, 97.12308, -0.28798294, -10.543321, 7.3313065, -1.4788468, -8.678608, -7.3313065, 1.4788468, 8.678608, 80.276405, -1.9020202, 13.234206, 1.3774185, 0, -3.317546, -1.3774185, 0, 3.317546, 61.38025, 0.80620116, 56.93393, 10.724094, 0.93970346, 0.08315277, -10.724094, -0.93970346, -0.08315277, 30.702751, -2.6609967, 77.39986, 26.888786, 2.3221512, -0.9664917, -26.888786, -2.3221512, 0.9664917, -0.21871185, -8.10733, 68.386086, 3.7466583, 0, 7.2541504, -3.7466583, 0, -7.2541504, -75.35891, 0, 51.90355, 2.8725052, 2.4795532e-05, 7.21554, -2.8725052, -2.4795532e-05, -7.21554, -82.80255, 2.521574, 13.72727, -8.839546, -0.0039138794, 9.396179, 8.839546, 0.0039138794, -9.396179, -101.341385, 0, -41.980762, -12.770142, -0.0055007935, 7.6616325, 12.770142, 0.0055007935, -7.6616325, -62.51287, -3.1975098, -65.02242, -21.73687, -1.1371031, 0.526947, 21.73687, 1.1371031, -0.526947, -0.13425827, -8.181686, -69.504524, -38.213898, -1.1112893, 3.511528, 38.213898, 1.1112893, -3.511528, 52.11138, -9.381868, -83.8857, -3.06176, 0.005878985, -10.015743, 3.06176, -0.005878985, 10.015743, 99.54384, -0.13511986, -64.39207),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 }
-point_count = 13
+point_count = 12
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_adxub"]
 albedo_color = Color(0, 0.13787085, 0.093943544, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ff0s2"]
-albedo_color = Color(0.5529556, 0.55295557, 0.55295557, 1)
+albedo_color = Color(0, 0, 0, 1)
 metallic = 0.6
 
 [node name="MainLevel" type="Node3D"]
@@ -228,7 +228,7 @@ offset_bottom = 37.0
 theme_override_colors/font_color = Color(0.35531342, 0.35531357, 0.35531372, 1)
 theme_override_fonts/font = ExtResource("1_iqu8w")
 theme_override_font_sizes/font_size = 11
-text = "VULKAN-HC RELEASE 1.0"
+text = "VULKAN BETA (DEBUG)w"
 
 [node name="FPSLabel" type="Label" parent="CanvasLayer"]
 visible = false
@@ -1686,114 +1686,6 @@ transform = Transform3D(-4.3711395e-08, 0, 1, 0, 1, 0, -1, 0, -4.3711395e-08, 10
 [node name="stone-wall-curve9" parent="walls/starting_room" instance=ExtResource("16_ndwfr")]
 transform = Transform3D(-1.0000001, 0, 0, 0, 1, 0, 0, 0, -1.0000001, 105.716675, 1.0003767, -19.15085)
 
-[node name="extremeWalllllll" type="CSGBox3D" parent="walls"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38.60666, 6.6105556, -62.900978)
-visible = false
-use_collision = true
-size = Vector3(53.12555, 100, 1)
-
-[node name="extremeWalllllll17" type="CSGBox3D" parent="walls"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.39334, 6.6105556, -62.900978)
-visible = false
-use_collision = true
-size = Vector3(53.12555, 100, 1)
-
-[node name="extremeWalllllll5" type="CSGBox3D" parent="walls"]
-transform = Transform3D(0.41817534, 0, 0, 0, 1, 0, 0, 0, 1, -10.289649, 27.840536, -52.203148)
-visible = false
-use_collision = true
-size = Vector3(35, 57.54004, 1)
-
-[node name="extremeWalllllll18" type="CSGBox3D" parent="walls"]
-transform = Transform3D(0.41817534, 0, 0, 0, 1, 0, 0, 0, 1, 11.919438, 27.840536, -52.203148)
-visible = false
-use_collision = true
-size = Vector3(34, 57.54004, 1)
-
-[node name="extremeWalllllll6" type="CSGBox3D" parent="walls"]
-transform = Transform3D(0.41817534, 0, 0, 0, 1, 0, 0, 0, 1, -10.150798, 27.840536, 49.63674)
-visible = false
-use_collision = true
-size = Vector3(36.412483, 57.54004, 1)
-
-[node name="extremeWalllllll15" type="CSGBox3D" parent="walls"]
-transform = Transform3D(0.41817534, 0, 0, 0, 1, 0, 0, 0, 1, 10.884463, 27.840536, 49.63674)
-visible = false
-use_collision = true
-size = Vector3(27.015759, 57.54004, 1)
-
-[node name="extremeWalllllll11" type="CSGBox3D" parent="walls"]
-transform = Transform3D(0.41817534, 0, 0, 0, 1, 0, 0, 0, 1, 45.087666, 27.840536, 49.63674)
-visible = false
-use_collision = true
-size = Vector3(51.901024, 57.54004, 1)
-
-[node name="extremeWalllllll12" type="CSGBox3D" parent="walls"]
-transform = Transform3D(0.41817534, 0, 0, 0, 1, 0, 0, 0, 1, -45.382835, 27.840536, 49.63674)
-visible = false
-use_collision = true
-size = Vector3(51.901024, 57.54004, 1)
-
-[node name="extremeWalllllll13" type="CSGBox3D" parent="walls"]
-transform = Transform3D(0.41817534, 0, 0, 0, 1, 0, 0, 0, 1, 45.823624, 27.840536, -52.36326)
-visible = false
-use_collision = true
-size = Vector3(48.381176, 57.54004, 1)
-
-[node name="extremeWalllllll14" type="CSGBox3D" parent="walls"]
-transform = Transform3D(0.41817534, 0, 0, 0, 1, 0, 0, 0, 1, -45.382835, 27.840536, -52.36326)
-visible = false
-use_collision = true
-size = Vector3(51.901024, 57.54004, 1)
-
-[node name="extremeWalllllll7" type="CSGBox3D" parent="walls"]
-transform = Transform3D(-1.8279025e-08, 0, -1, 0, 1, 0, 0.41817534, 0, -4.371139e-08, -50.154434, 27.840536, 28.636742)
-visible = false
-use_collision = true
-size = Vector3(82.87065, 57.54004, 1)
-
-[node name="extremeWalllllll9" type="CSGBox3D" parent="walls"]
-transform = Transform3D(-1.8279025e-08, 0, -1, 0, 1, 0, 0.41817534, 0, -4.371139e-08, -50.154434, 27.840536, -27.893707)
-visible = false
-use_collision = true
-size = Vector3(104.53835, 57.54004, 1)
-
-[node name="extremeWalllllll10" type="CSGBox3D" parent="walls"]
-transform = Transform3D(-1.8279025e-08, 0, -1, 0, 1, 0, 0.41817534, 0, -4.371139e-08, 52.845566, 27.840536, -27.249243)
-visible = false
-use_collision = true
-size = Vector3(107.62062, 57.54004, 1)
-
-[node name="extremeWalllllll8" type="CSGBox3D" parent="walls"]
-transform = Transform3D(-1.8279025e-08, 0, -1, 0, 1, 0, 0.41817534, 0, -4.371139e-08, 52.563034, 27.840536, 29.603363)
-visible = false
-use_collision = true
-size = Vector3(82.87065, 57.54004, 1)
-
-[node name="extremeWalllllll2" type="CSGBox3D" parent="walls"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -42.029594, 6.6105556, 61.19049)
-visible = false
-use_collision = true
-size = Vector3(65.95703, 100, 1)
-
-[node name="extremeWalllllll16" type="CSGBox3D" parent="walls"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43.970406, 6.6105556, 61.19049)
-visible = false
-use_collision = true
-size = Vector3(65.95703, 100, 1)
-
-[node name="extremeWalllllll3" type="CSGBox3D" parent="walls"]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 62.978554, 6.6105556, -7.708496)
-visible = false
-use_collision = true
-size = Vector3(150, 100, 1)
-
-[node name="extremeWalllllll4" type="CSGBox3D" parent="walls"]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -63.19834, 6.6105556, -7.708496)
-visible = false
-use_collision = true
-size = Vector3(150, 100, 1)
-
 [node name="cross2" parent="walls" instance=ExtResource("10_5fr2l")]
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 25.242638, 1.0002375, 57.84619)
 
@@ -1913,8 +1805,9 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -26.
 
 [node name="Objects" type="Node3D" parent="."]
 
-[node name="CSGMesh3D" type="CSGMesh3D" parent="."]
-transform = Transform3D(-3.2889364e-08, 0, -14.6650095, 0.6516156, -2.2704935, -5.5514647e-07, -0.37621057, -3.9326098, 3.2051395e-07, 0.7903755, -7.077352, -66.89461)
+[node name="ramp" type="CSGMesh3D" parent="."]
+transform = Transform3D(-3.2889364e-08, 0, -14.6650095, 0.6516156, -2.2704935, -5.5514647e-07, -0.37621057, -3.9326098, 3.2051395e-07, 1.334161, -7.0470095, -67.47716)
+use_collision = true
 mesh = SubResource("PrismMesh_adxub")
 material = SubResource("StandardMaterial3D_uk2yf")
 
@@ -1924,7 +1817,8 @@ curve = SubResource("Curve3D_adxub")
 
 [node name="Track" type="CSGPolygon3D" parent="."]
 material_override = SubResource("StandardMaterial3D_adxub")
-polygon = PackedVector2Array(0, 0, 0.0058652163, 0.07855272, 1.6184335, 0.07438, 1.6193604, -0.0010274798)
+use_collision = true
+polygon = PackedVector2Array(-9.580336, -0.06792745, -9.590064, 0.41428703, 5.6165876, 0.2667601, 5.62081, 0.043509007)
 mode = 2
 path_node = NodePath("../Path3D")
 path_interval_type = 0
@@ -1940,11 +1834,12 @@ metadata/_edit_group_ = true
 
 [node name="Outer Edge" type="CSGPolygon3D" parent="."]
 material_override = SubResource("StandardMaterial3D_ff0s2")
-polygon = PackedVector2Array(-0.0617034, 0.009447036, -0.06172715, 0.19810821, -0.0067948643, 0.19805558, -0.011443937, 0.010495171)
+use_collision = true
+polygon = PackedVector2Array(-9.931122, -0.022338688, -9.945695, 0.94961125, -9.516603, 0.94870377, -9.528092, -0.019746661)
 mode = 2
 path_node = NodePath("../Path3D")
 path_interval_type = 0
-path_interval = 0.1
+path_interval = 1.0
 path_simplify_angle = 0.0
 path_rotation = 2
 path_rotation_accurate = false
@@ -1955,11 +1850,12 @@ path_joined = false
 
 [node name="Inner Edge" type="CSGPolygon3D" parent="."]
 material_override = SubResource("StandardMaterial3D_ff0s2")
-polygon = PackedVector2Array(1.6959982, -0.0017714198, 1.6973721, 0.18567699, 1.6365892, 0.18828818, 1.6350851, -0.004686244)
+use_collision = true
+polygon = PackedVector2Array(5.8733683, -0.001703687, 5.893044, 0.8840673, 5.450614, 0.9029769, 5.4816847, 0.009974599)
 mode = 2
 path_node = NodePath("../Path3D")
 path_interval_type = 0
-path_interval = 0.1
+path_interval = 1.0
 path_simplify_angle = 0.0
 path_rotation = 2
 path_rotation_accurate = false

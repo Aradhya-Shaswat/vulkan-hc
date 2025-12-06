@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://lnkystooe34y" path="res://scenes/cart_main.tscn" id="2_2tcqy"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_body"]
-size = Vector3(1.4178467, 0.6, 2.335846)
+size = Vector3(1.4178467, 0.6, 2.1341324)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_seat"]
 albedo_color = Color(0.2, 0.2, 0.2, 1)
@@ -26,13 +26,12 @@ properties/2/replication_mode = 1
 
 [node name="Cart" type="RigidBody3D"]
 collision_layer = 4
-collision_mask = 1
 mass = 500.0
 continuous_cd = true
 script = ExtResource("1_cart")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(-1.9125487, 0, 1.5081673e-07, 0, 2.2509866, 0, -1.6720031e-07, 0, -1.7251424, 0.041076604, 0.6653398, -0.08285126)
+transform = Transform3D(-1.9125487, 0, 1.5081673e-07, 0, 2.2509866, 0, -1.6720031e-07, 0, -1.7251424, 0.04107659, 0.6653398, 0.09114105)
 shape = SubResource("BoxShape3D_body")
 
 [node name="Seat" type="MeshInstance3D" parent="."]
