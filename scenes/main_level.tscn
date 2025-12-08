@@ -140,6 +140,7 @@ shadow_offset = Vector2(0, 3)
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_v3uhd"]
 sky_top_color = Color(0.63930094, 0.7580117, 1, 1)
 sky_horizon_color = Color(0.6843325, 0.62863654, 0.40863404, 1)
+ground_bottom_color = Color(0.917002, 0.7237735, 0.7300603, 1)
 ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
 
 [sub_resource type="Sky" id="Sky_ufxs0"]
@@ -166,10 +167,10 @@ point_count = 12
 [sub_resource type="Curve3D" id="Curve3D_ff0s2"]
 closed = true
 _data = {
-"points": PackedVector3Array(4.9653015, 0.8778763, -22.08017, -4.9653015, -0.8778763, 22.08017, 97.12308, -2.903057, -40.947968, 5.1940613, 0.06758571, -27.22345, -5.1940613, -0.06758571, 27.22345, 136.8644, -1.9020202, 13.234192, 4.9159927, 0.07612437, -5.9112854, -4.9159927, -0.07612437, 5.9112854, 91.975746, 0.80620116, 56.93393, 10.724094, 0.93970346, 0.08315277, -10.724094, -0.93970346, -0.08315277, 41.85936, -10.179458, 77.39986, 26.888786, 2.3221512, -0.9664917, -26.888786, -2.3221512, 0.9664917, -0.21871185, -7.656269, 71.93042, 10.23922, 1.0598068, 15.163658, -10.23922, -1.0598068, -15.163658, -75.35891, 0, 84.63928, 9.004875, -1.496357, 22.024963, -9.004875, 1.496357, -22.024963, -82.80255, 2.521574, 51.663788, -4.5347214, -0.0038986206, 17.548315, 4.5347214, 0.0038986206, -17.548315, -220.8841, 0, -28.669952, -12.770142, -0.0055007935, 7.6616325, 12.770142, 0.0055007935, -7.6616325, -143.67044, -3.1975098, -95.139465, -52.966045, -1.1371231, 2.0421143, 52.966045, 1.1371231, -2.0421143, -0.13425827, -8.181686, -60.196198, -38.213898, -1.1112893, 3.511528, 38.213898, 1.1112893, -3.511528, 64.87949, -9.381868, -83.8857, -3.06176, 0.005878985, -10.015743, 3.06176, -0.005878985, 10.015743, 120.02086, -0.13511986, -81.228516),
-"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+"points": PackedVector3Array(0.99043274, 9.323959, -32.17816, -0.99043274, -9.323959, 32.17816, 163.11581, -12.489883, -57.71454, 5.1940613, 0.06758571, -27.22345, -5.1940613, -0.06758571, 27.22345, 136.8644, -1.9020202, 13.234192, 13.881752, 1.9147501, -11.990631, -13.881752, -1.9147501, 11.990631, 91.975746, -10.467023, 56.93393, 10.724094, 0.93970346, 0.08315277, -10.724094, -0.93970346, -0.08315277, 41.85936, -10.179458, 77.39986, 26.888786, 2.3221512, -0.9664917, -26.888786, -2.3221512, 0.9664917, -0.21871185, -12.866435, 71.93042, 24.956287, 0.95495796, 29.833282, -24.956287, -0.95495796, -29.833282, -82.80255, 2.521574, 51.663788, -26.102737, 4.5155945, 72.08084, 26.102737, -4.5155945, -72.08084, -220.8841, 0, 18.286713, -48.450043, 22.0708, 21.014023, 48.450043, -22.0708, -21.014023, -188.78821, -3.1975098, -95.139465, -52.966045, -1.1371231, 2.0421143, 52.966045, 1.1371231, -2.0421143, -0.13425827, -8.181686, -60.196198, -38.213898, -1.1112893, 3.511528, 38.213898, 1.1112893, -3.511528, 64.87949, -9.381868, -83.8857),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 }
-point_count = 12
+point_count = 10
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uk2yf"]
 albedo_color = Color(0.23908564, 0, 0.029992647, 1)
@@ -1750,7 +1751,7 @@ transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -7.32618, 1.0002356, -63.9274
 [node name="border-pillar11" parent="walls" instance=ExtResource("13_mwgft")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 10.054991, 1.0002356, -63.927498)
 
-[node name="Cart5" parent="walls" instance=ExtResource("14_cart")]
+[node name="Cart4" parent="walls" instance=ExtResource("14_cart")]
 transform = Transform3D(1, 0, -1.7484555e-07, 0, 1, 0, 1.7484555e-07, 0, 1, 9.192693, 1.1105556, -25.599638)
 collision_layer = 2
 collision_mask = 7
@@ -1766,7 +1767,23 @@ mass = 500.0
 center_of_mass_mode = 0
 center_of_mass = Vector3(0, 0, 0)
 
-[node name="Cart6" parent="walls" instance=ExtResource("14_cart")]
+[node name="Cart7" parent="walls" instance=ExtResource("14_cart")]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -5, 1.1105556, 25.527493)
+collision_layer = 2
+collision_mask = 7
+mass = 500.0
+center_of_mass_mode = 0
+center_of_mass = Vector3(0, 0, 0)
+
+[node name="Cart8" parent="walls" instance=ExtResource("14_cart")]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 9.192693, 1.1105556, 25.40036)
+collision_layer = 2
+collision_mask = 7
+mass = 500.0
+center_of_mass_mode = 0
+center_of_mass = Vector3(0, 0, 0)
+
+[node name="Cart5" parent="walls" instance=ExtResource("14_cart")]
 transform = Transform3D(1.3113416e-07, 0, 1, 0, 1, 0, -1, 0, 1.3113416e-07, -28, 1.1105556, 2.5274925)
 collision_layer = 2
 collision_mask = 7
@@ -1774,7 +1791,7 @@ mass = 500.0
 center_of_mass_mode = 0
 center_of_mass = Vector3(0, 0, 0)
 
-[node name="Cart7" parent="walls" instance=ExtResource("14_cart")]
+[node name="Cart6" parent="walls" instance=ExtResource("14_cart")]
 transform = Transform3D(-4.371138e-08, 0, -1, 0, 1, 0, 1, 0, -4.371138e-08, 25, 1.1105556, 2.5274925)
 collision_layer = 2
 collision_mask = 7
@@ -1827,7 +1844,8 @@ curve = SubResource("Curve3D_adxub")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 350)
 curve = SubResource("Curve3D_ff0s2")
 
-[node name="Track2" type="CSGPolygon3D" parent="."]
+[node name="Track2_Ground" type="CSGPolygon3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.793045, 0)
 material_override = SubResource("StandardMaterial3D_uk2yf")
 use_collision = true
 polygon = PackedVector2Array(-9.580336, -0.06792745, -9.590064, 0.41428703, 5.6165876, 0.2667601, 5.62081, 0.043509007)
@@ -1844,7 +1862,27 @@ path_u_distance = 1.0
 path_joined = true
 metadata/_edit_group_ = true
 
-[node name="Outer Edge2" type="CSGPolygon3D" parent="."]
+[node name="Track2_Roof" type="CSGPolygon3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.7380333, 0)
+visible = false
+material_override = SubResource("StandardMaterial3D_uk2yf")
+use_collision = true
+polygon = PackedVector2Array(-9.580336, -0.06792745, -9.590064, 0.41428703, 5.6165876, 0.2667601, 5.62081, 0.043509007)
+mode = 2
+path_node = NodePath("../Path3D2")
+path_interval_type = 0
+path_interval = 0.1
+path_simplify_angle = 0.0
+path_rotation = 2
+path_rotation_accurate = false
+path_local = false
+path_continuous_u = true
+path_u_distance = 1.0
+path_joined = true
+metadata/_edit_group_ = true
+
+[node name="Track2_OuterEdge" type="CSGPolygon3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.793045, 0)
 material_override = SubResource("StandardMaterial3D_ff0s2")
 use_collision = true
 polygon = PackedVector2Array(-10.177332, -0.015610635, -10.233889, 1.3119156, -9.519004, 1.2851326, -9.528092, -0.019746661)
@@ -1860,7 +1898,8 @@ path_continuous_u = true
 path_u_distance = 1.0
 path_joined = false
 
-[node name="Inner Edge2" type="CSGPolygon3D" parent="."]
+[node name="Track2_InnerEdge" type="CSGPolygon3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.793045, 0)
 material_override = SubResource("StandardMaterial3D_ff0s2")
 use_collision = true
 polygon = PackedVector2Array(5.8733683, -0.001703687, 5.893044, 0.8840673, 5.551889, 0.88657534, 5.5762973, -0.0051956773)
@@ -1940,6 +1979,12 @@ size = Vector3(2.470459, 1, 218.77437)
 
 [node name="track_ramp3" type="CSGBox3D" parent="."]
 transform = Transform3D(2.587713e-07, 0, -0.9999998, 0, -0.1, 0, 5.9199977, 0, 4.371138e-08, 117.4997, -7.519, 170.754)
+material_override = SubResource("StandardMaterial3D_ff0s2")
+use_collision = true
+size = Vector3(2.470459, 1, 218.10855)
+
+[node name="track_ramp4" type="CSGBox3D" parent="."]
+transform = Transform3D(2.587713e-07, 0, -0.9999998, 0, -0.1, 0, 5.9199977, 0, 4.371138e-08, -113.5003, -7.519, 170.754)
 material_override = SubResource("StandardMaterial3D_ff0s2")
 use_collision = true
 size = Vector3(2.470459, 1, 218.10855)
@@ -2071,42 +2116,42 @@ font_size = 10
 outline_size = 0
 
 [node name="football" type="CSGBox3D" parent="."]
-transform = Transform3D(50, 0, 0, 0, 0.457, 0, 0, 0, 76.938, 253.93, -11.069287, 169.853)
+transform = Transform3D(50, 0, 0, 0, 0.457, 0, 0, 0, 76.938, 253.93, -11.077123, 169.853)
 material_override = SubResource("StandardMaterial3D_ondrs")
 use_collision = true
 size = Vector3(1.096, 15.8984375, 1)
 
 [node name="football_border" type="CSGBox3D" parent="."]
-transform = Transform3D(50, 0, 0, 0, -1.9976104e-08, -76.938, 0, 0.457, -3.363067e-06, 254.40314, 3.311449, 131.63603)
+transform = Transform3D(50, 0, 0, 0, -1.9976104e-08, -76.938, 0, 0.457, -3.363067e-06, 254.40314, 6.3036137, 131.63603)
 visible = false
 use_collision = true
 size = Vector3(1.1010742, 1, 1)
 
 [node name="football_border2" type="CSGBox3D" parent="."]
-transform = Transform3D(50, 0, 0, 0, -1.9976104e-08, -76.938, 0, 0.457, -3.363067e-06, 256.31146, 3.311449, 208.09877)
+transform = Transform3D(50, 0, 0, 0, -1.9976104e-08, -76.938, 0, 0.457, -3.363067e-06, 256.31146, 6.3036137, 208.09877)
 visible = false
 use_collision = true
 size = Vector3(1.2056885, 1, 1)
 
 [node name="football_border3" type="CSGBox3D" parent="."]
-transform = Transform3D(-2.1855697e-06, -0.457, 3.3630663e-06, 50, -1.9976104e-08, 3.3630668e-06, -2.185569e-06, 1.9976103e-08, 76.938, 280.89795, 16.855047, 169.853)
+transform = Transform3D(-2.1855697e-06, -0.457, 3.3630663e-06, 50, -1.9976104e-08, 3.3630663e-06, -2.185569e-06, 1.9976103e-08, 76.938, 280.89795, 19.847212, 169.853)
 visible = false
 use_collision = true
 
 [node name="football_border4" type="CSGBox3D" parent="."]
-transform = Transform3D(-2.1855697e-06, -0.457, 3.3630663e-06, 50, -1.9976104e-08, 3.3630668e-06, -2.185569e-06, 1.9976103e-08, 76.938, 226.66345, 13.663923, 145.50163)
+transform = Transform3D(-2.1855697e-06, -0.457, 3.3630663e-06, 50, -1.9976104e-08, 3.3630663e-06, -2.185569e-06, 1.9976103e-08, 76.938, 226.66345, 16.656088, 145.50163)
 visible = false
 use_collision = true
 size = Vector3(1, 1, 0.46392822)
 
 [node name="football_border5" type="CSGBox3D" parent="."]
-transform = Transform3D(-2.1855697e-06, -0.457, 3.3630663e-06, 50, -1.9976104e-08, 3.3630668e-06, -2.185569e-06, 1.9976103e-08, 76.938, 226.74463, 13.20895, 195.99748)
+transform = Transform3D(-2.1855697e-06, -0.457, 3.3630663e-06, 50, -1.9976104e-08, 3.3630663e-06, -2.185569e-06, 1.9976103e-08, 76.938, 226.74463, 16.201115, 195.99748)
 visible = false
 use_collision = true
 size = Vector3(1, 1, 0.46627808)
 
 [node name="goal_post" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.14599419, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.187294, 0)
 
 [node name="border-pillar2" parent="goal_post" instance=ExtResource("13_mwgft")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 242.75513, -7.519001, 144.44383)
@@ -2145,7 +2190,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 242.75513, -5.519001, 135.443
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 265.19363, -5.519001, 135.44383)
 
 [node name="goal_post2" type="Node3D" parent="."]
-transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 508.2453, -0.14599419, 339.70856)
+transform = Transform3D(-1, 0, 1.509958e-07, 0, 1, 0, -1.509958e-07, 0, -1, 508.2453, -0.187294, 339.70856)
 
 [node name="border-pillar2" parent="goal_post2" instance=ExtResource("13_mwgft")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 242.75513, -7.519001, 144.44383)

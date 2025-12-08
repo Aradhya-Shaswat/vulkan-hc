@@ -56,6 +56,9 @@ const FOOTSTEP_INTERVAL = 0.4
 @onready var head = $Head
 @onready var camera = $Head/Camera3D
 @onready var player_mesh = $MeshInstance3D
+@onready var eye1 = $Head/Camera3D/eye
+@onready var eye2 = $Head/Camera3D/eye2
+@onready var face_mesh = $Head/Camera3D/MeshInstance3D3
 @onready var multiplayer_sync = $MultiplayerSynchronizer
 @onready var cart_hint_label = $CanvasLayer/CartHint
 @onready var nametag = $Nametag
@@ -78,9 +81,9 @@ const PLAYER_COLORS = [
 	Color(0.9, 0.6, 0.2),
 ]
 
-@export var sync_position: Vector3
-@export var sync_rotation: Vector3
-@export var sync_head_rotation: float
+var sync_position: Vector3 = Vector3.ZERO
+var sync_rotation: Vector3 = Vector3.ZERO
+var sync_head_rotation: float = 0.0
 	
 func _enter_tree() -> void:
 	set_multiplayer_authority(name.to_int())
@@ -121,6 +124,13 @@ func _ready():
 			health_bar_3d.visible = false
 		if health_bar_ui:
 			health_bar_ui.visible = false
+		# Hide eye nodes for local player
+		if eye1:
+			eye1.visible = false
+		if eye2:
+			eye2.visible = false
+		if face_mesh:
+			face_mesh.visible = false
 	else:
 		camera.current = false
 		player_mesh.layers = 1
@@ -370,15 +380,15 @@ func _physics_process(delta):
 			_handle_cart_driving(delta)
 			#_update_speed_lines(delta)
 			global_position = current_cart.get_seat_global_position()
-			cart_look_timer += delta
 			
 			if looking_behind:
 				var behind_y = current_cart.global_rotation.y + PI
 				head.global_rotation.y = lerp_angle(head.global_rotation.y, behind_y, delta * 10.0)
-				cart_look_timer = 0.0
-			elif cart_look_timer >= CART_LOOK_TIMEOUT:
-				var target_head_y = current_cart.global_rotation.y
-				head.global_rotation.y = lerp_angle(head.global_rotation.y, target_head_y, delta * 5.0)
+			else:
+				cart_look_timer += delta
+				if cart_look_timer >= CART_LOOK_TIMEOUT:
+					var target_head_y = current_cart.global_rotation.y
+					head.global_rotation.y = lerp_angle(head.global_rotation.y, target_head_y, delta * 5.0)
 			
 			sync_position = global_position
 			sync_rotation = rotation
@@ -498,6 +508,8 @@ func _physics_process(delta):
 		if $CollisionShape3D.disabled != sync_in_cart:
 			$CollisionShape3D.disabled = sync_in_cart
 			player_mesh.visible = not sync_in_cart
+			# Sync eye visibility for remote players
+			_update_face_visibility(not sync_in_cart)
 		
 		if health != sync_health:
 			health = sync_health
@@ -519,6 +531,14 @@ func _update_crouch_visual(delta: float):
 	
 	var target_head_y = 0.0 if is_crouching else 0.4069364
 	head.position.y = lerp(head.position.y, target_head_y, delta * CROUCH_TRANSITION_SPEED)
+
+func _update_face_visibility(visible_state: bool):
+	if eye1:
+		eye1.visible = visible_state
+	if eye2:
+		eye2.visible = visible_state
+	if face_mesh:
+		face_mesh.visible = visible_state
 
 func _check_nearby_cart():
 	nearby_cart = null
@@ -560,6 +580,11 @@ func _enter_cart(cart: Node):
 	
 	sync_in_cart = true
 	player_mesh.visible = false
+	
+	# Hide face elements when entering cart
+	if not _is_local_authority():
+		_update_face_visibility(false)
+	
 	$CollisionShape3D.disabled = true
 	_sync_collision_state.rpc(true)
 	cart_entered.emit()
@@ -593,6 +618,11 @@ func _exit_cart():
 		#speed_line_data.clear()
 	
 	player_mesh.visible = true
+	
+	# Show face elements when exiting cart
+	if not _is_local_authority():
+		_update_face_visibility(true)
+	
 	$CollisionShape3D.disabled = false
 	_sync_collision_state.rpc(false)
 	global_position = exit_pos
@@ -746,62 +776,5 @@ func _show_alive_body():
 func _sync_collision_state(in_cart_state: bool):
 	$CollisionShape3D.disabled = in_cart_state
 	player_mesh.visible = not in_cart_state
-
-#func _update_speed_lines(delta: float):
-	#if not speed_lines or not current_cart:
-		#return
-	#
-	#var speed_ratio = 0.0
-	#if current_cart.has_method("get_speed_ratio"):
-		#speed_ratio = current_cart.get_speed_ratio()
-	#
-	#if speed_ratio < 0.3:
-		#speed_lines.visible = false
-		#speed_line_data.clear()
-		#return
-	#
-	#speed_lines.visible = true
-	#var intensity = (speed_ratio - 0.3) / 0.7
-	#var num_lines = int(lerp(10, 30, intensity))
-	#
-	#while speed_line_data.size() < num_lines:
-		#var angle = randf() * TAU
-		#speed_line_data.append({
-			#"angle": angle,
-			#"dist": randf_range(0.85, 0.95),
-			#"length": randf_range(0.08, 0.18),
-			#"width": randf_range(2.0, 4.0),
-			#"alpha": randf_range(0.4, 0.8)
-		#})
-	#
-	#while speed_line_data.size() > num_lines:
-		#speed_line_data.pop_back()
-	#
-	#for line in speed_line_data:
-		#line.dist += delta * lerp(0.8, 1.8, intensity)
-		#if line.dist > 1.1:
-			#line.dist = randf_range(0.85, 0.92)
-			#line.angle = randf() * TAU
-			#line.length = randf_range(0.08, 0.18)
-	#
-	#speed_lines.queue_redraw()
-#
-#func _ready_speed_lines():
-	#if speed_lines:
-		#speed_lines.draw.connect(_draw_speed_lines)
-#
-#func _draw_speed_lines():
-	#if not speed_lines or not speed_lines.visible:
-		#return
-	
-	#var viewport_size = get_viewport().get_visible_rect().size
-	#var center = viewport_size / 2
-	#var max_radius = min(viewport_size.x, viewport_size.y) * 0.6
-	
-	#for line in speed_line_data:
-		#var dir = Vector2(cos(line.angle), sin(line.angle))
-		#var start_pos = center + dir * line.dist * max_radius
-		#var end_pos = center + dir * (line.dist + line.length) * max_radius
-		#var edge_alpha = clamp((line.dist - 0.85) / 0.15, 0.0, 1.0) * line.alpha
-		#var color = Color(1, 1, 1, edge_alpha)
-		##speed_lines.draw_line(start_pos, end_pos, color, line.width, true)
+	# Sync face visibility when collision state changes
+	_update_face_visibility(not in_cart_state)

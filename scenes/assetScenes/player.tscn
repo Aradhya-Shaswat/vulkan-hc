@@ -69,6 +69,7 @@ corner_radius_bottom_left = 4
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_health3d"]
 shading_mode = 0
 albedo_color = Color(0.07040397, 0.3238471, 0.06693058, 1)
+billboard_mode = 1
 
 [sub_resource type="BoxMesh" id="BoxMesh_health3d"]
 material = SubResource("StandardMaterial3D_health3d")
