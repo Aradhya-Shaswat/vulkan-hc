@@ -1,4 +1,4 @@
-[gd_scene load_steps=56 format=3 uid="uid://cnew6x2hwvjyh"]
+[gd_scene load_steps=57 format=3 uid="uid://cnew6x2hwvjyh"]
 
 [ext_resource type="FontFile" uid="uid://gunvccib1svm" path="res://assets/fonts/Poppins-Regular.ttf" id="1_iqu8w"]
 [ext_resource type="Script" uid="uid://b27u1ptmiviqb" path="res://scripts/main.gd" id="1_mwgft"]
@@ -77,8 +77,8 @@ corner_radius_bottom_left = 8
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2sb77"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pausemenu"]
-bg_color = Color(0.05, 0.05, 0.05, 0.95)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ondrs"]
+bg_color = Color(0.050708726, 0.050708726, 0.050708726, 0.77300006)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ondrs"]
 
@@ -106,6 +106,9 @@ corner_radius_top_left = 12
 corner_radius_top_right = 12
 corner_radius_bottom_right = 12
 corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pausemenu"]
+bg_color = Color(0.050708726, 0.050708726, 0.050708726, 0.514)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ff0s2"]
 bg_color = Color(0.29954746, 0.29954746, 0.29954743, 1)
@@ -191,6 +194,29 @@ player_scene = ExtResource("3_fkrx8")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
+[node name="title" type="Label" parent="CanvasLayer"]
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.46300003
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -574.0
+offset_top = -165.02402
+offset_right = -55.0
+offset_bottom = -49.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 0.8235294, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/outline_size = 7
+theme_override_fonts/font = ExtResource("1_iqu8w")
+theme_override_font_sizes/font_size = 58
+text = "Game Options"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="hackclub" type="Label" parent="CanvasLayer"]
 z_index = 1
 anchors_preset = -1
@@ -239,7 +265,7 @@ offset_bottom = 39.0
 theme_override_colors/font_color = Color(0.35531342, 0.35531357, 0.35531372, 1)
 theme_override_fonts/font = ExtResource("1_iqu8w")
 theme_override_font_sizes/font_size = 11
-text = "VULKAN 1.1  (RELEASE)"
+text = "VULKAN 1.2  (RELEASE)"
 
 [node name="FPSLabel" type="Label" parent="CanvasLayer"]
 visible = false
@@ -388,7 +414,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_pausemenu")
+theme_override_styles/panel = SubResource("StyleBoxFlat_ondrs")
 
 [node name="PasswordTitle" type="Label" parent="CanvasLayer/PasswordPanel"]
 layout_mode = 0
@@ -429,15 +455,16 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="PasswordInput" type="LineEdit" parent="CanvasLayer/PasswordPanel"]
-layout_mode = 0
+layout_mode = 1
+anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -120.0
-offset_top = -25.0
+offset_top = -11.0
 offset_right = 120.0
-offset_bottom = 15.0
+offset_bottom = 29.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
@@ -460,9 +487,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -121.0
-offset_top = 28.0
+offset_top = 54.0
 offset_right = 122.0
-offset_bottom = 68.0
+offset_bottom = 94.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
@@ -484,10 +511,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -120.0
-offset_top = 79.0
-offset_right = 120.0
-offset_bottom = 119.0
+offset_left = -118.0
+offset_top = 233.0
+offset_right = 122.0
+offset_bottom = 273.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 14
@@ -533,9 +560,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -121.0
-offset_top = 130.0
+offset_top = 104.0
 offset_right = 122.0
-offset_bottom = 170.0
+offset_bottom = 144.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
@@ -671,30 +698,6 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_ff0s2")
 theme_override_styles/hover = SubResource("StyleBoxFlat_uk2yf")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_uk2yf")
 text = "Cancel"
-
-[node name="title" type="Label" parent="CanvasLayer"]
-z_index = 12
-anchors_preset = -1
-anchor_left = 0.5
-anchor_top = 0.46300003
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -574.0
-offset_top = -165.02402
-offset_right = -55.0
-offset_bottom = -49.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(1, 1, 0.8235294, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 1
-theme_override_constants/shadow_offset_y = 1
-theme_override_constants/outline_size = 7
-theme_override_fonts/font = ExtResource("1_iqu8w")
-theme_override_font_sizes/font_size = 58
-text = "Game Options"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="Hotbar" type="Panel" parent="CanvasLayer"]
 visible = false
@@ -1073,7 +1076,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.05, 0.05, 0.05, 0.9)
+color = Color(0.050708726, 0.050708726, 0.050708726, 0.647)
 
 [node name="OptionsTitle" type="Label" parent="CanvasLayer/InGameOptions"]
 layout_mode = 1
@@ -1407,7 +1410,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.564762, 1.0003803, 50.664
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.435238, 1.0003803, 50.664772)
 
 [node name="brick-wall44" parent="walls" instance=ExtResource("6_bq26l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 37.435238, 1.0003803, 50.664772)
+transform = Transform3D(1.1679773, 0, 0, 0, 1, 0, 0, 0, 1, 37.24083, 1.0003805, 50.664772)
 
 [node name="brick-wall45" parent="walls" instance=ExtResource("6_bq26l")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43.435238, 1.0003803, 50.664772)
@@ -1431,7 +1434,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.225313, 1.0003805, -49.24
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36.851486, 1.0003805, -49.2404)
 
 [node name="brick-wall59" parent="walls" instance=ExtResource("6_bq26l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38.50228, 1.0003803, -49.2404)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38.61787, 1.0003805, -49.2404)
 
 [node name="brick-wall60" parent="walls" instance=ExtResource("6_bq26l")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43.435238, 1.0003803, -49.2404)
@@ -1463,11 +1466,8 @@ transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 49.3
 [node name="brick-wall23" parent="walls" instance=ExtResource("6_bq26l")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 49.345535, 1.0003803, -7.318268)
 
-[node name="brick-wall25" parent="walls" instance=ExtResource("6_bq26l")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 49.345535, 1.0003805, 15.681732)
-
 [node name="brick-wall26" parent="walls" instance=ExtResource("6_bq26l")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 49.345535, 1.0003803, 16.681732)
+transform = Transform3D(-6.331685e-08, 0, -1, 0, 1, 0, 1.4485207, 0, -4.371139e-08, 49.345535, 1.0003805, 16.681732)
 
 [node name="brick-wall27" parent="walls" instance=ExtResource("6_bq26l")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 49.345535, 1.0003803, 22.681732)
@@ -1719,24 +1719,30 @@ transform = Transform3D(1.3113416e-07, 0, -1, 0, 1, 0, 1, 0, 1.3113416e-07, 59.6
 transform = Transform3D(-2, 0, 1.7484555e-07, 0, 2, 0, -1.7484555e-07, 0, -2, 38.7817, 1.0002356, 24.60435)
 
 [node name="CSGTorus3D" type="CSGTorus3D" parent="walls/border-pillar3"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2828407, 4.235342, 0)
-inner_radius = 0.805
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1564674, 4.235342, 0)
+use_collision = true
+inner_radius = 0.697
+outer_radius = 0.574
 sides = 64
 
 [node name="border-pillar4" parent="walls" instance=ExtResource("13_mwgft")]
 transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 38.7817, 1.0002356, -26.60447)
 
 [node name="CSGTorus3D" type="CSGTorus3D" parent="walls/border-pillar4"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2828407, 4.235342, 0)
-inner_radius = 0.805
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1404362, 4.235342, 0)
+use_collision = true
+inner_radius = 0.697
+outer_radius = 0.574
 sides = 64
 
 [node name="border-pillar5" parent="walls" instance=ExtResource("13_mwgft")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -31.2183, 1.0002356, -26.60447)
 
 [node name="CSGTorus3D" type="CSGTorus3D" parent="walls/border-pillar5"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2828407, 4.235342, 0)
-inner_radius = 0.805
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1314268, 4.235342, 0)
+use_collision = true
+inner_radius = 0.697
+outer_radius = 0.574
 sides = 64
 
 [node name="border-pillar8" parent="walls" instance=ExtResource("13_mwgft")]
@@ -1803,13 +1809,13 @@ center_of_mass = Vector3(0, 0, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.689765, 0.9987221, 50.671577)
 
 [node name="brick-wall-end3" parent="walls" instance=ExtResource("13_adxub")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -5.310235, 0.9987221, 46.452545)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -5.310235, 0.9987221, 46.473812)
 
 [node name="brick-wall-end4" parent="walls" instance=ExtResource("13_adxub")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.689765, 0.9987221, -49.200554)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.689765, 0.9987221, -49.24383)
 
 [node name="brick-wall-end5" parent="walls" instance=ExtResource("13_adxub")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -5.310235, 0.9987221, -53.419586)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -5.310235, 0.9987221, -53.44463)
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("uid://cva3jmdk0sqdm")
@@ -1845,7 +1851,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 350)
 curve = SubResource("Curve3D_ff0s2")
 
 [node name="Track2_Ground" type="CSGPolygon3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.793045, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9338379, 0.46544647, 0)
 material_override = SubResource("StandardMaterial3D_uk2yf")
 use_collision = true
 polygon = PackedVector2Array(-9.580336, -0.06792745, -9.590064, 0.41428703, 5.6165876, 0.2667601, 5.62081, 0.043509007)
@@ -1863,7 +1869,7 @@ path_joined = true
 metadata/_edit_group_ = true
 
 [node name="Track2_Roof" type="CSGPolygon3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.7380333, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9338379, 6.996525, 0)
 visible = false
 material_override = SubResource("StandardMaterial3D_uk2yf")
 use_collision = true
@@ -1882,7 +1888,7 @@ path_joined = true
 metadata/_edit_group_ = true
 
 [node name="Track2_OuterEdge" type="CSGPolygon3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.793045, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9338379, 0.46544647, 0)
 material_override = SubResource("StandardMaterial3D_ff0s2")
 use_collision = true
 polygon = PackedVector2Array(-10.177332, -0.015610635, -10.233889, 1.3119156, -9.519004, 1.2851326, -9.528092, -0.019746661)
@@ -1899,7 +1905,7 @@ path_u_distance = 1.0
 path_joined = false
 
 [node name="Track2_InnerEdge" type="CSGPolygon3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.793045, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9338379, 0.46544647, 0)
 material_override = SubResource("StandardMaterial3D_ff0s2")
 use_collision = true
 polygon = PackedVector2Array(5.8733683, -0.001703687, 5.893044, 0.8840673, 5.551889, 0.88657534, 5.5762973, -0.0051956773)
@@ -1966,28 +1972,23 @@ path_u_distance = 1.0
 path_joined = false
 
 [node name="track_ramp" type="CSGBox3D" parent="."]
-transform = Transform3D(5.919999, 0, 0, 0, -0.099839784, 0.05658823, 0, 0.005658823, 0.9983976, 0, -5.834101, -69.01058)
+transform = Transform3D(5.919999, -4.880072e-10, -8.728645e-08, 4.0849073e-08, -0.099092014, 0.13445315, 5.1592815e-07, 0.013445318, 0.9909198, -8.1462616e-08, -6.1645446, -68.9488)
 material_override = SubResource("StandardMaterial3D_ff0s2")
 use_collision = true
-size = Vector3(1, 1, 6.687332)
+size = Vector3(1, 1, 7.4398384)
 
 [node name="track_ramp2" type="CSGBox3D" parent="."]
-transform = Transform3D(5.9199986, 1.287743e-10, -8.741329e-08, 0, -0.09998918, -0.014730059, 5.1754273e-07, -0.0014730063, 0.9998915, 1.4937303, -7.5187297, 170.75354)
+transform = Transform3D(5.9199986, 0, 8.742278e-08, 0, -0.10000003, 0, -5.1754273e-07, 0, 1, 1.4937298, -5.6954565, 171.10068)
 material_override = SubResource("StandardMaterial3D_ff0s2")
 use_collision = true
-size = Vector3(2.470459, 1, 218.77437)
-
-[node name="track_ramp3" type="CSGBox3D" parent="."]
-transform = Transform3D(2.587713e-07, 0, -0.9999998, 0, -0.1, 0, 5.9199977, 0, 4.371138e-08, 117.4997, -7.519, 170.754)
-material_override = SubResource("StandardMaterial3D_ff0s2")
-use_collision = true
-size = Vector3(2.470459, 1, 218.10855)
+size = Vector3(2.470459, 1, 217.78088)
 
 [node name="track_ramp4" type="CSGBox3D" parent="."]
-transform = Transform3D(2.587713e-07, 0, -0.9999998, 0, -0.1, 0, 5.9199977, 0, 4.371138e-08, -113.5003, -7.519, 170.754)
+transform = Transform3D(2.587713e-07, 0, -0.9999998, 0, -0.1, 0, 5.9199977, 0, 4.371138e-08, -175.26863, -7.519, 170.754)
+visible = false
 material_override = SubResource("StandardMaterial3D_ff0s2")
 use_collision = true
-size = Vector3(2.470459, 1, 218.10855)
+size = Vector3(2.470459, 1, 94.57185)
 
 [node name="track_screen" type="CSGBox3D" parent="."]
 transform = Transform3D(60.383984, 0, 0, 0, -0.006427352, -3.3907125, 0, -0.113399185, 0.19218223, 0, 0.6959822, -100.04063)
@@ -2115,43 +2116,49 @@ font = ExtResource("15_ff0s2")
 font_size = 10
 outline_size = 0
 
+[node name="track_ramp3" type="CSGBox3D" parent="."]
+transform = Transform3D(2.587713e-07, 0, -0.9999998, 0, -0.1, 0, 5.9199977, 0, 4.371138e-08, 117.5, -5.695, 170.754)
+material_override = SubResource("StandardMaterial3D_ff0s2")
+use_collision = true
+size = Vector3(2.470459, 1, 218.10855)
+
 [node name="football" type="CSGBox3D" parent="."]
-transform = Transform3D(50, 0, 0, 0, 0.457, 0, 0, 0, 76.938, 253.93, -11.077123, 169.853)
+transform = Transform3D(50, 0, 0, 0, 0.457, 0, 0, 0, 76.938, 253.93, -9.33524, 169.853)
 material_override = SubResource("StandardMaterial3D_ondrs")
 use_collision = true
 size = Vector3(1.096, 15.8984375, 1)
 
 [node name="football_border" type="CSGBox3D" parent="."]
-transform = Transform3D(50, 0, 0, 0, -1.9976104e-08, -76.938, 0, 0.457, -3.363067e-06, 254.40314, 6.3036137, 131.63603)
+transform = Transform3D(50, 0, 0, 0, -1.9976104e-08, -76.938, 0, 0.457, -3.363067e-06, 254.40314, 8.045496, 131.63603)
 visible = false
 use_collision = true
 size = Vector3(1.1010742, 1, 1)
 
 [node name="football_border2" type="CSGBox3D" parent="."]
-transform = Transform3D(50, 0, 0, 0, -1.9976104e-08, -76.938, 0, 0.457, -3.363067e-06, 256.31146, 6.3036137, 208.09877)
+transform = Transform3D(50, 0, 0, 0, -1.9976104e-08, -76.938, 0, 0.457, -3.363067e-06, 256.31146, 8.045496, 208.09877)
 visible = false
 use_collision = true
 size = Vector3(1.2056885, 1, 1)
 
 [node name="football_border3" type="CSGBox3D" parent="."]
-transform = Transform3D(-2.1855697e-06, -0.457, 3.3630663e-06, 50, -1.9976104e-08, 3.3630663e-06, -2.185569e-06, 1.9976103e-08, 76.938, 280.89795, 19.847212, 169.853)
+transform = Transform3D(-2.1855697e-06, -0.457, 3.3630663e-06, 50, -1.9976104e-08, 3.3630663e-06, -2.185569e-06, 1.9976103e-08, 76.938, 280.89795, 21.589094, 169.853)
 visible = false
 use_collision = true
 
 [node name="football_border4" type="CSGBox3D" parent="."]
-transform = Transform3D(-2.1855697e-06, -0.457, 3.3630663e-06, 50, -1.9976104e-08, 3.3630663e-06, -2.185569e-06, 1.9976103e-08, 76.938, 226.66345, 16.656088, 145.50163)
+transform = Transform3D(-2.1855697e-06, -0.457, 3.3630663e-06, 50, -1.9976104e-08, 3.3630663e-06, -2.185569e-06, 1.9976103e-08, 76.938, 226.66345, 18.39797, 145.50163)
 visible = false
 use_collision = true
 size = Vector3(1, 1, 0.46392822)
 
 [node name="football_border5" type="CSGBox3D" parent="."]
-transform = Transform3D(-2.1855697e-06, -0.457, 3.3630663e-06, 50, -1.9976104e-08, 3.3630663e-06, -2.185569e-06, 1.9976103e-08, 76.938, 226.74463, 16.201115, 195.99748)
+transform = Transform3D(-2.1855697e-06, -0.457, 3.3630663e-06, 50, -1.9976104e-08, 3.3630663e-06, -2.185569e-06, 1.9976103e-08, 76.938, 226.74463, 17.942997, 195.99748)
 visible = false
 use_collision = true
 size = Vector3(1, 1, 0.46627808)
 
 [node name="goal_post" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.187294, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5545883, 0)
 
 [node name="border-pillar2" parent="goal_post" instance=ExtResource("13_mwgft")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 242.75513, -7.519001, 144.44383)
@@ -2190,7 +2197,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 242.75513, -5.519001, 135.443
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 265.19363, -5.519001, 135.44383)
 
 [node name="goal_post2" type="Node3D" parent="."]
-transform = Transform3D(-1, 0, 1.509958e-07, 0, 1, 0, -1.509958e-07, 0, -1, 508.2453, -0.187294, 339.70856)
+transform = Transform3D(-1, 0, 1.509958e-07, 0, 1, 0, -1.509958e-07, 0, -1, 508.2453, 1.5545883, 339.70856)
 
 [node name="border-pillar2" parent="goal_post2" instance=ExtResource("13_mwgft")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 242.75513, -7.519001, 144.44383)

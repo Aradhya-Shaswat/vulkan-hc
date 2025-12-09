@@ -64,7 +64,7 @@ func _setup_graphics_options():
 	
 	vsync_check.button_pressed = GameSettings.vsync_enabled
 	fps_check.button_pressed = GameSettings.show_fps
-	render_scale_slider.value = GameSettings.render_scale * 100
+	#render_scale_slider.value = GameSettings.render_scale * 100
 
 func _connect_hover_sounds():
 	_connect_buttons_recursive(self)

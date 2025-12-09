@@ -170,20 +170,48 @@ func _update_minimap():
 func _on_minimap_draw():
 	var minimap = $CanvasLayer/Minimap
 	var center = Vector2(MINIMAP_SIZE / 2, MINIMAP_SIZE / 2)
-	var radius = MINIMAP_SIZE / 2
-	minimap.draw_circle(center, radius, Color(0, 0, 0, 0.6))
-	minimap.draw_arc(center, radius - 1, 0, TAU, 64, Color(1, 1, 1, 0.4), 2.0)
+	var half_size = MINIMAP_SIZE / 2
+	
+	minimap.draw_rect(Rect2(0, 0, MINIMAP_SIZE, MINIMAP_SIZE), Color(0, 0, 0, 0.6))
+	minimap.draw_rect(Rect2(0, 0, MINIMAP_SIZE, MINIMAP_SIZE), Color(1, 1, 1, 0.4), false, 2.0)
+	
 	var local_player = get_node_or_null(str(multiplayer.get_unique_id()))
 	if not local_player:
 		return
+	
 	var local_pos = local_player.global_position
+	
+	var player_rotation = 0.0
+	if local_player.has_node("Head"):
+		player_rotation = local_player.get_node("Head").global_rotation.y
+	else:
+		player_rotation = local_player.global_rotation.y
+	
 	for child in get_children():
 		if child is CharacterBody3D and child.has_method("_is_local_authority"):
-			var offset = (Vector2(child.global_position.x, child.global_position.z) - Vector2(local_pos.x, local_pos.z)) / MINIMAP_SCALE
-			var dot_pos = center + offset
-			if dot_pos.distance_to(center) < radius - 5:
+			var world_offset = Vector2(
+				child.global_position.x - local_pos.x,
+				child.global_position.z - local_pos.z
+			)
+			
+			var rotated_offset = world_offset.rotated(player_rotation)
+			var map_offset = rotated_offset / MINIMAP_SCALE
+			var dot_pos = center + Vector2(map_offset.x, map_offset.y)
+			
+			if abs(dot_pos.x - center.x) < half_size - 5 and abs(dot_pos.y - center.y) < half_size - 5:
 				var color = Color(0, 1, 0) if child == local_player else Color(1, 0.3, 0.3)
 				minimap.draw_circle(dot_pos, 4.0, color)
+				
+				#if child == local_player:
+					#var forward = Vector2(0, -8).rotated(-player_rotation)
+					##var end_pos = dot_pos + forward
+					##minimap.draw_line(dot_pos, end_pos, Color(0, 1, 0), 2.0)
+	
+	var north_angle = player_rotation
+	var north_dir = Vector2(sin(north_angle), cos(north_angle)) * (half_size - 15)
+	var north_pos = center + north_dir
+	minimap.draw_circle(north_pos, 3.0, Color(1, 1, 1, 0.6))
+	minimap.draw_line(north_pos, north_pos + Vector2(sin(north_angle), cos(north_angle)) * 5, Color(1, 1, 1, 0.6), 2.0)
 
 func _apply_crosshair_color():
 	$CanvasLayer/CenterContainer/Crosshair.modulate = GameSettings.crosshair_color

@@ -29,7 +29,7 @@ const COMMANDS = {
 var noclip_mode: bool = false
 var custom_fov: float = 75.0
 var custom_speed: float = 8.5
-var _original_collision_state: bool = false
+#var _original_collision_state: bool = false
 
 func _ready():
 	console_panel.hide()
@@ -142,7 +142,7 @@ func _execute_command(cmd: String):
 		"speed":
 			_cmd_speed(args)
 		"version":
-			_print_line("  [color=gray]VULKAN-HC BETA 1.0[/color]")
+			_print_line("  [color=gray]VULKAN-HC BETA 1.2[/color]")
 		"quit", "exit":
 			get_tree().quit()
 		_:

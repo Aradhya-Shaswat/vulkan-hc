@@ -356,7 +356,7 @@ func _physics_process(delta):
 				_respawn_after_death()
 			return
 		
-		var current_time = Time.get_ticks_msec() / 1000.0
+		#var current_time = Time.get_ticks_msec() / 1000.0
 		
 		if global_position.y < FALL_THRESHOLD:
 			respawn()
@@ -473,14 +473,14 @@ func _physics_process(delta):
 
 		move_and_slide()
 		
-		var standing_on_physics_object = false
+		var _standing_on_physics_object = false
 		for i in range(get_slide_collision_count()):
 			var collision = get_slide_collision(i)
 			var body = collision.get_collider()
 			var normal = collision.get_normal()
 
 			if body is RigidBody3D and normal.y > 0.7:
-				standing_on_physics_object = true
+				_standing_on_physics_object = true
 				if body.has_method("apply_central_impulse"):
 					body.apply_central_impulse(Vector3(0, 0.5, 0))
 				velocity.y = max(velocity.y, 1.0)
@@ -556,8 +556,10 @@ func _check_nearby_cart():
 func _toggle_cart():
 	if in_cart and current_cart:
 		_exit_cart()
+		$CanvasLayer/HealthBarUI.visible = true
 	elif nearby_cart:
 		_enter_cart(nearby_cart)
+		$CanvasLayer/HealthBarUI.visible = false
 
 func _enter_cart(cart: Node):
 	if cart.is_cart_occupied():

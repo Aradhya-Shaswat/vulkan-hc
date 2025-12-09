@@ -199,7 +199,7 @@ func _physics_process(delta):
 func _apply_movement(delta):
 	var forward = -global_transform.basis.z
 	var right = global_transform.basis.x
-	var up = global_transform.basis.y
+	var _up = global_transform.basis.y
 	
 	var forward_speed = linear_velocity.dot(forward)
 	var lateral_speed = linear_velocity.dot(right)

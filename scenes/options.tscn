@@ -45,8 +45,8 @@ shadow_offset = Vector2(0, 3)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_focus"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_controls"]
-bg_color = Color(0.15, 0.15, 0.15, 0.9)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kv8mn"]
+bg_color = Color(0.15170373, 0.15170373, 0.15170373, 0.531)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
@@ -323,13 +323,13 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 194.0
-offset_top = -205.0
-offset_right = 549.0
-offset_bottom = 207.0
+offset_left = 240.0
+offset_top = -275.0
+offset_right = 548.0
+offset_bottom = 194.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_controls")
+theme_override_styles/panel = SubResource("StyleBoxFlat_kv8mn")
 
 [node name="ControlsTitle" type="Label" parent="ControlsPanel"]
 layout_mode = 1
@@ -350,9 +350,9 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 20.0
-offset_top = 50.0
+offset_top = 44.5
 offset_right = -20.0
-offset_bottom = -15.0
+offset_bottom = -9.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 6
@@ -363,6 +363,13 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("1_c2u1v")
 theme_override_font_sizes/font_size = 14
 text = "WASD - Move"
+
+[node name="Control15" type="Label" parent="ControlsPanel/ControlsList"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("1_c2u1v")
+theme_override_font_sizes/font_size = 14
+text = "CTRL (Hold) - Crouch"
 
 [node name="Control2" type="Label" parent="ControlsPanel/ControlsList"]
 layout_mode = 2
@@ -376,7 +383,7 @@ layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("1_c2u1v")
 theme_override_font_sizes/font_size = 14
-text = "SHIFT - Sprint"
+text = "SHIFT - Sprint/Drift (in Kart)"
 
 [node name="Control4" type="Label" parent="ControlsPanel/ControlsList"]
 layout_mode = 2
@@ -439,7 +446,7 @@ layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("1_c2u1v")
 theme_override_font_sizes/font_size = 14
-text = "1-7 - Select hotbar slot"
+text = "1-6 - Select hotbar slot"
 
 [node name="Control13" type="Label" parent="ControlsPanel/ControlsList"]
 layout_mode = 2
@@ -447,6 +454,13 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("1_c2u1v")
 theme_override_font_sizes/font_size = 14
 text = "ESC - Pause menu"
+
+[node name="Control16" type="Label" parent="ControlsPanel/ControlsList"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("1_c2u1v")
+theme_override_font_sizes/font_size = 14
+text = "ALT (Hold) - Look Behind (in Kart)"
 
 [node name="Control14" type="Label" parent="ControlsPanel/ControlsList"]
 layout_mode = 2
@@ -559,39 +573,6 @@ theme_override_fonts/font = ExtResource("1_c2u1v")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_2iy26")
 text = "Enabled"
 
-[node name="RenderScaleContainer" type="HBoxContainer" parent="GraphicsContainer"]
-layout_mode = 2
-theme_override_constants/separation = 15
-
-[node name="RenderScaleLabel" type="Label" parent="GraphicsContainer/RenderScaleContainer"]
-custom_minimum_size = Vector2(120, 0)
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 0.8235294, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 3
-theme_override_fonts/font = ExtResource("1_c2u1v")
-theme_override_font_sizes/font_size = 16
-text = "Render Scale"
-
-[node name="RenderScaleSlider" type="HSlider" parent="GraphicsContainer/RenderScaleContainer"]
-modulate = Color(0.98898584, 0.86889833, 0.7355447, 1)
-custom_minimum_size = Vector2(150, 0)
-layout_mode = 2
-size_flags_vertical = 1
-min_value = 50.0
-value = 100.0
-
-[node name="RenderScaleValue" type="Label" parent="GraphicsContainer/RenderScaleContainer"]
-custom_minimum_size = Vector2(50, 0)
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 0.8235294, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 2
-theme_override_fonts/font = ExtResource("1_c2u1v")
-theme_override_font_sizes/font_size = 14
-text = "100%"
-horizontal_alignment = 2
-
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
 [connection signal="value_changed" from="SettingsContainer/SFXContainer/SFXSlider" to="." method="_on_sfx_slider_value_changed"]
 [connection signal="value_changed" from="SettingsContainer/MusicContainer/MusicSlider" to="." method="_on_music_slider_value_changed"]
@@ -603,4 +584,3 @@ horizontal_alignment = 2
 [connection signal="item_selected" from="GraphicsContainer/ResolutionContainer/ResolutionOption" to="." method="_on_resolution_option_item_selected"]
 [connection signal="toggled" from="GraphicsContainer/VSyncContainer/VSyncCheck" to="." method="_on_vsync_check_toggled"]
 [connection signal="toggled" from="GraphicsContainer/FPSContainer/FPSCheck" to="." method="_on_fps_check_toggled"]
-[connection signal="value_changed" from="GraphicsContainer/RenderScaleContainer/RenderScaleSlider" to="." method="_on_render_scale_slider_value_changed"]

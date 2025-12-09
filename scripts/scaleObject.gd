@@ -59,12 +59,12 @@ func _ready():
 	if player_node_path != NodePath("") and has_node(player_node_path):
 		player_node = get_node(player_node_path)
 	else:
-		var current = get_parent()
-		while current:
-			if current is CharacterBody3D or current.name == "player":
-				player_node = current
+		var current1 = get_parent()
+		while current1:
+			if current1 is CharacterBody3D or current1.name == "player":
+				player_node = current1
 				break
-			current = current.get_parent()
+			current1 = current1.get_parent()
 	if power_indicator_path != NodePath("") and has_node(power_indicator_path):
 		power_indicator = get_node(power_indicator_path)
 		power_indicator.visible = false
@@ -132,11 +132,11 @@ func _is_static_surface(node: Node) -> bool:
 	if node.is_in_group("walls"):
 		return true
 	if node is StaticBody3D:
-		var current = node
-		while current:
-			if current.name == "walls" or current.is_in_group("walls") or current.name == "ground" or current.is_in_group("ground"):
+		var current2 = node
+		while current2:
+			if current2.name == "walls" or current2.is_in_group("walls") or current2.name == "ground" or current2.is_in_group("ground"):
 				return true
-			current = current.get_parent()
+			current2 = current2.get_parent()
 		return true
 	return false
 
@@ -561,11 +561,11 @@ func _find_collision_shape(root: Node) -> CollisionShape3D:
 func _is_part_of_player(node: Node) -> bool:
 	if node is CharacterBody3D:
 		return true
-	var current = node
-	while current:
-		if current is CharacterBody3D or current.is_in_group("player"):
+	var current3 = node
+	while current3:
+		if current3 is CharacterBody3D or current3.is_in_group("player"):
 			return true
-		current = current.get_parent()
+		current3 = current3.get_parent()
 	return false
 
 func _is_cart(node: Node) -> bool:
@@ -573,9 +573,9 @@ func _is_cart(node: Node) -> bool:
 		return false
 	if node.is_in_group("carts"):
 		return true
-	var current = node
-	while current:
-		if current.is_in_group("carts"):
+	var current4 = node
+	while current4:
+		if current4.is_in_group("carts"):
 			return true
-		current = current.get_parent()
+		current4 = current4.get_parent()
 	return false
